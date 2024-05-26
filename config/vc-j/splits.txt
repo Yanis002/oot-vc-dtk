@@ -16,3 +16,8 @@ Sections:
 runtime/global_destructor_chain.c:
 	.text       start:0x801525F4 end:0x8015263C
 	.sbss       start:0x8025DCD8 end:0x8025DCE0
+
+runtime/__init_cpp_exceptions.cpp:
+	.text       start:0x80153618 end:0x80153688
+	.ctors      start:0x8016A6E0 end:0x8016A6E4
+	.dtors      start:0x8016A740 end:0x8016A748
