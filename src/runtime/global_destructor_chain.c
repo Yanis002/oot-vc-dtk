@@ -14,4 +14,4 @@ void __destroy_global_chain(void) {
     }
 }
 
-// DTORS extern void* const __destroy_global_chain_reference = __destroy_global_chain;
+DTORS extern void* const __destroy_global_chain_reference = __destroy_global_chain;

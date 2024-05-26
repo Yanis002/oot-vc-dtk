@@ -182,11 +182,12 @@ cflags_base = [
     "-i libc",
     f"-i build/{config.version}/include",
     f"-DVERSION={version_num}",
+    "-sym on",
 ]
 
 # Debug flags
 if config.debug:
-    cflags_base.extend(["-sym on", "-DDEBUG=1"])
+    cflags_base.extend(["-DDEBUG=1"])
 else:
     cflags_base.append("-DNDEBUG=1")
 
@@ -200,8 +201,7 @@ cflags_runtime = [
     "-inline auto",
 ]
 
-config.linker_version = "GC/3.0a3" # not sure
-
+config.linker_version = "GC/3.0a5.2"
 
 # Helper function for Dolphin libraries
 def DolphinLib(lib_name: str, objects: List[Object]) -> Dict[str, Any]:
