@@ -19,5 +19,6 @@ runtime/global_destructor_chain.c:
 
 runtime/__init_cpp_exceptions.cpp:
 	.text       start:0x80153618 end:0x80153688
-	.ctors      start:0x8016A6E0 end:0x8016A6E4
-	.dtors      start:0x8016A740 end:0x8016A748
+	.ctors      start:0x8016A6E0 end:0x8016A6E4 rename:.ctors$10
+	.dtors      start:0x8016A740 end:0x8016A744 rename:.dtors$10
+	.dtors      start:0x8016A744 end:0x8016A748 rename:.dtors$15
