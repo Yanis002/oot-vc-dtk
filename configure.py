@@ -28,7 +28,7 @@ from tools.project import (
 # Game versions
 DEFAULT_VERSION = 0
 VERSIONS = [
-    "GAMEID",  # 0
+    "vc-j",  # 0
 ]
 
 parser = argparse.ArgumentParser()
@@ -70,6 +70,7 @@ parser.add_argument(
     "--map",
     action="store_true",
     help="generate map file(s)",
+    default=True
 )
 parser.add_argument(
     "--no-asm",
@@ -114,7 +115,7 @@ parser.add_argument(
 args = parser.parse_args()
 
 config = ProjectConfig()
-config.version = str(args.version)
+config.version = str(args.version).lower()
 version_num = VERSIONS.index(config.version)
 
 # Apply arguments
@@ -134,7 +135,7 @@ if args.no_asm:
 # Tool versions
 config.binutils_tag = "2.42-1"
 config.compilers_tag = "20231018"
-config.dtk_tag = "v0.7.5"
+config.dtk_tag = "v0.8.3"
 config.sjiswrap_tag = "v1.1.1"
 config.wibo_tag = "0.6.11"
 
@@ -143,7 +144,7 @@ config.config_path = Path("config") / config.version / "config.yml"
 config.check_sha_path = Path("config") / config.version / "build.sha1"
 config.asflags = [
     "-mgekko",
-    "--strip-local-absolute",
+    # "--strip-local-absolute",
     "-I include",
     f"-I build/{config.version}/include",
     f"--defsym version={version_num}",
@@ -159,24 +160,26 @@ config.reconfig_deps = []
 # Base flags, common to most GC/Wii games.
 # Generally leave untouched, with overrides added below.
 cflags_base = [
-    "-nodefaults",
-    "-proc gekko",
-    "-align powerpc",
-    "-enum int",
-    "-fp hardware",
     "-Cpp_exceptions off",
-    # "-W all",
+    "-proc gekko",
+    "-fp hardware",
     "-O4,p",
-    "-inline auto",
-    '-pragma "cats off"',
-    '-pragma "warn_notinlined off"',
-    "-maxerrors 1",
-    "-nosyspath",
-    "-RTTI off",
-    "-fp_contract on",
-    "-str reuse",
-    "-multibyte",  # For Wii compilers, replace with `-enc SJIS`
+    "-nodefaults",
+    "-msgstyle gcc",
+    # "-align powerpc",
+    # "-enum int",
+    # # "-W all",
+    # "-inline auto",
+    # '-pragma "cats off"',
+    # '-pragma "warn_notinlined off"',
+    # "-maxerrors 1",
+    # "-nosyspath",
+    # "-RTTI off",
+    # "-fp_contract on",
+    # "-str reuse",
+    # "-enc SJIS",  # For Wii compilers, replace with `-enc SJIS`
     "-i include",
+    "-i libc",
     f"-i build/{config.version}/include",
     f"-DVERSION={version_num}",
 ]
@@ -197,14 +200,7 @@ cflags_runtime = [
     "-inline auto",
 ]
 
-# REL flags
-cflags_rel = [
-    *cflags_base,
-    "-sdata 0",
-    "-sdata2 0",
-]
-
-config.linker_version = "GC/1.3.2"
+config.linker_version = "GC/3.0a3" # not sure
 
 
 # Helper function for Dolphin libraries
@@ -217,17 +213,15 @@ def DolphinLib(lib_name: str, objects: List[Object]) -> Dict[str, Any]:
         "objects": objects,
     }
 
-
-# Helper function for REL script objects
-def Rel(lib_name: str, objects: List[Object]) -> Dict[str, Any]:
+# Helper function for other files
+def GenericLib(lib_name: str, objects: List[Object]) -> Dict[str, Any]:
     return {
         "lib": lib_name,
-        "mw_version": "GC/1.3.2",
-        "cflags": cflags_rel,
-        "host": True,
+        "mw_version": "GC/2.7",
+        "cflags": cflags_base,
+        "host": False,
         "objects": objects,
     }
-
 
 Matching = True                   # Object matches and should be linked
 NonMatching = False               # Object does not match and should not be linked
@@ -236,16 +230,13 @@ Equivalent = config.non_matching  # Object should be linked when configured with
 config.warn_missing_config = True
 config.warn_missing_source = False
 config.libs = [
-    {
-        "lib": "Runtime.PPCEABI.H",
-        "mw_version": config.linker_version,
-        "cflags": cflags_runtime,
-        "host": False,
-        "objects": [
-            Object(NonMatching, "Runtime.PPCEABI.H/global_destructor_chain.c"),
-            Object(NonMatching, "Runtime.PPCEABI.H/__init_cpp_exceptions.cpp"),
-        ],
-    },
+    GenericLib(
+        "runtime",
+        [
+            Object(NonMatching, "runtime/global_destructor_chain.c"),
+            Object(NonMatching, "runtime/__init_cpp_exceptions.cpp"),
+        ]
+    )
 ]
 
 if args.mode == "configure":
