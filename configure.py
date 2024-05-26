@@ -3,7 +3,7 @@
 ###
 # Generates build files for the project.
 # This file also includes the project configuration,
-# such as compiler flags and the object matching status.
+# such as compiler flags and the object NonMatching status.
 #
 # Usage:
 #   python3 configure.py
@@ -25,11 +25,7 @@ from tools.project import (
     is_windows,
 )
 
-# Game versions
-DEFAULT_VERSION = 0
-VERSIONS = [
-    "vc-j",  # 0
-]
+### Script's arguments
 
 parser = argparse.ArgumentParser()
 parser.add_argument(
@@ -40,12 +36,9 @@ parser.add_argument(
     nargs="?",
 )
 parser.add_argument(
-    "-v",
-    "--version",
-    choices=VERSIONS,
-    type=str.upper,
-    default=VERSIONS[DEFAULT_VERSION],
-    help="version to build",
+    "--non-matching",
+    action="store_true",
+    help="create non-matching build for modding",
 )
 parser.add_argument(
     "--build-dir",
@@ -70,17 +63,12 @@ parser.add_argument(
     "--map",
     action="store_true",
     help="generate map file(s)",
-    default=True
+    default=True,
 )
 parser.add_argument(
     "--no-asm",
     action="store_true",
     help="don't incorporate .s files from asm directory",
-)
-parser.add_argument(
-    "--debug",
-    action="store_true",
-    help="build with debug info (non-matching)",
 )
 if not is_windows():
     parser.add_argument(
@@ -102,118 +90,106 @@ parser.add_argument(
     help="path to sjiswrap.exe (optional)",
 )
 parser.add_argument(
-    "--verbose",
-    action="store_true",
-    help="print verbose output",
+    "--progress-version",
+    metavar="VERSION",
+    help="version to print progress for",
 )
-parser.add_argument(
-    "--non-matching",
-    dest="non_matching",
-    action="store_true",
-    help="builds equivalent (but non-matching) or modded objects",
-)
+
 args = parser.parse_args()
 
-config = ProjectConfig()
-config.version = str(args.version).lower()
-version_num = VERSIONS.index(config.version)
+### Project configuration
 
-# Apply arguments
+config = ProjectConfig()
+config.versions = [
+    "vc-j",
+]
+config.default_version = "vc-j"
+config.warn_missing_config = True
+config.warn_missing_source = False
+config.progress_all = False
+
 config.build_dir = args.build_dir
 config.dtk_path = args.dtk
 config.binutils_path = args.binutils
 config.compilers_path = args.compilers
-config.debug = args.debug
 config.generate_map = args.map
-config.non_matching = args.non_matching
 config.sjiswrap_path = args.sjiswrap
+config.non_matching = args.non_matching
+
 if not is_windows():
     config.wrapper = args.wrapper
+
 if args.no_asm:
     config.asm_dir = None
 
-# Tool versions
+### Tool versions
+
 config.binutils_tag = "2.42-1"
 config.compilers_tag = "20231018"
 config.dtk_tag = "v0.8.3"
 config.sjiswrap_tag = "v1.1.1"
 config.wibo_tag = "0.6.11"
+config.linker_version = "GC/3.0a5.2"
 
-# Project
-config.config_path = Path("config") / config.version / "config.yml"
-config.check_sha_path = Path("config") / config.version / "build.sha1"
+### Flags
+
 config.asflags = [
     "-mgekko",
-    # "--strip-local-absolute",
     "-I include",
-    f"-I build/{config.version}/include",
-    f"--defsym version={version_num}",
+    "-I libc",
 ]
+
 config.ldflags = [
     "-fp hardware",
     "-nodefaults",
-    # "-listclosure", # Uncomment for Wii linkers
+    "-warn off",
 ]
-# Use for any additional files that should cause a re-configure when modified
-config.reconfig_deps = []
 
-# Base flags, common to most GC/Wii games.
-# Generally leave untouched, with overrides added below.
 cflags_base = [
     "-Cpp_exceptions off",
     "-proc gekko",
     "-fp hardware",
+    "-fp_contract on",
+    "-enum int",
+    "-align powerpc",
+    "-nosyspath",
+    "-RTTI off",
+    "-str reuse",
+    "-multibyte",
     "-O4,p",
+    "-inline auto",
     "-nodefaults",
     "-msgstyle gcc",
-    # "-align powerpc",
-    # "-enum int",
-    # # "-W all",
-    # "-inline auto",
-    # '-pragma "cats off"',
-    # '-pragma "warn_notinlined off"',
-    # "-maxerrors 1",
-    # "-nosyspath",
-    # "-RTTI off",
-    # "-fp_contract on",
-    # "-str reuse",
-    # "-enc SJIS",  # For Wii compilers, replace with `-enc SJIS`
+    "-sym on",
     "-i include",
     "-i libc",
-    f"-i build/{config.version}/include",
-    f"-DVERSION={version_num}",
-    "-sym on",
+    # TODO: remove and use VERSION instead
+    # "-DDOLPHIN_REV=2003",
 ]
 
-# Debug flags
-if config.debug:
-    cflags_base.extend(["-DDEBUG=1"])
-else:
-    cflags_base.append("-DNDEBUG=1")
+if config.non_matching:
+    cflags_base.append("-DNON_MATCHING")
 
-# Metrowerks library flags
-cflags_runtime = [
-    *cflags_base,
-    "-use_lmw_stmw on",
-    "-str reuse,pool,readonly",
-    "-gccinc",
-    "-common off",
-    "-inline auto",
-]
+### Helper functions
 
-config.linker_version = "GC/3.0a5.2"
+def EmulatorLib(lib_name: str, objects: List[Object]) -> Dict[str, Any]:
+    return {
+        "lib": lib_name,
+        "mw_version": "GC/3.0a5.2",
+        "cflags": [*cflags_base],#, "-inline deferred"],
+        "host": False,
+        "objects": objects,
+    }
 
-# Helper function for Dolphin libraries
 def DolphinLib(lib_name: str, objects: List[Object]) -> Dict[str, Any]:
     return {
         "lib": lib_name,
-        "mw_version": "GC/1.2.5n",
+        "mw_version": "GC/1.2.5n", # unknown
         "cflags": cflags_base,
         "host": False,
         "objects": objects,
     }
 
-# Helper function for other files
 def GenericLib(lib_name: str, objects: List[Object]) -> Dict[str, Any]:
     return {
         "lib": lib_name,
@@ -223,12 +199,18 @@ def GenericLib(lib_name: str, objects: List[Object]) -> Dict[str, Any]:
         "objects": objects,
     }
 
-Matching = True                   # Object matches and should be linked
-NonMatching = False               # Object does not match and should not be linked
-Equivalent = config.non_matching  # Object should be linked when configured with --non-matching
+### Link order
 
-config.warn_missing_config = True
-config.warn_missing_source = False
+# Not matching for any version
+NonMatching = {}
+
+# Matching for all versions
+Matching = config.versions
+
+# Matching for specific versions
+def MatchingFor(*versions):
+    return versions
+
 config.libs = [
     GenericLib(
         "runtime",
@@ -239,12 +221,13 @@ config.libs = [
     )
 ]
 
+### Execute mode
+
 if args.mode == "configure":
     # Write build.ninja and objdiff.json
     generate_build(config)
 elif args.mode == "progress":
     # Print progress and write progress.json
-    config.progress_each_module = args.verbose
-    calculate_progress(config)
+    calculate_progress(config, args.progress_version)
 else:
     sys.exit("Unknown mode: " + args.mode)
