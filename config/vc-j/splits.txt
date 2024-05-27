@@ -13,6 +13,29 @@ Sections:
 	.sdata2     type:rodata align:32
 	.sbss2      type:bss align:32
 
+emulator/xlCoreRVL.c:
+	.text       start:0x8007F85C end:0x800800B4
+
+emulator/xlPostRVL.c:
+	.text       start:0x800800B4 end:0x800800C4
+
+emulator/xlFile.c:
+	.text       start:0x800800C4 end:0x80080534
+
+emulator/xlText.c:
+	.text       start:0x80080534 end:0x800805F0
+
+emulator/xlList.c:
+	.text       start:0x800805F0 end:0x800809B0
+	.bss        start:0x801C96B8 end:0x801C96C8
+
+emulator/xlHeap.c:
+	.text       start:0x800809B0 end:0x800821F4
+
+emulator/xlObject.c:
+	.text       start:0x800821F4 end:0x800825B0
+	.sbss       start:0x8025D1F8 end:0x8025D200
+
 runtime/global_destructor_chain.c:
 	.text       start:0x801525F4 end:0x8015263C
 	.sbss       start:0x8025DCD8 end:0x8025DCE0

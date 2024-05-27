@@ -155,7 +155,7 @@ cflags_base = [
     "-nosyspath",
     "-RTTI off",
     "-str reuse",
-    "-multibyte",
+    "-enc SJIS",
     "-O4,p",
     "-inline auto",
     "-nodefaults",
@@ -176,7 +176,7 @@ def EmulatorLib(lib_name: str, objects: List[Object]) -> Dict[str, Any]:
     return {
         "lib": lib_name,
         "mw_version": "GC/3.0a5.2",
-        "cflags": [*cflags_base],#, "-inline deferred"],
+        "cflags": [*cflags_base, "-inline auto"],
         "host": False,
         "objects": objects,
     }
@@ -212,6 +212,18 @@ def MatchingFor(*versions):
     return versions
 
 config.libs = [
+    EmulatorLib(
+        "emulator",
+        [
+            Object(NonMatching, "emulator/xlCoreRVL.c"),
+            Object(MatchingFor("vc-j"), "emulator/xlPostRVL.c"),
+            Object(NonMatching, "emulator/xlFile.c"),
+            Object(MatchingFor("vc-j"), "emulator/xlText.c"),
+            Object(MatchingFor("vc-j"), "emulator/xlList.c"),
+            Object(NonMatching, "emulator/xlHeap.c"),
+            Object(NonMatching, "emulator/xlObject.c"), # xlObjectMake
+        ]
+    ),
     GenericLib(
         "runtime",
         [
