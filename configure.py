@@ -221,7 +221,7 @@ config.libs = [
             Object(MatchingFor("vc-j"), "emulator/xlText.c"),
             Object(MatchingFor("vc-j"), "emulator/xlList.c"),
             Object(NonMatching, "emulator/xlHeap.c"),
-            Object(NonMatching, "emulator/xlObject.c"), # xlObjectMake
+            Object(MatchingFor("vc-j"), "emulator/xlObject.c"), # xlObjectMake
         ]
     ),
     GenericLib(

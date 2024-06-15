@@ -2,9 +2,10 @@
 #define _XL_FILE_GCN_H
 
 #include "dolphin.h"
+#include "revolution/cnt/cnt.h"
 
-typedef bool (*DVDOpenCallback)(char*, DVDFileInfo*);
-typedef bool (*DVDReadCallback)(DVDFileInfo*, void*, s32, s32, DVDCallback);
+typedef bool (*DVDOpenCallback)(char*, CNTFileInfo*);
+typedef bool (*DVDReadCallback)(CNTFileInfo*, void*, s32, s32, DVDCallback);
 
 // __anon_0x2757
 typedef enum XlFileType {
@@ -14,15 +15,17 @@ typedef enum XlFileType {
 } XlFileType;
 
 typedef struct tXL_FILE {
-    /* 0x00 */ s32 iBuffer;
     /* 0x04 */ void* pData;
+    /* 0x00 */ void* iBuffer; // ???
     /* 0x08 */ void* pBuffer;
     /* 0x0C */ s32 nAttributes;
     /* 0x10 */ s32 nSize;
     /* 0x14 */ s32 nOffset;
     /* 0x18 */ XlFileType eType;
-    /* 0x1C */ DVDFileInfo info;
-} tXL_FILE; // size = 0x58
+    /* 0x1C */ char unk_1C[0x8];
+    /* 0x24 */ s32 unk_24;
+    /* 0x28 */ CNTFileInfo info;
+} tXL_FILE; // size = 0x38
 
 bool xlFileSetOpen(DVDOpenCallback pfOpen);
 bool xlFileSetRead(DVDReadCallback pfRead);

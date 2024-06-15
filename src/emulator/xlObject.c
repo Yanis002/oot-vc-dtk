@@ -50,10 +50,9 @@ bool xlObjectMake(void** ppObject, void* pArgument, _XL_OBJECTTYPE* pType) {
     }
 
     temp1 = *ppObject;
-    temp2 = pData;
-    *ppObject = ((u8*)*ppObject + 4);
-    NODE_NEXT(temp1) = temp2;
-    memset(temp1, 0, pType->nSizeObject);
+    NODE_NEXT(*ppObject) = pData;
+    *ppObject = NODE_DATA(temp1);
+    memset(*ppObject, 0, pType->nSizeObject);
 
     if (bFlag) {
         pType->pfEvent(*ppObject, 0, NULL);
