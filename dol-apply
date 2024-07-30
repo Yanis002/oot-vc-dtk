@@ -6,6 +6,6 @@
 
 set -euo pipefail
 
-VERSION=${1:-ce-j}
+VERSION=${1:-vc-j}
 ninja "build/$VERSION/ok"
-build/tools/dtk dol apply "config/$VERSION/config.yml" "build/$VERSION/oot-gc.elf"
+build/tools/dtk dol apply "config/$VERSION/config.yml" "build/$VERSION/oot-vc.elf"

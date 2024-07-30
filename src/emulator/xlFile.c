@@ -17,8 +17,8 @@ _XL_OBJECTTYPE gTypeFile = {
     (EventFunc)xlFileEvent,
 };
 
-static DVDOpenCallback gpfOpen;
 static DVDReadCallback gpfRead;
+static DVDOpenCallback gpfOpen;
 
 bool xlFileSetOpen(DVDOpenCallback pfOpen) {
     return true;
@@ -67,37 +67,48 @@ bool xlFileGet(tXL_FILE* pFile, void* pTarget, s32 nSizeBytes) {
     s32 nSize;
     s32 nSizeUsed;
 
-    nOffset = pFile->nOffset;
-    nSize = pFile->nSize;
-    if (nOffset + nSizeBytes > nSize) {
-        nSizeBytes = nSize - nOffset;
+    if (pFile->nOffset + nSizeBytes > pFile->nSize) {
+        nSizeBytes = pFile->nSize - pFile->nOffset;
     }
+
     if (nSizeBytes == 0) {
         *(s8*)pTarget = 0xFF;
         return false;
     }
 
-    while (nSizeBytes != 0) {
-        if (pFile->unk_24 != -1 && (nOffsetExtra = pFile->nOffset - pFile->unk_24, nOffsetExtra < 0x1000)) {
-            nSizeUsed = 0x1000 - nOffsetExtra;
-            if (nSizeUsed > nSizeBytes) {
-                nSizeUsed = nSizeBytes;
-            }
-            if (!xlHeapCopy(pTarget, (void*)((u8*)pFile->pBuffer + nOffsetExtra), nSizeUsed)) {
-                return false;
-            }
-            pTarget = (void*)((s32)pTarget + nSizeUsed);
-            nSizeBytes -= nSizeUsed;
-            pFile->nOffset += nSizeUsed;
-        }
-        if (nSizeBytes != 0) {
-            if (((u32)pFile->pData % 32) == 0 && (nOffset = pFile->nOffset, (nOffset % 4) == 0) && ((u32)nSize % 32) == 0) {
-                if (gpfRead != NULL) {
-                    gpfRead(pFile->pData, pFile->pBuffer, nSize, nOffset, NULL);
-                } else {
-                    contentReadNAND(pFile->pData, pFile->pBuffer, nSize, nOffset);
-                    // DVDReadPrio(pFile->pData, pFile->pBuffer, nSize, nOffset, 2);
+    while (nSizeBytes > 0) {
+        if (pFile->unk_24 != -1) {
+            nOffsetExtra = pFile->nOffset - pFile->unk_24;
+
+            if (nOffsetExtra < 0x1000) {
+                nSizeUsed = 0x1000 - nOffsetExtra;
+                if (nSizeUsed > nSizeBytes) {
+                    nSizeUsed = nSizeBytes;
                 }
+
+                if (!xlHeapCopy(pTarget, (void*)((u8*)pFile->pBuffer + nOffsetExtra), nSizeUsed)) {
+                    return false;
+                }
+
+                pTarget = (void*)((s32)pTarget + nSizeUsed);
+                nSizeBytes -= nSizeUsed;
+                pFile->nOffset += nSizeUsed;
+            }
+        }
+
+        if (nSizeBytes > 0) {
+            if (!((s32) pTarget & 0x1F) && (nOffset = pFile->nOffset, (((nOffset & 3) == 0) != 0)) && !(nSizeBytes & 0x1F)) {
+                s32 temp_r0;
+
+                if (((s32 (*)(CNTFileInfo*, void*, s32, s32, void (*)(s32, DVDFileInfo*))) gpfRead) != NULL) {
+                    gpfRead((CNTFileInfo* ) pFile->pData, pTarget, nSizeBytes, nOffset, NULL);
+                } else {
+                    contentReadNAND((CNTFileInfo* ) pFile->pData, pTarget, nSizeBytes, nOffset);
+                }
+
+                temp_r0 = pFile->nOffset + nSizeBytes;
+                nSizeBytes = 0;
+                pFile->nOffset = temp_r0;
             } else {
                 nSize = 0x1000;
                 nOffset = pFile->nOffset & ~0x3;
@@ -105,17 +116,17 @@ bool xlFileGet(tXL_FILE* pFile, void* pTarget, s32 nSizeBytes) {
                 pFile->unk_24 = nOffset;
 
                 if (nOffsetExtra <= 0x1000) {
-                    nSize = (nOffsetExtra + 0x1F) & ~0x1F; // align 32
+                    nSize = (nOffsetExtra + 0x1F) & ~0x1F;
                 }
 
-                if (gpfRead != NULL) {
-                    gpfRead(pFile->pData, pFile->pBuffer, nSize, nOffset, NULL);
+                if (((s32 (*)(CNTFileInfo*, void*, s32, s32, void (*)(s32, DVDFileInfo*))) gpfRead) != NULL) {
+                    gpfRead((CNTFileInfo* ) pFile->pData, pFile->pBuffer, nSize, nOffset, NULL);
                 } else {
-                    contentReadNAND(pFile->pData, pFile->pBuffer, nSize, nOffset);
-                    // DVDReadPrio(pFile->pData, pFile->pBuffer, nSize, nOffset, 2);
+                    contentReadNAND((CNTFileInfo* ) pFile->pData, pFile->pBuffer, nSize, nOffset);
                 }
             }
         }
+        
     }
 
     return true;

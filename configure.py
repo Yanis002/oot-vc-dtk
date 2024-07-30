@@ -126,7 +126,7 @@ if args.no_asm:
 
 config.binutils_tag = "2.42-1"
 config.compilers_tag = "20231018"
-config.dtk_tag = "v0.8.3"
+config.dtk_tag = "v0.9.2"
 config.sjiswrap_tag = "v1.1.1"
 config.wibo_tag = "0.6.11"
 config.linker_version = "GC/3.0a5.2"
@@ -217,11 +217,11 @@ config.libs = [
         [
             Object(NonMatching, "emulator/xlCoreRVL.c"),
             Object(MatchingFor("vc-j"), "emulator/xlPostRVL.c"),
-            Object(NonMatching, "emulator/xlFile.c"),
+            Object(MatchingFor("vc-j"), "emulator/xlFile.c"),
             Object(MatchingFor("vc-j"), "emulator/xlText.c"),
             Object(MatchingFor("vc-j"), "emulator/xlList.c"),
             Object(NonMatching, "emulator/xlHeap.c"),
-            Object(MatchingFor("vc-j"), "emulator/xlObject.c"), # xlObjectMake
+            Object(MatchingFor("vc-j"), "emulator/xlObject.c"),
         ]
     ),
     GenericLib(
