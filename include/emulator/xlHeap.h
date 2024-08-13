@@ -3,7 +3,7 @@
 
 #include "dolphin.h"
 
-extern s32 gnSizeHeap;
+extern s32 gnSizeHeap[2];
 
 bool xlHeapTake(void** ppHeap, s32 nByteCount);
 bool xlHeapFree(void** ppHeap);
