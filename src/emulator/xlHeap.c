@@ -246,6 +246,7 @@ static inline bool xlHeapFindUpperBlock(s32 iHeap, s32 nSize, u32** ppBlock, s32
     return true;
 }
 
+// https://decomp.me/scratch/2K9NF
 bool xlHeapCompact(s32 iHeap) {
     s32 nCount;
     s32 nBlockLarge;

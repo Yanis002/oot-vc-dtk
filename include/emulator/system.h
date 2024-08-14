@@ -141,9 +141,9 @@ typedef struct System {
     /* 0x04 */ void* pSound;
     /* 0x08 */ bool bException;
     /* 0x0C */ SystemMode eMode;
-    /* 0x10 */ SystemRomCopy romCopy;
-    /* 0x20 */ SystemRomType eTypeROM;
-    /* 0x24 */ void* apObject[SOT_COUNT];
+    /* 0x10 */ void* apObject[SOT_COUNT];
+    /* 0x20 */ SystemRomCopy romCopy;
+    /* 0x24 */ SystemRomType eTypeROM;
     /* 0x68 */ u64 nAddressBreak;
     /* 0x70 */ SystemObjectType storageDevice;
     /* 0x74 */ u8 anException[16];
@@ -195,5 +195,6 @@ bool systemExceptionPending(System* pSystem, SystemInterruptType nException);
 bool systemEvent(System* pSystem, s32 nEvent, void* pArgument);
 
 extern _XL_OBJECTTYPE gClassSystem;
+extern System* gSystem;
 
 #endif

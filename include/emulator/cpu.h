@@ -371,6 +371,7 @@ bool cpuInvalidateCache(Cpu* pCPU, s32 nAddress0, s32 nAddress1);
 bool cpuGetFunctionChecksum(Cpu* pCPU, u32* pnChecksum, CpuFunction* pFunction);
 bool cpuHeapTake(void* heap, Cpu* pCPU, CpuFunction* pFunction, int memory_size);
 bool cpuFindFunction(Cpu* pCPU, s32 theAddress, CpuFunction** tree_node);
+bool cpuSetGetBlock(Cpu* pCPU, CpuDevice* pDevice, void* pArgument);
 
 extern _XL_OBJECTTYPE gClassCPU;
 

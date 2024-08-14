@@ -215,6 +215,7 @@ config.libs = [
     EmulatorLib(
         "emulator",
         [
+            Object(MatchingFor("vc-j"), "emulator/ram.c"),
             Object(MatchingFor("vc-j"), "emulator/xlCoreRVL.c"),
             Object(MatchingFor("vc-j"), "emulator/xlPostRVL.c"),
             Object(MatchingFor("vc-j"), "emulator/xlFileRVL.c"),

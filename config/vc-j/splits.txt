@@ -13,6 +13,11 @@ Sections:
 	.sdata2     type:rodata align:32
 	.sbss2      type:bss align:32
 
+emulator/ram.c:
+	.text       start:0x80041844 end:0x80042064
+	.data       start:0x80172070 end:0x80172290
+	.sdata      start:0x8025C760 end:0x8025C768
+
 emulator/xlCoreRVL.c:
 	.text       start:0x8007F85C end:0x800800B4
 	.data       start:0x80175248 end:0x80175280
