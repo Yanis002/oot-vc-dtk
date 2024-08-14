@@ -1,15 +1,15 @@
 #include "emulator/xlHeap.h"
 
-static u32* gpHeap;
-static u32* gapHeapBlockCache[11][32];
-s32 gnSizeHeap[2];
+s32 gnSizeHeap[HEAP_COUNT];
+static u32* gpHeap[HEAP_COUNT];
+static u32* gapHeapBlockCache[HEAP_COUNT][11][32];
 
-static u32* gpHeapBlockFirst;
-static u32* gpHeapBlockLast;
-static s32 gnHeapTakeCount;
-static s32 gnHeapFreeCount;
-static s32 gnHeapTakeCacheCount;
-u32* gnHeapOS[2];
+static u32* gpHeapBlockFirst[HEAP_COUNT];
+static u32* gpHeapBlockLast[HEAP_COUNT];
+static s32 gnHeapTakeCount[HEAP_COUNT];
+static s32 gnHeapFreeCount[HEAP_COUNT];
+static s32 gnHeapTakeCacheCount[HEAP_COUNT];
+u32* gnHeapOS[HEAP_COUNT];
 
 #define PADDING_MAGIC 0x1234ABCD
 
@@ -28,7 +28,7 @@ u32* gnHeapOS[2];
 #define CHKSUM_HI(v) ((u32)((v) >> 26))
 #define CHKSUM_LO(v) ((u32)((v) & 0x3F))
 
-static bool xlHeapBlockCacheGet(s32 nSize, u32** ppBlock, s32* pnBlockSize) {
+static bool xlHeapBlockCacheGet(s32 iHeap, s32 nSize, u32** ppBlock, s32* pnBlockSize) {
     s32 nBlockCachedSize;
     s32 nBlock;
     s32 nBlockSize;
@@ -64,7 +64,7 @@ static bool xlHeapBlockCacheGet(s32 nSize, u32** ppBlock, s32* pnBlockSize) {
         nBlockBest = -1;
         nBlockBestSize = 0x1000000;
         for (nBlock = 0; nBlock < 32; nBlock++) {
-            if ((pBlock = gapHeapBlockCache[nBlockSize][nBlock]) != NULL) {
+            if ((pBlock = gapHeapBlockCache[iHeap][nBlockSize][nBlock]) != NULL) {
                 nBlockCachedSize = BLOCK_SIZE(*pBlock);
                 if (nBlockCachedSize < nBlockBestSize && nBlockCachedSize >= nSize) {
                     nBlockBest = nBlock;
@@ -75,10 +75,10 @@ static bool xlHeapBlockCacheGet(s32 nSize, u32** ppBlock, s32* pnBlockSize) {
 
         if (nBlockBest >= 0) {
             *pnBlockSize = nBlockBestSize;
-            *ppBlock = gapHeapBlockCache[nBlockSize][nBlockBest];
-            gapHeapBlockCache[nBlockSize][nBlockBest] = NULL;
+            *ppBlock = gapHeapBlockCache[iHeap][nBlockSize][nBlockBest];
+            gapHeapBlockCache[iHeap][nBlockSize][nBlockBest] = NULL;
 
-            gnHeapTakeCacheCount++;
+            gnHeapTakeCacheCount[iHeap]++;
             return true;
         }
     }
@@ -87,7 +87,7 @@ static bool xlHeapBlockCacheGet(s32 nSize, u32** ppBlock, s32* pnBlockSize) {
     return false;
 }
 
-static s32 xlHeapBlockCacheAdd(u32* pBlock) {
+static s32 xlHeapBlockCacheAdd(s32 iHeap, u32* pBlock) {
     s32 nSize;
     s32 nBlock;
     s32 nBlockSize;
@@ -124,9 +124,9 @@ static s32 xlHeapBlockCacheAdd(u32* pBlock) {
     }
 
     for (nBlock = 0; nBlock < 32; nBlock++) {
-        if ((pBlockCached = gapHeapBlockCache[nBlockSize][nBlock]) == NULL ||
+        if ((pBlockCached = gapHeapBlockCache[iHeap][nBlockSize][nBlock]) == NULL ||
             (nBlockCachedSize = BLOCK_SIZE(*pBlockCached)) < nSize) {
-            gapHeapBlockCache[nBlockSize][nBlock] = pBlock;
+            gapHeapBlockCache[iHeap][nBlockSize][nBlock] = pBlock;
             return true;
         }
     }
@@ -134,7 +134,7 @@ static s32 xlHeapBlockCacheAdd(u32* pBlock) {
     return false;
 }
 
-static bool xlHeapBlockCacheClear(u32* pBlock) {
+static bool xlHeapBlockCacheClear(s32 iHeap, u32* pBlock) {
     s32 nSize;
     s32 nBlock;
     s32 nBlockSize;
@@ -169,8 +169,8 @@ static bool xlHeapBlockCacheClear(u32* pBlock) {
     }
 
     for (nBlock = 0; nBlock < 32; nBlock++) {
-        if (gapHeapBlockCache[nBlockSize][nBlock] == pBlock) {
-            gapHeapBlockCache[nBlockSize][nBlock] = NULL;
+        if (gapHeapBlockCache[iHeap][nBlockSize][nBlock] == pBlock) {
+            gapHeapBlockCache[iHeap][nBlockSize][nBlock] = NULL;
             return true;
         }
     }
@@ -178,25 +178,25 @@ static bool xlHeapBlockCacheClear(u32* pBlock) {
     return false;
 }
 
-static bool xlHeapBlockCacheReset(void) {
+static bool xlHeapBlockCacheReset(s32 iHeap) {
     s32 nBlockSize;
     u32* pBlock;
     u32 nBlock;
 
-    gnHeapTakeCacheCount = 0;
-    gnHeapFreeCount = 0;
-    gnHeapTakeCount = 0;
+    gnHeapTakeCacheCount[iHeap] = 0;
+    gnHeapFreeCount[iHeap] = 0;
+    gnHeapTakeCount[iHeap] = 0;
 
     for (nBlockSize = 0; nBlockSize < 11; nBlockSize++) {
         for (nBlock = 0; nBlock < 32; nBlock++) {
-            gapHeapBlockCache[nBlockSize][nBlock] = NULL;
+            gapHeapBlockCache[iHeap][nBlockSize][nBlock] = NULL;
         }
     }
 
-    pBlock = gpHeapBlockFirst;
+    pBlock = gpHeapBlockFirst[iHeap];
     while ((nBlockSize = BLOCK_SIZE(*pBlock)) != 0) {
         if (BLOCK_IS_FREE(*pBlock)) {
-            xlHeapBlockCacheAdd(pBlock);
+            xlHeapBlockCacheAdd(iHeap, pBlock);
         }
         pBlock += nBlockSize + 1;
     }
@@ -204,7 +204,7 @@ static bool xlHeapBlockCacheReset(void) {
     return true;
 }
 
-static inline bool xlHeapFindUpperBlock(s32 nSize, u32** ppBlock, s32* pnBlockSize) {
+static inline bool xlHeapFindUpperBlock(s32 iHeap, s32 nSize, u32** ppBlock, s32* pnBlockSize) {
     s32 nBlockSize;
     u32 nBlock;
     u32* pBlock;
@@ -212,7 +212,7 @@ static inline bool xlHeapFindUpperBlock(s32 nSize, u32** ppBlock, s32* pnBlockSi
     u32* pBlockNext;
 
     pBlockBest = NULL;
-    pBlock = gpHeapBlockFirst;
+    pBlock = gpHeapBlockFirst[iHeap];
 
     while ((u32)pBlock < (u32)gpHeapBlockLast) {
         nBlock = *pBlock;
@@ -231,12 +231,12 @@ static inline bool xlHeapFindUpperBlock(s32 nSize, u32** ppBlock, s32* pnBlockSi
     }
 
     nBlockSize = BLOCK_SIZE(*pBlockBest);
-    xlHeapBlockCacheClear(pBlockBest);
+    xlHeapBlockCacheClear(iHeap, pBlockBest);
 
     if (nBlockSize > nSize + 0x20) {
         pBlockNext = pBlockBest + ((nBlockSize - nSize) - 1);
         *pBlockNext = MAKE_BLOCK(nSize, FLAG_FREE);
-        xlHeapBlockCacheAdd(pBlockBest);
+        xlHeapBlockCacheAdd(iHeap, pBlockBest);
         *ppBlock = pBlockNext;
         *pnBlockSize = BLOCK_SIZE(*pBlockNext);
     } else {
@@ -246,7 +246,7 @@ static inline bool xlHeapFindUpperBlock(s32 nSize, u32** ppBlock, s32* pnBlockSi
     return true;
 }
 
-bool xlHeapCompact(void) {
+bool xlHeapCompact(s32 iHeap) {
     s32 nCount;
     s32 nBlockLarge;
     s32 nBlockSize;
@@ -259,7 +259,7 @@ bool xlHeapCompact(void) {
     u32* pBlockNext;
 
     pBlockPrevious = NULL;
-    pBlock = gpHeapBlockFirst;
+    pBlock = gpHeapBlockFirst[iHeap];
     while (nBlock = *pBlock, (nBlockSize = BLOCK_SIZE(*pBlock)) != 0) {
         pBlockNext = pBlock + nBlockSize + 1;
         nBlockNext = *pBlockNext;
@@ -291,12 +291,13 @@ bool xlHeapCompact(void) {
         pBlock = pBlockNext;
     }
 
-    xlHeapBlockCacheReset();
+    xlHeapBlockCacheReset(iHeap);
     return true;
 }
 
 bool xlHeapTake(void** ppHeap, s32 nByteCount) {
     bool bValid;
+    s32 iHeap;
     u32 nSizeExtra;
     u32 iTry;
     s32 nSize;
@@ -309,6 +310,7 @@ bool xlHeapTake(void** ppHeap, s32 nByteCount) {
     u32* pBlockNextNext;
 
     bValid = false;
+    iHeap = (nByteCount >> 30) & 1;
     *ppHeap = NULL;
 
     switch (nByteCount & 0x30000000) {
@@ -324,6 +326,9 @@ bool xlHeapTake(void** ppHeap, s32 nByteCount) {
         case 0x30000000:
             nSizeExtra = 31;
             break;
+        default:
+            nSizeExtra = 0;
+            break;
     }
 
     if ((nSize = ((nByteCount & 0x8FFFFFFF) + nSizeExtra) >> 2) < 1) {
@@ -335,13 +340,11 @@ bool xlHeapTake(void** ppHeap, s32 nByteCount) {
 
     iTry = 0;
     while (iTry++ < 8) {
-        if (nByteCount & 0x40000000) {
-            bValid = xlHeapFindUpperBlock(nSize, &pBlock, &nBlockSize);
-        } else if (xlHeapBlockCacheGet(nSize, &pBlock, &nBlockSize)) {
+        if (xlHeapBlockCacheGet(iHeap, nSize, &pBlock, &nBlockSize)) {
             bValid = true;
         } else {
-            pBlock = gpHeapBlockFirst;
-            while ((u32)pBlock < (u32)gpHeapBlockLast) {
+            pBlock = gpHeapBlockFirst[iHeap];
+            while ((u32)pBlock < (u32)gpHeapBlockLast[iHeap]) {
                 nBlock = *pBlock;
                 nBlockSize = BLOCK_SIZE(nBlock);
 
@@ -369,16 +372,16 @@ bool xlHeapTake(void** ppHeap, s32 nByteCount) {
 
                 pBlockNextNext = pBlock + nBlockSize + 1;
                 if ((nBlockNextNextSize = BLOCK_SIZE(*pBlockNextNext)) != 0 && BLOCK_IS_FREE(*pBlockNextNext)) {
-                    xlHeapBlockCacheClear(pBlockNextNext);
+                    xlHeapBlockCacheClear(iHeap, pBlockNextNext);
                     nBlockNextSize += nBlockNextNextSize + 1;
                 }
 
                 *pBlockNext = MAKE_BLOCK(nBlockNextSize, FLAG_FREE);
-                xlHeapBlockCacheAdd(pBlockNext);
+                xlHeapBlockCacheAdd(iHeap, pBlockNext);
             }
 
             *pBlock = MAKE_BLOCK(nSize, FLAG_TAKEN);
-            gnHeapTakeCount += 1;
+            gnHeapTakeCount[iHeap] += 1;
 
             pBlock++;
             while (((u32)pBlock & nSizeExtra) != 0) {
@@ -389,7 +392,7 @@ bool xlHeapTake(void** ppHeap, s32 nByteCount) {
             return true;
         }
 
-        if (!xlHeapCompact()) {
+        if (!xlHeapCompact(iHeap)) {
             return false;
         }
     }
@@ -398,12 +401,19 @@ bool xlHeapTake(void** ppHeap, s32 nByteCount) {
 }
 
 bool xlHeapFree(void** ppHeap) {
+    s32 iHeap;
     s32 nBlockSize;
     s32 nBlockNextSize;
     u32* pBlock;
     u32* pBlockNext;
 
-    if (ppHeap == NULL || (u32)*ppHeap < (u32)gpHeapBlockFirst || (u32)*ppHeap > (u32)gpHeapBlockLast) {
+    for (iHeap = 0; iHeap < 2; iHeap++) {
+        if ((u32)gpHeapBlockFirst[iHeap] <= (u32)*ppHeap && (u32)gpHeapBlockLast[iHeap] >= (u32)*ppHeap) {
+            break;
+        }
+    }
+
+    if (iHeap == 2) {
         return false;
     }
 
@@ -427,14 +437,14 @@ bool xlHeapFree(void** ppHeap) {
 
     pBlockNext = pBlock + nBlockSize + 1;
     if ((nBlockNextSize = BLOCK_SIZE(*pBlockNext)) != 0 && BLOCK_IS_FREE(*pBlockNext)) {
-        xlHeapBlockCacheClear(pBlockNext);
+        xlHeapBlockCacheClear(iHeap, pBlockNext);
         nBlockSize += nBlockNextSize + 1;
     }
 
     *pBlock = MAKE_BLOCK(nBlockSize, FLAG_FREE);
-    xlHeapBlockCacheAdd(pBlock);
+    xlHeapBlockCacheAdd(iHeap, pBlock);
 
-    gnHeapFreeCount++;
+    gnHeapFreeCount[iHeap]++;
     *ppHeap = NULL;
 
     return true;
@@ -585,20 +595,20 @@ bool xlHeapFill32(void* pHeap, s32 nByteCount, u32 nData) {
     return true;
 }
 
-bool __xlHeapGetFree(s32 nHeap, s32* pnFreeBytes) {
+bool __xlHeapGetFree(s32 iHeap, s32* pnFreeBytes) {
     s32 nBlockSize;
     s32 nFree;
     s32 nCount;
     u32* pBlock;
     u32 nBlock;
 
-    if (!xlHeapCompact()) {
+    if (!xlHeapCompact(iHeap)) {
         return false;
     }
 
-    pBlock = gpHeapBlockFirst;
+    pBlock = gpHeapBlockFirst[iHeap];
     nFree = 0;
-    while ((u32)pBlock < (u32)gpHeapBlockLast) {
+    while (pBlock < gpHeapBlockLast[iHeap]) {
         nBlock = *pBlock;
         nBlockSize = BLOCK_SIZE(nBlock);
 

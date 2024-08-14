@@ -129,7 +129,7 @@ config.compilers_tag = "20231018"
 config.dtk_tag = "v0.9.2"
 config.sjiswrap_tag = "v1.1.1"
 config.wibo_tag = "0.6.11"
-config.linker_version = "GC/3.0a5.2"
+config.linker_version = "GC/3.0a3.4"
 
 ### Flags
 
@@ -175,7 +175,7 @@ if config.non_matching:
 def EmulatorLib(lib_name: str, objects: List[Object]) -> Dict[str, Any]:
     return {
         "lib": lib_name,
-        "mw_version": "GC/3.0a5.2",
+        "mw_version": "GC/3.0a3.4",
         "cflags": [*cflags_base, "-inline auto"],
         "host": False,
         "objects": objects,
@@ -221,7 +221,7 @@ config.libs = [
             Object(MatchingFor("vc-j"), "emulator/xlText.c"),
             Object(MatchingFor("vc-j"), "emulator/xlList.c"),
             Object(NonMatching, "emulator/xlHeap.c"),
-            Object(NonMatching, "emulator/xlFile.c"),
+            Object(MatchingFor("vc-j"), "emulator/xlFile.c"),
             Object(MatchingFor("vc-j"), "emulator/xlObject.c"),
         ]
     ),

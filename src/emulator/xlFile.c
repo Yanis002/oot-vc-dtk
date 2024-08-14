@@ -22,27 +22,28 @@ bool xlFileGetSize(s32* pnSize, char* szFileName) {
     return false;
 }
 
-u32 fn_800820EC(char* szFileName, void* pTarget) {
-    tXL_FILE* pFile;
+// xlFileLoad?
+bool xlFileReadAll(char* szFileName, void** pTarget) {
     s32 pnSize;
+    tXL_FILE* pFile;
     s32 temp_r3;
 
     if (xlFileGetSize(&pnSize, szFileName)) {
-        if (!xlHeapTake(&pTarget, pnSize | 0x30000000)) {
-            return 0;
+        if (!xlHeapTake(pTarget, pnSize | 0x30000000)) {
+            return false;
         }
 
         if (!xlFileOpen(&pFile, XLFT_BINARY, szFileName)) {
-            return 0;
+            return false;
         }
 
-        if (!xlFileGet(pFile, pTarget, pnSize)) {
-            return 0;
+        if (!xlFileGet(pFile, *pTarget, pnSize)) {
+            return false;
         }
 
         temp_r3 = xlFileClose(&pFile);
-        return (u32) (-temp_r3 | temp_r3) >> 0x1F;
+        return temp_r3 != 0;
     }
 
-    return 0;
+    return false;
 }

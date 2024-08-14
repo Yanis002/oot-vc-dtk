@@ -15,7 +15,10 @@ Sections:
 
 emulator/xlCoreRVL.c:
 	.text       start:0x8007F85C end:0x800800B4
-	.sbss       start:0x8025CFE0 end:0x8025D000
+	.data       start:0x80175248 end:0x80175280
+	.bss        start:0x801C9640 end:0x801C96A8
+	.sdata      start:0x8025C8D0 end:0x8025C8D8
+	.sbss       start:0x8025D188 end:0x8025D1B0
 
 emulator/xlPostRVL.c:
 	.text       start:0x800800B4 end:0x800800C4
@@ -35,7 +38,7 @@ emulator/xlList.c:
 
 emulator/xlHeap.c:
 	.text       start:0x800809B0 end:0x80082074
-	.bss        start:0x801C96C8 end:0x801C9C48
+	.bss        start:0x801C96C8 end:0x801CA1C8
 	.sbss       start:0x8025D1B8 end:0x8025D1F8
 
 emulator/xlFile.c:
