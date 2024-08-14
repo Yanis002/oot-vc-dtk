@@ -14,10 +14,10 @@ static s32 gnCountArgument;
 static char** gaszArgument;
 static void* DefaultFifo;
 static GXFifoObj* DefaultFifoObj;
-static void* gArenaHi;
+GXRenderModeObj* rmode;
 static void* gpHeap[2];
 static void* gArenaLo;
-GXRenderModeObj* rmode;
+static void* gArenaHi;
 
 const GXColor D_80135D00 = {0};
 
