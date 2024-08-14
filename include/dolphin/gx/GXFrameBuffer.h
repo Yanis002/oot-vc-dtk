@@ -27,5 +27,6 @@ void GXCopyTex(void* dest, GXBool clear);
 void GXSetCopyClamp(GXFBClamp clamp);
 void GXClearBoundingBox(void);
 void GXSetDispCopyFrame2Field(GXCopyMode mode);
+u16 GXGetNumXfbLines(const u16 efbHeight, f32 yScale);
 
 #endif

@@ -632,7 +632,7 @@ bool xlHeapGetFree(s32* pnFreeBytes) {
     return __xlHeapGetFree(0, pnFreeBytes);
 }
 
-bool xlHeapSetup(void* pHeap, s32 nSizeBytes) {
+bool xlHeapSetup(void) {
 }
 
 bool xlHeapReset(void) {

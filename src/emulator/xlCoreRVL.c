@@ -6,24 +6,36 @@
 #include "emulator/xlPostGCN.h"
 #include "macros.h"
 
-// #include "gTgPcTPL.inc"
-
 static GXRenderModeObj rmodeobj;
-GXTexObj g_texMap[4];
 static s32 gnCountArgument;
 static char** gaszArgument;
 static void* DefaultFifo;
 static GXFifoObj* DefaultFifoObj;
 GXRenderModeObj* rmode;
-static void* gpHeap[2];
-static void* gArenaLo;
-static void* gArenaHi;
 
-const GXColor D_80135D00 = {0};
+//! TODO: move in the proper header
+void SCInit(void);
+u32 SCCheckStatus();
+
+//! TODO: find these function names
+u32 fn_8009A7C4();
+u32 fn_800B6F8C();
+
+#define ROUND_UP(v, x) (((v) + ((x)-1)) & ~((x)-1))
+
+static inline u32 getFBTotalSize(f32 aspectRatio) {
+    u16 lineCount = GXGetNumXfbLines(rmode->efbHeight, aspectRatio);
+    u16 fbWith = ROUND_UP(rmode->fbWidth, 16);
+    return  fbWith * lineCount;
+}
 
 static void xlCoreInitRenderMode(GXRenderModeObj* mode) {
-    char* szText;
-    s32 iArgument;
+    OSTick nTickLast;
+
+    SCInit();
+
+    nTickLast = OSGetTick();
+    while (SCCheckStatus() == 1 && OS_TICKS_TO_MSEC(OSGetTick() - nTickLast) < 3000) {}
 
     if (mode != NULL) {
         rmode = mode;
@@ -31,97 +43,63 @@ static void xlCoreInitRenderMode(GXRenderModeObj* mode) {
     }
 
     switch (VIGetTvFormat()) {
-        case 0:
-            rmode = &GXNtsc480IntDf;
-
-            for (iArgument = 0; iArgument < gnCountArgument; iArgument++) {
-                if (iArgument >= 0 && iArgument < gnCountArgument) {
-                    szText = gaszArgument[iArgument];
-                }
-
-                if ((szText[0] == '-' || szText[0] == '/' || szText[0] == '\\') &&
-                    (szText[1] == 'p' || szText[1] == 'P') && szText[2] == '1') {
-                    rmode = &GXNtsc480Prog;
-                    break;
-                }
-            }
-
-            rmode->viXOrigin -= 0x20;
-            rmode->viWidth += 0x40;
+        case VI_NTSC:
+            rmode = fn_8009A7C4() && ((fn_800B6F8C() & 0xFF) == 1) ? &GXNtsc480Prog : &GXNtsc480IntDf;
+            rmode->viXOrigin -= 32;
+            rmode->viWidth += 64;
             break;
-        case 1:
+        case VI_PAL:
+        case VI_MPAL:
+        case VI_EURGB60:
             rmode = &GXPal528IntDf;
-            break;
-        case 2:
-            rmode = &GXMpal480IntDf;
+            rmode->viXOrigin -= 32;
+            rmode->viWidth += 64;
+            rmode->xfbHeight = rmode->viHeight = 574;
+            rmode->viYOrigin = (s32)(574 - rmode->viHeight) / 2;
             break;
         default:
-            OSPanic("xlCoreRVL.c", 182, "DEMOInit: invalid TV format\n");
+            OSPanic("xlCoreRVL.c", 138, "DEMOInit: invalid TV format\n");
             break;
     }
 
+    rmode->efbHeight = 480;
     GXAdjustForOverscan(rmode, &rmodeobj, 0, 0);
     rmode = &rmodeobj;
 }
 
-// static void xlCoreInitMem(void) {
-//     void* arenaLo;
-//     void* arenaHi;
-//     u32 fbSize;
-
-//     gArenaLo = arenaLo = OSGetArenaLo();
-//     gArenaHi = arenaHi = OSGetArenaHi();
-
-//     fbSize = (((u16)(rmode->fbWidth + 0xF) & 0xFFF0) * rmode->xfbHeight * 2);
-//     DemoFrameBuffer1 = (void*)(((u32)arenaLo + 0x1F) & 0xFFFFFFE0);
-//     DemoFrameBuffer2 = (void*)(((u32)DemoFrameBuffer1 + fbSize + 0x1F) & 0xFFFFFFE0);
-//     DemoCurrentBuffer = DemoFrameBuffer2;
-//     OSSetArenaLo((void*)(((s32)DemoFrameBuffer2 + fbSize + 0x1F) & 0xFFFFFFE0));
-
-//     arenaLo = OSGetArenaLo();
-//     arenaHi = OSGetArenaHi();
-
-//     arenaLo = OSInitAlloc(arenaLo, arenaHi, 1);
-//     OSSetArenaLo(arenaLo);
-
-//     arenaLo = (void*)(((s32)arenaLo + 0x1F) & ~0x1F);
-//     arenaHi = (void*)((s32)arenaHi & ~0x1F);
-//     OSSetCurrentHeap(OSCreateHeap(arenaLo, arenaHi));
-//     OSSetArenaLo(arenaHi);
-// }
-
-static inline void xlCoreInitFilter(u8* pFilter, s32 size, f32 factor) {
-    s32 iFilter;
-
-    for (iFilter = 0; iFilter < size; iFilter++) {
-        pFilter[iFilter] = rmode->vfilter[iFilter] * factor;
-    }
-}
-
-void xlCoreInitGX(void) {
-    s32 pad1;
-    u8 newFilter[7];
-    s32 pad2;
-
+static inline void __xlCoreInitGX(void) {
     GXSetViewport(0.0f, 0.0f, rmode->fbWidth, rmode->efbHeight, 0.0f, 1.0f);
     GXSetScissor(0, 0, rmode->fbWidth, rmode->efbHeight);
     GXSetDispCopySrc(0, 0, rmode->fbWidth, rmode->efbHeight);
     GXSetDispCopyDst(rmode->fbWidth, rmode->xfbHeight);
     GXSetDispCopyYScale((f32)rmode->xfbHeight / (f32)rmode->efbHeight);
-
-    xlCoreInitFilter(newFilter, ARRAY_COUNT(newFilter), 1.0f);
-
-    GXSetCopyFilter(rmode->aa, rmode->sample_pattern, GX_TRUE, newFilter);
+    GXSetCopyFilter(rmode->aa, rmode->sample_pattern, GX_TRUE, rmode->vfilter);
 
     if (rmode->aa != 0) {
-        GXSetPixelFmt(2, 0);
+        GXSetPixelFmt(GX_PF_RGB565_Z16, GX_ZC_LINEAR);
     } else {
-        GXSetPixelFmt(0, 0);
+        GXSetPixelFmt(GX_PF_RGB8_Z24, GX_ZC_LINEAR);
     }
 
-    GXCopyDisp(DemoCurrentBuffer, GX_TRUE);
-    GXSetDispCopyGamma(0);
+    GXSetDispCopyGamma(GX_GM_1_0);
+
+    VISetNextFrameBuffer(DemoFrameBuffer1);
+    DemoCurrentBuffer = DemoFrameBuffer2;
+    VIFlush();
+    VIWaitForRetrace();
+
+    if (rmode->viTVmode & 1) {
+        VIWaitForRetrace();
+    }
+}
+
+bool xlCoreInitGX(void) {
+    __xlCoreInitGX();
+
+    VIConfigure(rmode);
+
     NO_INLINE();
+    return true;
 }
 
 bool xlCoreBeforeRender(void) {
@@ -149,36 +127,21 @@ bool xlCoreGetArgument(s32 iArgument, char** pszArgument) {
     return false;
 }
 
-bool fn_8007FC7C(void) {
+bool xlCoreHiResolution(void) {
     return true;
 }
 
-bool xlCoreHiResolution(void) {
+bool fn_8007FC84(void) {
     switch (VIGetTvFormat()) {
-        case 0:
-        case 1:
-        case 2:
-        case 3:
-            break;
-        default:
+        case VI_PAL:
+        case VI_MPAL:
+        case VI_EURGB60:
             return true;
+        default:
+            break;
     }
-    return false;
-//     u32 temp_r3;
 
-//     temp_r3 = VIGetTvFormat();
-//     if (temp_r3 != 5) {
-//         if ((temp_r3 < 5) && (temp_r3 < 3)) {
-//             if (temp_r3 < 1) {
-//                 goto block_6;
-//             }
-//             goto block_5;
-//         }
-// block_6:
-//         return 0;
-//     }
-// block_5:
-//     return 1;
+    return false;
 }
 
 
@@ -187,68 +150,48 @@ void xlExit(void) {
 }
 
 int main(int nCount, char** aszArgument) {
-    void* pHeap;
-    u32 i;
-    TEXDescriptor* tdp;
-    GXColor black;
     s32 nSizeHeap;
     s32 nSize;
+
+    f32 aspectRatio;
 
     gnCountArgument = nCount;
     gaszArgument = aszArgument;
 
-    __PADDisableRecalibration(true);
-    OSInitAlarm();
-    OSInitFastCast();
-
-    nSizeHeap = 0;
-
-    ARInit(NULL, 0);
     OSInit();
     DVDInit();
+
+    if (NANDInit() != 0) {
+        xlExit();
+    }
+
+    fn_800FEFB8();
     VIInit();
-    DEMOPadInit();
     xlCoreInitRenderMode(NULL);
-    // xlCoreInitMem();
     VIConfigure(rmode);
-    DefaultFifo = OSAllocFromHeap(__OSCurrHeap, 0x40000);
-    DefaultFifoObj = GXInit(DefaultFifo, 0x40000);
-    xlCoreInitGX();
-    VISetNextFrameBuffer(DemoFrameBuffer1);
-    DemoCurrentBuffer = DemoFrameBuffer2;
-    VIFlush();
-    VIWaitForRetrace();
 
-    if (rmode->viTVmode & 1) {
-        VIWaitForRetrace();
+#ifdef __MWERKS__ // clang-format off
+    asm {
+        li      r3, 0x4
+        oris    r3, r3, 0x4
+        mtspr   GQR2, r3
+        li      r3, 0x5
+        oris    r3, r3, 0x5
+        mtspr   GQR3, r3
+        li      r3, 0x6
+        oris    r3, r3, 0x6
+        mtspr   GQR4, r3
+        li      r3, 0x7
+        oris    r3, r3, 0x7
+        mtspr   GQR5, r3
     }
-
-    // simulatorUnpackTexPalette((TEXPalette*)gTgPcTPL);
-
-    black = D_80135D00;
-    for (i = 0; i < 2; i++) {
-        // tdp = TEXGet((TEXPalette*)gTgPcTPL, i);
-        GXInitTexObj(&g_texMap[i], tdp->textureHeader->data, tdp->textureHeader->width, tdp->textureHeader->height,
-                     tdp->textureHeader->format, GX_CLAMP, GX_CLAMP, GX_FALSE);
-    }
-
-    GXSetDispCopyGamma(GX_GM_1_0);
-    nSizeHeap = OSCheckHeap(__OSCurrHeap);
-
-    if (nSizeHeap != -1) {
-        nSize = nSizeHeap;
-        if (nSize > 0x04000000) {
-            nSize = 0x04000000;
-        }
-        pHeap = OSAllocFromHeap(__OSCurrHeap, nSize);
-        gpHeap[0] = pHeap;
-    }
+#endif // clang-format on
 
     if (!xlPostSetup()) {
         return false;
     }
 
-    if (!xlHeapSetup(pHeap, nSize)) {
+    if (!xlHeapSetup()) {
         return false;
     }
 
@@ -260,7 +203,26 @@ int main(int nCount, char** aszArgument) {
         return false;
     }
 
-    __PADDisableRecalibration(false);
+    aspectRatio = (f32)rmode->xfbHeight / (f32)rmode->efbHeight;
+    nSizeHeap = fn_8007FC84() ? 0xBB800 : 0x87600;
+    nSize = getFBTotalSize(aspectRatio) * 2;
+
+    if (nSize < nSizeHeap) {
+        nSize = nSizeHeap;
+    }
+
+    xlHeapTake(&DemoFrameBuffer1, nSize | 0x70000000);
+    xlHeapTake(&DemoFrameBuffer2, nSize | 0x70000000);
+    xlHeapFill32(DemoFrameBuffer1, nSize, 0);
+    xlHeapFill32(DemoFrameBuffer2, nSize, 0);
+    DCStoreRange(DemoFrameBuffer1, nSize);
+    DCStoreRange(DemoFrameBuffer2, nSize);
+
+    xlHeapTake(&DefaultFifo, 0x40000 | 0x30000000);
+    DefaultFifoObj = GXInit(DefaultFifo, 0x40000);
+
+    __xlCoreInitGX();
+    fn_80063C7C();
     xlMain();
 
     if (!xlObjectReset()) {
@@ -279,6 +241,6 @@ int main(int nCount, char** aszArgument) {
         return false;
     }
 
-    OSPanic("xlCoreRVL.c", 577, "CORE DONE!");
+    OSPanic("xlCoreRVL.c", 603, "CORE DONE!");
     return false;
 }

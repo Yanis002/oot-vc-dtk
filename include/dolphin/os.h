@@ -224,5 +224,6 @@ void OSPanic(const char* file, int line, const char* msg, ...);
 #include "dolphin/os/OSRtc.h"
 #include "dolphin/os/OSSerial.h"
 #include "dolphin/os/OSThread.h"
+#include "dolphin/os/OSTime.h"
 
 #endif

@@ -13,7 +13,7 @@ bool xlHeapCompact(s32 iHeap);
 bool xlHeapCopy(void* pHeapTarget, void* pHeapSource, s32 nByteCount);
 bool xlHeapFill32(void* pHeap, s32 nByteCount, u32 nData);
 bool xlHeapGetFree(s32* pnFreeBytes);
-bool xlHeapSetup(void* pHeap, s32 nSizeBytes);
+bool xlHeapSetup(void);
 bool xlHeapReset(void);
 
 #endif
