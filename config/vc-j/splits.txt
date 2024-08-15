@@ -13,6 +13,9 @@ Sections:
 	.sdata2     type:rodata align:32
 	.sbss2      type:bss align:32
 
+emulator/cpu.c:
+	.text       start:0x8000CB1C end:0x80040B24
+
 emulator/ram.c:
 	.text       start:0x80041844 end:0x80042064
 	.data       start:0x80172070 end:0x80172290
@@ -23,6 +26,9 @@ emulator/rom.c:
 	.data       start:0x80172290 end:0x801722A0
 	.sdata      start:0x8025C768 end:0x8025C770
 	.sdata2     start:0x8025DD78 end:0x8025DD80
+
+emulator/rdp.c:
+	.text       start:0x8007D8A0 end:0x8007F85C
 
 emulator/xlCoreRVL.c:
 	.text       start:0x8007F85C end:0x800800B4
