@@ -11,3 +11,6 @@ orig/*/*
 !orig/*/.gitkeep
 /*.txt
 ctx.c
+nonmatchings
+tools/mwcc_compiler
+tools/binutils

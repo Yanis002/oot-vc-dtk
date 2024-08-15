@@ -85,19 +85,18 @@ typedef struct Rom {
     /* 0x19AFC */ s32 offsetToRom;
 } Rom; // size = 0x19B00
 
+s32 fn_80042E30(void);
 bool romGetPC(Rom* pROM, u64* pnPC);
 bool romGetCode(Rom* pROM, s32* acCode);
-bool romTestCode(Rom* pROM, char* acCode);
 
 //! NOTE: The debug informations indicates that `nSize` is unsigned, but the
 //! generated code seems to treat it as signed.
 bool romCopy(Rom* pROM, void* pTarget, s32 nOffset, s32 nSize, UnknownCallbackFunc* pCallback);
-bool romCopyImmediate(Rom* pROM, void* pTarget, s32 nOffsetROM, s32 nSize);
 
 bool romUpdate(Rom* pROM);
-bool romSetCacheSize(Rom* pROM, s32 nSize);
 bool romSetImage(Rom* pROM, char* szNameFile);
 bool romGetImage(Rom* pROM, char* acNameFile);
+bool romGetBuffer(Rom* pROM, void** pBuffer, u32 nAddress, s32* pData);
 bool romEvent(Rom* pROM, s32 nEvent, void* pArgument);
 
 extern _XL_OBJECTTYPE gClassROM;

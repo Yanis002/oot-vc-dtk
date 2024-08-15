@@ -196,18 +196,20 @@ static bool romSetBlockCache(Rom* pROM, s32 iBlock, RomCacheType eType) {
     return true;
 }
 
-// https://decomp.me/scratch/apRJf
+static inline void romByteSwap(Rom* pROM) {
+    u32 i;
+    u32* anData = (u32*)pROM->load.anData;
+
+    for (i = 0; i < ((pROM->load.nSize + 3) >> 2); i++) {
+        *anData++ = ((*anData >> 8) & 0x00FF00FF) | ((*anData << 8) & 0xFF00FF00);
+    }
+}
+
 static bool __romLoadBlock_Complete(Rom* pROM) {
     s32 iBlock;
 
     if (pROM->bFlip) {
-        //! TODO: this might be an inline function, see ``romLoadFullOrPart``
-        u32 i;
-        u32* anData = (u32*)pROM->load.anData;
-
-        for (i = 0; i < ((pROM->load.nSize + 3) >> 2); i++) {
-            *anData++ = ((*anData >> 8) & 0x00FF00FF) | ((*anData << 8) & 0xFF00FF00);
-        }
+        romByteSwap(pROM);
     }
 
     iBlock = pROM->load.iBlock;
@@ -221,6 +223,7 @@ static bool __romLoadBlock_Complete(Rom* pROM) {
         return false;
     }
 
+    NO_INLINE();
     return true;
 }
 
@@ -270,7 +273,7 @@ static bool romLoadBlock(Rom* pROM, s32 iBlock, s32 iCache, UnknownCallbackFunc 
     return true;
 }
 
-bool __romLoadUpdate_Complete(void) {
+static bool __romLoadUpdate_Complete(void) {
     Rom* pROM = SYSTEM_ROM(gpSystem);
 
     pROM->load.bWait = false;
@@ -490,18 +493,19 @@ static bool fn_80042C98(Rom* pROM) {
     return true;
 }
 
-void* __ROMEntry(void* arg) {
+static void* __ROMEntry(void* arg) {
     fn_80042C98(SYSTEM_ROM(gpSystem));
     return NULL;
 }
 
-// https://decomp.me/scratch/oZr1k
-u8 fn_80042E30(void) {
-    u8 ret;
+s32 fn_80042E30(void) {
+    s32 ret;
+    bool bThread;
 
+    bThread = OSIsThreadTerminated(&DefaultThread);
     ret = 0;
 
-    if (OSIsThreadTerminated(&DefaultThread)) {
+    if (bThread) {
         ret = 2;
     }
 
@@ -654,7 +658,7 @@ static bool romGet64(Rom* pROM, u32 nAddress, s64* pData) {
     return true;
 }
 
-bool romGetBlock(Rom* pROM, cpu_blk_req_t* req) {
+static bool romGetBlock(Rom* pROM, cpu_blk_req_t* req) {
     void* buf;
 
     if (req->dst_phys_ram < 0x4000000) {
@@ -709,7 +713,7 @@ static inline bool romCopyLoad(Rom* pROM) {
 }
 
 static inline bool romCopyLoop(Rom* pROM, u8* pTarget, u32 nOffset, u32 nSize, UnknownCallbackFunc* pCallback) {
-    s32 i;
+    int i;
 
     pROM->copy.bWait = false;
     pROM->copy.nSize = nSize;
@@ -728,7 +732,6 @@ static inline bool romCopyLoop(Rom* pROM, u8* pTarget, u32 nOffset, u32 nSize, U
     return false;
 }
 
-// https://decomp.me/scratch/R4m4G
 bool romCopy(Rom* pROM, void* pTarget, s32 nOffset, s32 nSize, UnknownCallbackFunc* pCallback) {
     tXL_FILE* pFile;
 
@@ -831,29 +834,6 @@ bool romUpdate(Rom* pROM) {
     return true;
 }
 
-bool romGetBuffer(Rom* pROM, void** pBuffer, u32 nAddress, s32* pData) {
-    if (pROM->eModeLoad == RLM_FULL) {
-        nAddress &= 0x07FFFFFF;
-
-        if (pData != NULL) {
-            u32 nSize = pROM->nSize;
-
-            if (nAddress >= nSize) {
-                return false;
-            }
-
-            if (nAddress + *pData > nSize) {
-                *pData -= (nSize - nAddress);
-            }
-        }
-
-        *pBuffer = (void*)((u32)pROM->pBuffer + nAddress);
-        return true;
-    }
-
-    return false;
-}
-
 bool romSetImage(Rom* pROM, char* szNameFile) {
     tXL_FILE* pFile;
     s32 iName;
@@ -938,6 +918,29 @@ bool romGetImage(Rom* pROM, char* acNameFile) {
     }
 
     return true;
+}
+
+bool romGetBuffer(Rom* pROM, void** pBuffer, u32 nAddress, s32* pData) {
+    if (pROM->eModeLoad == RLM_FULL) {
+        nAddress &= 0x07FFFFFF;
+
+        if (pData != NULL) {
+            u32 nSize = pROM->nSize;
+
+            if (nAddress >= nSize) {
+                return false;
+            }
+
+            if (nAddress + *pData > nSize) {
+                *pData -= (nSize - nAddress);
+            }
+        }
+
+        *pBuffer = (void*)((u32)pROM->pBuffer + nAddress);
+        return true;
+    }
+
+    return false;
 }
 
 bool romEvent(Rom* pROM, s32 nEvent, void* pArgument) {
