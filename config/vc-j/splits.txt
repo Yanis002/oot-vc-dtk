@@ -18,6 +18,12 @@ emulator/ram.c:
 	.data       start:0x80172070 end:0x80172290
 	.sdata      start:0x8025C760 end:0x8025C768
 
+emulator/rom.c:
+	.text       start:0x80042064 end:0x800440A8
+	.data       start:0x80172290 end:0x801722A0
+	.sdata      start:0x8025C768 end:0x8025C770
+	.sdata2     start:0x8025DD78 end:0x8025DD80
+
 emulator/xlCoreRVL.c:
 	.text       start:0x8007F85C end:0x800800B4
 	.data       start:0x80175248 end:0x80175280

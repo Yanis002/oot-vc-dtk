@@ -93,7 +93,9 @@ typedef enum SystemObjectType {
     SOT_LIBRARY = 13,
     SOT_PERIPHERAL = 14,
     SOT_RDB = 15,
-    SOT_COUNT = 16,
+    SOT_UNK16 = 16,
+    SOT_HELP = 17,
+    SOT_COUNT = 18,
 } SystemObjectType;
 
 // __anon_0x3979C
@@ -178,6 +180,9 @@ typedef struct SystemRomConfig {
 #define SYSTEM_LIBRARY(pSystem) ((Library*)(((System*)(pSystem))->apObject[SOT_LIBRARY]))
 #define SYSTEM_PERIPHERAL(pSystem) ((Peripheral*)(((System*)(pSystem))->apObject[SOT_PERIPHERAL]))
 #define SYSTEM_RDB(pSystem) ((Rdb*)(((System*)(pSystem))->apObject[SOT_RDB]))
+
+//! TODO: replace void* by the help struct name
+#define SYSTEM_HELP(pSystem) ((void*)(((System*)(pSystem))->apObject[SOT_HELP]))
 
 extern u32 nTickMultiplier;
 extern f32 fTickScale;

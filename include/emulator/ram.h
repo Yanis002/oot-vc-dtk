@@ -26,13 +26,6 @@
 #define RDRAM_ADDR_SELECT 0x20
 #define RDRAM_DEVICE_MANUF 0x24
 
-//! TODO: document this
-typedef struct unk_ramGetBlock_s unk_ramGetBlock_t;
-struct unk_ramGetBlock_s {
-    char unk_0x00[0x8];
-    s32 (*unk_0x08)(unk_ramGetBlock_t*, s32);
-};
-
 // __anon_0x4BFE7
 typedef struct Ram {
     /* 0x00 */ void* pHost;

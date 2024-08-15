@@ -5,6 +5,8 @@
 #include "emulator/xlFileGCN.h"
 #include "emulator/xlObject.h"
 
+#define ROM_THREAD_SIZE 0x2000
+
 typedef bool UnknownCallbackFunc(void);
 typedef bool ProgressCallbackFunc(f32 progressPercent);
 
@@ -58,31 +60,33 @@ typedef struct RomLoadState {
 
 // __anon_0x4D873
 typedef struct Rom {
-    /* 0x00000 */ void* pHost;
-    /* 0x00004 */ void* pBuffer;
-    /* 0x00008 */ bool bFlip;
-    /* 0x0000C */ bool bLoad;
+    /* 0x00000 */ void* pBuffer;
+    /* 0x00004 */ bool bFlip;
+    /* 0x00008 */ bool bLoad;
+    /* 0x0000C */ s32 UNKNOWN_C;
     /* 0x00010 */ char acNameFile[513];
     /* 0x00214 */ u32 nSize;
-    /* 0x00218 */ RomModeLoad eModeLoad;
-    /* 0x0021C */ RomBlock aBlock[4096];
-    /* 0x1021C */ u32 nTick;
-    /* 0x10220 */ u8* pCacheRAM;
-    /* 0x10224 */ u8 anBlockCachedRAM[1024]; // Bitfield, one bit per block
-    /* 0x10624 */ u8 anBlockCachedARAM[2046]; // Bitfield, one bit per block
-    /* 0x10E24 */ RomCopyState copy;
-    /* 0x10E38 */ RomLoadState load;
-    /* 0x10E68 */ s32 nCountBlockRAM;
-    /* 0x10E6C */ s32 nSizeCacheRAM;
-    /* 0x10E70 */ u8 acHeader[64];
-    /* 0x10EB0 */ u32* anOffsetBlock;
-    /* 0x10EB4 */ s32 nCountOffsetBlocks;
-    /* 0x10EB8 */ DVDFileInfo fileInfo;
-    /* 0x10EF4 */ s32 offsetToRom;
-} Rom; // size = 0x10EF8
+    /* 0x00218 */ s32 UNKNOWN_218;
+    /* 0x0021C */ RomModeLoad eModeLoad;
+    /* 0x00220 */ RomBlock aBlock[6144];
+    /* 0x18220 */ u32 nTick;
+    /* 0x18224 */ u8* pCacheRAM;
+    /* 0x18228 */ u8 anBlockCachedRAM[4096]; // Bitfield, one bit per block
+    /* 0x19228 */ u8 anBlockCachedARAM[2046]; // Bitfield, one bit per block
+    /* 0x19A28 */ RomCopyState copy;
+    /* 0x19A3C */ RomLoadState load;
+    /* 0x19A6C */ s32 nCountBlockRAM;
+    /* 0x19A70 */ s32 nSizeCacheRAM;
+    /* 0x19A74 */ u8 acHeader[64];
+    /* 0x19AB4 */ u32* anOffsetBlock;
+    /* 0x19AB8 */ s32 nCountOffsetBlocks;
+    /* 0x19ABC */ s32 UNKNOWN_19ABC; // game's segment `boot` checksum?
+    /* 0x19AC0 */ DVDFileInfo fileInfo;
+    /* 0x19AFC */ s32 offsetToRom;
+} Rom; // size = 0x19B00
 
 bool romGetPC(Rom* pROM, u64* pnPC);
-bool romGetCode(Rom* pROM, char* acCode);
+bool romGetCode(Rom* pROM, s32* acCode);
 bool romTestCode(Rom* pROM, char* acCode);
 
 //! NOTE: The debug informations indicates that `nSize` is unsigned, but the

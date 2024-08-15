@@ -278,6 +278,8 @@ struct Cpu {
     /* 0x00030 */ u32 nCallLast;
     /* 0x00034 */ CpuFunction* pFunctionLast;
     /* 0x00038 */ s32 nReturnAddrLast;
+    /* 0x00B5C */ u32 nRetrace;
+    /* 0x00B60 */ u32 nRetraceUsed;
     /* 0x0003C */ s32 survivalTimer;
     /* 0x00040 */ CpuGpr aGPR[32];
     /* 0x00140 */ CpuFpr aFPR[32];
@@ -291,8 +293,6 @@ struct Cpu {
     /* 0x00B50 */ CpuExecuteFunc pfRam;
     /* 0x00B54 */ CpuExecuteFunc pfRamF;
     /* 0x00B58 */ u32 nTickLast;
-    /* 0x00B5C */ u32 nRetrace;
-    /* 0x00B60 */ u32 nRetraceUsed;
     /* 0x00B64 */ CpuDevice* apDevice[256];
     /* 0x00F64 */ u8 aiDevice[65536];
     /* 0x10F64 */ void* gHeap1;
@@ -310,6 +310,17 @@ struct Cpu {
     /* 0x12060 */ u32 nCompileFlag;
     /* 0x12064 */ CpuOptimize nOptimize;
 }; // size = 0x12090
+
+//! TODO: document this
+struct cpu_blk_req_t;
+typedef s32 blockReqHandler(struct cpu_blk_req_t*, s32);
+typedef struct cpu_blk_req_t {
+    struct cpu_blk_req_t* done;
+    u32 len;
+    blockReqHandler* handler;
+    s32 dev_addr;
+    u32 dst_phys_ram;
+} cpu_blk_req_t;
 
 #define CPU_DEVICE(apDevice, aiDevice, nAddress) (apDevice[aiDevice[(u32)(nAddress) >> 16]])
 
