@@ -36,6 +36,11 @@ emulator/rom.c:
 	.sdata      start:0x8025C768 end:0x8025C770
 	.sdata2     start:0x8025DD78 end:0x8025DD80
 
+emulator/codeGCN.c:
+	.text       start:0x8005E29C end:0x8005E2D0
+	.data       start:0x801743A0 end:0x801743B0
+	.sdata      start:0x8025C848 end:0x8025C850
+
 emulator/rdp.c:
 	.text       start:0x8007D8A0 end:0x8007F85C
 	.data       start:0x80174FC0 end:0x80175248

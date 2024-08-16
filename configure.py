@@ -3,7 +3,7 @@
 ###
 # Generates build files for the project.
 # This file also includes the project configuration,
-# such as compiler flags and the object NonMatching status.
+# such as compiler flags and the object NotLinked status.
 #
 # Usage:
 #   python3 configure.py
@@ -202,39 +202,40 @@ def GenericLib(lib_name: str, objects: List[Object]) -> Dict[str, Any]:
 ### Link order
 
 # Not matching for any version
-NonMatching = {}
+NotLinked = {}
 
 # Matching for all versions
-Matching = config.versions
+Linked = config.versions
 
 # Matching for specific versions
-def MatchingFor(*versions):
+def LinkedFor(*versions):
     return versions
 
 config.libs = [
     EmulatorLib(
         "emulator",
         [
-            Object(NonMatching, "emulator/cpu.c", asm_processor=True),
-            Object(NonMatching, "emulator/pif.c"),
-            Object(MatchingFor("vc-j"), "emulator/ram.c"),
-            Object(MatchingFor("vc-j"), "emulator/rom.c"),
-            Object(NonMatching, "emulator/rdp.c"),
-            Object(MatchingFor("vc-j"), "emulator/xlCoreRVL.c"),
-            Object(MatchingFor("vc-j"), "emulator/xlPostRVL.c"),
-            Object(MatchingFor("vc-j"), "emulator/xlFileRVL.c"),
-            Object(MatchingFor("vc-j"), "emulator/xlText.c"),
-            Object(MatchingFor("vc-j"), "emulator/xlList.c"),
-            Object(NonMatching, "emulator/xlHeap.c"),
-            Object(MatchingFor("vc-j"), "emulator/xlFile.c"),
-            Object(MatchingFor("vc-j"), "emulator/xlObject.c"),
+            Object(NotLinked, "emulator/cpu.c", asm_processor=True),
+            Object(NotLinked, "emulator/pif.c"),
+            Object(LinkedFor("vc-j"), "emulator/ram.c"),
+            Object(LinkedFor("vc-j"), "emulator/rom.c"),
+            Object(LinkedFor("vc-j"), "emulator/codeGCN.c"),
+            Object(NotLinked, "emulator/rdp.c"),
+            Object(LinkedFor("vc-j"), "emulator/xlCoreRVL.c"),
+            Object(LinkedFor("vc-j"), "emulator/xlPostRVL.c"),
+            Object(LinkedFor("vc-j"), "emulator/xlFileRVL.c"),
+            Object(LinkedFor("vc-j"), "emulator/xlText.c"),
+            Object(LinkedFor("vc-j"), "emulator/xlList.c"),
+            Object(NotLinked, "emulator/xlHeap.c"),
+            Object(LinkedFor("vc-j"), "emulator/xlFile.c"),
+            Object(LinkedFor("vc-j"), "emulator/xlObject.c"),
         ]
     ),
     GenericLib(
         "runtime",
         [
-            Object(NonMatching, "runtime/global_destructor_chain.c"),
-            Object(NonMatching, "runtime/__init_cpp_exceptions.cpp"),
+            Object(NotLinked, "runtime/global_destructor_chain.c"),
+            Object(NotLinked, "runtime/__init_cpp_exceptions.cpp"),
         ]
     )
 ]
