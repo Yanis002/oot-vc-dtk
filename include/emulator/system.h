@@ -77,25 +77,30 @@ typedef enum SystemRomType {
 // __anon_0x370F1
 typedef enum SystemObjectType {
     SOT_NONE = -1,
-    SOT_CPU = 0,
-    SOT_PIF = 1,
-    SOT_RAM = 2,
-    SOT_ROM = 3,
-    SOT_RSP = 4,
+
+    SOT_CPU = 0, // 0x10
+    SOT_PIF = 1, // 0x14
+    SOT_RAM = 2, // 0x18
+    SOT_ROM = 3, // 0x1C
+    SOT_RSP = 4, // 0x20
+
     SOT_RDP = 5,
-    SOT_MIPS = 6,
-    SOT_DISK = 7,
-    SOT_FLASH = 8,
-    SOT_SRAM = 9,
-    SOT_AUDIO = 10,
-    SOT_VIDEO = 11,
+    SOT_DISK = 6,
+    SOT_FLASH = 7,
+    SOT_AUDIO = 8,
+
+    SOT_VIDEO = 9, // 0x34
+
+    SOT_MIPS = 10,
+    SOT_SRAM = 11,
     SOT_SERIAL = 12,
-    SOT_LIBRARY = 13,
-    SOT_PERIPHERAL = 14,
-    SOT_RDB = 15,
+    SOT_PERIPHERAL = 13,
+    SOT_RDB = 14,
     SOT_UNK16 = 16,
-    SOT_HELP = 17,
-    SOT_COUNT = 18,
+
+    SOT_HELP = 17, // 0x54
+    SOT_LIBRARY = 18, // 0x58
+    SOT_COUNT = 19,
 } SystemObjectType;
 
 // __anon_0x3979C
@@ -139,18 +144,21 @@ typedef struct SystemRomCopy {
 
 // __anon_0x37240
 typedef struct System {
-    /* 0x00 */ void* pFrame;
-    /* 0x04 */ void* pSound;
-    /* 0x08 */ bool bException;
-    /* 0x0C */ SystemMode eMode;
+    // ok
+    /* 0x00 */ bool bException;
+    /* 0x04 */ SystemMode eMode;
+    /* 0x08 */ SystemObjectType storageDevice;
+    /* 0x0C */ SystemRomType eTypeROM;
     /* 0x10 */ void* apObject[SOT_COUNT];
-    /* 0x20 */ SystemRomCopy romCopy;
-    /* 0x24 */ SystemRomType eTypeROM;
-    /* 0x68 */ u64 nAddressBreak;
-    /* 0x70 */ SystemObjectType storageDevice;
-    /* 0x74 */ u8 anException[16];
-    /* 0x84 */ bool bJapaneseVersion;
-} System; // size = 0x88
+    // /* 0x58 */ void* pSound;
+    /* 0x5C */ void* pFrame;
+
+    // not ok
+    /* 0x60 */ u64 nAddressBreak;
+    /* 0x68 */ SystemRomCopy romCopy;
+    /* 0x78 */ u8 anException[16];
+    /* 0x88 */ bool bJapaneseVersion;
+} System; // size = 0x8C
 
 // __anon_0x3459E
 typedef struct SystemRomConfig {

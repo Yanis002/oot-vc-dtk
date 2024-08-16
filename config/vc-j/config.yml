@@ -11,8 +11,8 @@ mw_comment_version: 14
 
 block_relocations:
 - source: 0x8002C248
-- source: 0x8003BEF8
-- source: 0x8003C568
 - source: 0x8002B758
-- source: 0x8003BEEC
-- source: 0x8003C550
+- source: 0x8003E3BC
+- source: 0x8003E3C0
+- source: 0x8003E39C
+- source: 0x8003E3A0

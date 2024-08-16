@@ -24,6 +24,15 @@
 #define MIPS_FS(inst) (((inst) >> 11) & 0x1F)
 #define MIPS_FD(inst) (((inst) >> 6) & 0x1F)
 
+#define TLB_PGSZ_MASK 0x01FFE000
+#define TLB_PGSZ_4K 0
+#define TLB_PGSZ_16K 0x6000
+#define TLB_PGSZ_64K 0x1E000
+#define TLB_PGSZ_256K 0x7E000
+#define TLB_PGSZ_1M 0x1FE000
+#define TLB_PGSZ_4M 0x7FE000
+#define TLB_PGSZ_16M 0x1FFE000
+
 typedef bool (*Put8Func)(void* pObject, u32 nAddress, s8* pData);
 typedef bool (*Put16Func)(void* pObject, u32 nAddress, s16* pData);
 typedef bool (*Put32Func)(void* pObject, u32 nAddress, s32* pData);
@@ -86,6 +95,18 @@ typedef enum CpuSize {
     CS_32BIT = 0,
     CS_64BIT = 1,
 } CpuSize;
+
+//! TODO: document this
+struct cpu_blk_req_t;
+typedef s32 blockReqHandler(struct cpu_blk_req_t*, s32);
+typedef struct cpu_blk_req_t {
+    struct cpu_blk_req_t* done;
+    u32 len;
+    blockReqHandler* handler;
+    s32 dev_addr;
+    u32 dst_phys_ram;
+} cpu_blk_req_t;
+typedef bool (*GetBlockFunc)(void *pObject, cpu_blk_req_t *pBlock);
 
 // __anon_0x3E22D
 typedef union CpuGpr {
@@ -175,9 +196,12 @@ typedef struct CpuDevice {
     /* 0x20 */ Put16Func pfPut16;
     /* 0x24 */ Put32Func pfPut32;
     /* 0x28 */ Put64Func pfPut64;
-    /* 0x2C */ u32 nAddressPhysical0;
-    /* 0x30 */ u32 nAddressPhysical1;
-} CpuDevice; // size = 0x34
+    /* 0x2C */ GetBlockFunc pfGetBlock;
+    /* 0x30 */ u32 nAddressVirtual0;
+    /* 0x34 */ u32 nAddressVirtual1;
+    /* 0x38 */ u32 nAddressPhysical0;
+    /* 0x3C */ u32 nAddressPhysical1;
+} CpuDevice; // size = 0x40
 
 // __anon_0x3DE78
 typedef struct CpuJump {
@@ -266,61 +290,69 @@ typedef bool (*CpuExecuteFunc)(Cpu* pCPU, s32 nCount, s32 nAddressN64, s32 nAddr
 
 // _CPU
 struct Cpu {
+    // ok
     /* 0x00000 */ s32 nMode;
     /* 0x00004 */ s32 nTick;
-    /* 0x00008 */ void* pHost;
-    /* 0x00010 */ s64 nLo;
-    /* 0x00018 */ s64 nHi;
-    /* 0x00020 */ s32 nCountAddress;
-    /* 0x00024 */ s32 iDeviceDefault;
-    /* 0x00028 */ u32 nPC;
-    /* 0x0002C */ u32 nWaitPC;
-    /* 0x00030 */ u32 nCallLast;
-    /* 0x00034 */ CpuFunction* pFunctionLast;
-    /* 0x00038 */ s32 nReturnAddrLast;
-    /* 0x00B5C */ u32 nRetrace;
-    /* 0x00B60 */ u32 nRetraceUsed;
-    /* 0x0003C */ s32 survivalTimer;
-    /* 0x00040 */ CpuGpr aGPR[32];
-    /* 0x00140 */ CpuFpr aFPR[32];
-    /* 0x00240 */ u64 aTLB[48][5];
-    /* 0x009C0 */ s32 anFCR[32];
-    /* 0x00A40 */ s64 anCP0[32];
-    /* 0x00B40 */ CpuExecuteFunc pfStep;
-    /* 0x00B44 */ CpuExecuteFunc pfJump;
-    /* 0x00B48 */ CpuExecuteFunc pfCall;
-    /* 0x00B4C */ CpuExecuteFunc pfIdle;
-    /* 0x00B50 */ CpuExecuteFunc pfRam;
-    /* 0x00B54 */ CpuExecuteFunc pfRamF;
-    /* 0x00B58 */ u32 nTickLast;
+    /* 0x00008 */ s64 nLo;
+    /* 0x00010 */ s64 nHi;
+    /* 0x00018 */ s32 nCountAddress;
+    /* 0x0001C */ s32 iDeviceDefault;
+    /* 0x00020 */ u32 nPC;
+    /* 0x00024 */ u32 nWaitPC;
+    /* 0x00028 */ u32 nCallLast;
+    /* 0x0002C */ CpuFunction* pFunctionLast;
+    /* 0x00030 */ s32 nReturnAddrLast;
+    /* 0x00034 */ s32 survivalTimer;
+    /* 0x00038 */ u32 nTickLast;
+    /* 0x0003C */ u32 nRetrace;
+    /* 0x00040 */ u32 nRetraceUsed;
+
+    // not ok?
+    /* 0x00044 */ CpuGpr aGPR[32];
+    /* 0x00144 */ CpuFpr aFPR[32];
+    /* 0x00244 */ u64 aTLB[48][5];
+    /* 0x009C4 */ s32 anFCR[32];
+    /* 0x00A44 */ s64 anCP0[32];
+    /* 0x00B44 */ CpuExecuteFunc pfStep;
+    /* 0x00B48 */ CpuExecuteFunc pfJump;
+    /* 0x00B4C */ CpuExecuteFunc pfCall;
+    /* 0x00B50 */ CpuExecuteFunc pfIdle;
+    /* 0x00B54 */ CpuExecuteFunc pfRam;
+    /* 0x00B58 */ CpuExecuteFunc pfRamF;
     /* 0x00B64 */ CpuDevice* apDevice[256];
     /* 0x00F64 */ u8 aiDevice[65536];
+
+    // ok
     /* 0x10F64 */ void* gHeap1;
     /* 0x10F68 */ void* gHeap2;
     /* 0x10F6C */ u32 aHeap1Flag[192];
     /* 0x1126C */ u32 aHeap2Flag[13];
-    /* 0x112A0 */ CpuTreeRoot* gTree;
-    /* 0x112A4 */ CpuAddress aAddressCache[256];
-    /* 0x11EA4 */ s32 nCountCodeHack;
-    /* 0x11EA8 */ CpuCodeHack aCodeHack[32];
-    /* 0x12028 */ s64 nTimeRetrace;
-    /* 0x12030 */ OSAlarm alarmRetrace;
-    /* 0x12058 */ u32 nFlagRAM;
-    /* 0x1205C */ u32 nFlagCODE;
-    /* 0x12060 */ u32 nCompileFlag;
-    /* 0x12064 */ CpuOptimize nOptimize;
-}; // size = 0x12090
+    /* 0x1129C */ void* gHeapTree;
+    /* 0x112A0 */ u32 aHeapTreeFlag[125];
+    /* 0x11494 */ CpuTreeRoot* gTree;
+    /* 0x11498 */ CpuAddress aAddressCache[256];
+    /* 0x12098 */ s32 nCountCodeHack;
+    /* 0x1209C */ CpuCodeHack aCodeHack[32];
+    /* 0x1221C */ u32 nFlagRAM;
+    /* 0x12220 */ u32 nFlagCODE;
 
-//! TODO: document this
-struct cpu_blk_req_t;
-typedef s32 blockReqHandler(struct cpu_blk_req_t*, s32);
-typedef struct cpu_blk_req_t {
-    struct cpu_blk_req_t* done;
-    u32 len;
-    blockReqHandler* handler;
-    s32 dev_addr;
-    u32 dst_phys_ram;
-} cpu_blk_req_t;
+    // not ok
+    /* 0x12224 */ u32 nCompileFlag;
+    /* 0x12228 */ s32 nTimeRetrace;
+
+    // /* 0x12230 */ OSAlarm alarmRetrace;
+    /* 0x12230 */ s32 alarmRetrace[12];
+
+    /* 0x1225C */ s32 UNKNOWN_1225C;
+    /* 0x12260 */ s32 UNKNOWN_12260;
+    /* 0x12264 */ s32 UNKNOWN_12264;
+    /* 0x12268 */ s32 UNKNOWN_12268;
+    /* 0x1226C */ s32 UNKNOWN_1226C;
+
+    // ok
+    /* 0x12270 */ CpuOptimize nOptimize;
+    u8 pad[0x38];
+}; // size = 0x122D0
 
 #define CPU_DEVICE(apDevice, aiDevice, nAddress) (apDevice[aiDevice[(u32)(nAddress) >> 16]])
 
@@ -370,6 +402,7 @@ bool cpuSetXPC(Cpu* pCPU, s64 nPC, s64 nLo, s64 nHi);
 bool cpuReset(Cpu* pCPU);
 bool cpuSetCodeHack(Cpu* pCPU, s32 nAddress, s32 nOpcodeOld, s32 nOpcodeNew);
 bool cpuMapObject(Cpu* pCPU, void* pObject, u32 nAddress0, u32 nAddress1, s32 nType);
+bool cpuSetGetBlock(Cpu* pCPU, CpuDevice* pDevice, GetBlockFunc pfGetBlock);
 bool cpuSetDeviceGet(Cpu* pCPU, CpuDevice* pDevice, Get8Func pfGet8, Get16Func pfGet16, Get32Func pfGet32,
                      Get64Func pfGet64);
 bool cpuSetDevicePut(Cpu* pCPU, CpuDevice* pDevice, Put8Func pfPut8, Put16Func pfPut16, Put32Func pfPut32,
@@ -382,7 +415,6 @@ bool cpuInvalidateCache(Cpu* pCPU, s32 nAddress0, s32 nAddress1);
 bool cpuGetFunctionChecksum(Cpu* pCPU, u32* pnChecksum, CpuFunction* pFunction);
 bool cpuHeapTake(void* heap, Cpu* pCPU, CpuFunction* pFunction, int memory_size);
 bool cpuFindFunction(Cpu* pCPU, s32 theAddress, CpuFunction** tree_node);
-bool cpuSetGetBlock(Cpu* pCPU, CpuDevice* pDevice, void* pArgument);
 
 extern _XL_OBJECTTYPE gClassCPU;
 

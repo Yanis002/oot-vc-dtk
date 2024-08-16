@@ -34,7 +34,7 @@ bool videoGet16(Video* pVideo, u32 nAddress, s16* pData);
 bool videoGet32(Video* pVideo, u32 nAddress, s32* pData);
 bool videoGet64(Video* pVideo, u32 nAddress, s64* pData);
 
-bool videoForceRetrace(Video* pVideo, bool unknown);
+bool videoForceRetrace(Video* pVideo);
 bool videoEvent(Video* pVideo, s32 nEvent, void* pArgument);
 
 extern _XL_OBJECTTYPE gClassVideo;
