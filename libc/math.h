@@ -1,7 +1,7 @@
 #ifndef _MATH_H_
 #define _MATH_H_
 
-#include "dolphin/types.h"
+#include "revolution/types.h"
 #include "intrinsics.h"
 #include "macros.h"
 

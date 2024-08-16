@@ -22,6 +22,8 @@
 #define SQ(x) ((x) * (x))
 #define CLAMP(x, l, h) (((x) > (h)) ? (h) : (((x) < (l)) ? (l) : (x)))
 
+#define DECOMP_DONT_INLINE __attribute__((never_inline))
+
 // Adds no-ops to increase a function's size, preventing automatic inlining
 #define NO_INLINE() \
     (void)0;        \

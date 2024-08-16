@@ -1,7 +1,7 @@
 #ifndef _THPBUFFER_H
 #define _THPBUFFER_H
 
-#include "dolphin/types.h"
+#include "revolution/types.h"
 
 typedef struct THPTextureSet {
     /* 0x0 */ u8* yTexture;

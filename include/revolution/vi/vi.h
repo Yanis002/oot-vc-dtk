@@ -1,34 +1,38 @@
-#ifndef REVOSDK_VI_H
-#define REVOSDK_VI_H
+#ifndef RVL_SDK_VI_H
+#define RVL_SDK_VI_H
 
-#include "dolphin/types.h"
-#include "revolution/gx/GXFrameBuf.h"
+#include "revolution/types.h"
+#include "revolution/gx/GXFramebuf.h"
+#include "revolution/vi/vitypes.h"
 
-typedef void (*VIPostRetraceCallback)(void);
+#ifdef __cplusplus
+extern "C" {
+#endif
 
-enum VITvFormat {
-    VI_NTSC,
-    VI_PAL,
-    VI_MPAL,
-    VI_TV_FORMAT_3,
-    VI_TV_FORMAT_4,
-    VI_EURGB60
-};
+typedef void (*VIRetraceCallback)(u32 retraceCount);
+typedef void (*VIPositionCallback)(s16 displayX, s16 displayY);
+
+VIRetraceCallback VISetPreRetraceCallback(VIRetraceCallback callback);
+VIRetraceCallback VISetPostRetraceCallback(VIRetraceCallback callback);
 
 void VIInit(void);
-void VISetBlack(s32);
-void VIConfigure(GXRenderModeObj*);
 void VIWaitForRetrace(void);
 
-void VISetPostRetraceCallback(VIPostRetraceCallback);
-
+void VIConfigure(const GXRenderModeObj* rmo);
+void VIConfigurePan(u16 x, u16 y, u16 w, u16 h);
 void VIFlush(void);
 
+void VISetNextFrameBuffer(void* fb);
 void* VIGetCurrentFrameBuffer(void);
 
-void VISetNextFrameBuffer(void*);
-
+void VISetBlack(bool black);
 s32 VIGetRetraceCount(void);
-enum VITvFormat VIGetTvFormat(void);
+
+VITvFormat VIGetTvFormat(void);
+VIScanMode VIGetScanMode(void);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

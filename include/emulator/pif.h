@@ -1,7 +1,7 @@
 #ifndef _PIF_H
 #define _PIF_H
 
-#include "dolphin.h"
+#include "revolution/types.h"
 #include "emulator/xlObject.h"
 
 #define PIF_RAM_START 0x7C0

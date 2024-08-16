@@ -1,7 +1,7 @@
 #ifndef _FLASH_H
 #define _FLASH_H
 
-#include "dolphin.h"
+#include "revolution/types.h"
 #include "emulator/xlObject.h"
 
 // __anon_0x7428F

@@ -1,7 +1,7 @@
 #ifndef _AUDIO_H
 #define _AUDIO_H
 
-#include "dolphin.h"
+#include "revolution/types.h"
 #include "emulator/xlObject.h"
 
 // __anon_0x753E7

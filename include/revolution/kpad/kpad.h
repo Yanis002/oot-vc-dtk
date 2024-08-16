@@ -1,10 +1,17 @@
 #ifndef REVOSDK_KPAD_H
 #define REVOSDK_KPAD_H
 
-#include "dolphin/types.h"
+#ifdef __cplusplus
+#include "revolution/types.h"
+extern "C" {
+#endif
 
 typedef struct {
 
 } KPADStatus;
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

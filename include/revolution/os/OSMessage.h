@@ -1,25 +1,34 @@
-#ifndef REVOSDK_OS_MESSAGE
-#define REVOSDK_OS_MESSAGE
+#ifndef RVL_SDK_OS_MESSAGE_H
+#define RVL_SDK_OS_MESSAGE_H
 
-#include "dolphin/types.h"
+#include "revolution/os/OSThread.h"
+#include "revolution/types.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+// General-purpose typedef
 typedef void* OSMessage;
 
-struct OSMessageQueue {
-    s32 WORD_0x0;
-    s32 WORD_0x4;
-    s32 WORD_0x8;
-    s32 WORD_0xC;
-    s32 WORD_0x10;
-    s32 WORD_0x14;
-    s32 WORD_0x18;
-    s32 WORD_0x1C;
-};
+typedef enum { OS_MSG_PERSISTENT = (1 << 0) } OSMessageFlags;
 
-s32 OSInitMessageQueue(struct OSMessageQueue*, OSMessage* buffer, s32 mesgCount);
+typedef struct OSMessageQueue {
+    OSThreadQueue sendQueue; // at 0x0
+    OSThreadQueue recvQueue; // at 0x8
+    OSMessage* buffer;       // at 0x10
+    s32 capacity;            // at 0x14
+    s32 front;               // at 0x18
+    s32 size;                // at 0x1C
+} OSMessageQueue;
 
-bool OSSendMessage(struct OSMessageQueue*, OSMessage, s32);
-bool OSReceiveMessage(struct OSMessageQueue*, OSMessage*, s32);
-bool OSJamMessage(struct OSMessageQueue*, s32, s32);
+void OSInitMessageQueue(OSMessageQueue* queue, OSMessage* buffer, s32 capacity);
+bool OSSendMessage(OSMessageQueue* queue, OSMessage mesg, u32 flags);
+bool OSReceiveMessage(OSMessageQueue* queue, OSMessage* mesg, u32 flags);
+bool OSJamMessage(OSMessageQueue* queue, OSMessage mesg, u32 flags);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

@@ -1,7 +1,7 @@
 #ifndef _XL_HEAP_H
 #define _XL_HEAP_H
 
-#include "dolphin.h"
+#include "revolution/types.h"
 
 #define HEAP_COUNT 2
 

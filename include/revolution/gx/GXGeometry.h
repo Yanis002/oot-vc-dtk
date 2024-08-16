@@ -1,17 +1,29 @@
-#ifndef REVOSDK_GX_GEOMETRY_H
-#define REVOSDK_GX_GEOMETRY_H
-#include "GX.h"
-#include "dolphin/types.h"
+#ifndef RVL_SDK_GX_GEOMETRY_H
+#define RVL_SDK_GX_GEOMETRY_H
 
-typedef enum _GXCullMode {
+#include "revolution/gx/GXTypes.h"
+#include "revolution/types.h"
 
-} GXCullMode;
+#ifdef __cplusplus
+extern "C" {
+#endif
 
-void GXBegin(s32, s32 formatIndex, s32);
-static void GXEnd(void) {}
+void GXBegin(GXPrimitive prim, GXVtxFmt fmt, u16 verts);
+static inline void GXEnd(void) {}
 
-void GXSetCullMode(s32);
+void GXSetLineWidth(u8 width, u32 offset);
+void GXSetPointSize(u8 size, u32 offset);
+void GXEnableTexOffsets(GXTexCoordID coordId, GXBool lineOfs, GXBool pointOfs);
+void GXSetCullMode(GXCullMode mode);
+void GXGetCullMode(GXCullMode* out);
+void GXSetCoPlanar(GXBool coplanar);
 
-void GXSetCoPlanar(s32);
+void __GXSetDirtyState(void);
+void __GXSendFlushPrim(void);
+void __GXSetGenMode(void);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

@@ -1,7 +1,7 @@
 #ifndef _MIPS_H
 #define _MIPS_H
 
-#include "dolphin.h"
+#include "revolution/types.h"
 #include "emulator/xlObject.h"
 
 // __anon_0x39384

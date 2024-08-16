@@ -1,8 +1,10 @@
 #ifndef _XL_FILE_GCN_H
 #define _XL_FILE_GCN_H
 
-#include "dolphin.h"
-#include "revolution/cnt/cnt.h"
+#include "revolution/types.h"
+#include "revolution/cnt.h"
+#include "revolution/dvd.h"
+#include "emulator/xlObject.h"
 
 typedef bool (*DVDOpenCallback)(char*, CNTFileInfo*);
 typedef bool (*DVDReadCallback)(CNTFileInfo*, void*, s32, s32, DVDCallback);
@@ -35,5 +37,7 @@ bool xlFileClose(tXL_FILE** ppFile);
 bool xlFileGet(tXL_FILE* pFile, void* pTarget, s32 nSizeBytes);
 bool xlFileSetPosition(tXL_FILE* pFile, s32 nOffset);
 bool xlFileEvent(tXL_FILE* pFile, s32 nEvent, void* pArgument);
+
+extern _XL_OBJECTTYPE gTypeFile;
 
 #endif

@@ -1,5 +1,5 @@
-#ifndef _DOLPHIN_TYPES_H_
-#define _DOLPHIN_TYPES_H_
+#ifndef REVOLUTION_TYPES_H_
+#define REVOLUTION_TYPES_H_
 
 typedef signed char s8;
 typedef unsigned char u8;
@@ -34,5 +34,8 @@ typedef int bool;
 #define ATTRIBUTE_ALIGN(num) __attribute__((aligned(num)))
 
 #define NULL (void*)0
+
+typedef int UNKWORD;
+typedef void UNKTYPE;
 
 #endif

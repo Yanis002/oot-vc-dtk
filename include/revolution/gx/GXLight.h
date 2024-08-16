@@ -1,39 +1,40 @@
-#ifndef REVOSDK_GX_LIGHT_H
-#define REVOSDK_GX_LIGHT_H
-#include "GX.h"
-#include "dolphin/types.h"
+#ifndef RVL_SDK_GX_LIGHT_H
+#define RVL_SDK_GX_LIGHT_H
 
-typedef struct _GXLightObj {
-    char UNK_0x0[64];
-} GXLightObj;
+#include "revolution/gx/GXInternal.h"
+#include "revolution/gx/GXTypes.h"
+#include "revolution/types.h"
 
-typedef enum _GXLightID {
+#ifdef __cplusplus
+extern "C" {
+#endif
 
-} GXLightID;
+GX_DECL_PUBLIC_STRUCT(GXLightObj, 64);
 
-typedef enum _GXSpotFn {
-    GX_SPOT_FN_0
-} GXSpotFn;
+void GXInitLightAttn(GXLightObj* light, f32 aa, f32 ab, f32 ac, f32 ka, f32 kb,
+                     f32 kc);
+void GXInitLightAttnA(GXLightObj* light, f32 a, f32 b, f32 c);
+void GXInitLightAttnK(GXLightObj* light, f32 a, f32 b, f32 c);
+void GXInitLightSpot(GXLightObj* light, f32 angle, GXSpotFn fn);
+void GXInitLightDistAttn(GXLightObj* light, f32 distance, f32 brightness,
+                         GXDistAttnFn fn);
+void GXInitLightPos(GXLightObj* light, f32 x, f32 y, f32 z);
+void GXGetLightPos(const GXLightObj* light, f32* x, f32* y, f32* z);
+void GXInitLightDir(GXLightObj* light, f32 x, f32 y, f32 z);
+void GXGetLightDir(const GXLightObj* light, f32* x, f32* y, f32* z);
+void GXInitSpecularDir(GXLightObj* light, f32 x, f32 y, f32 z);
+void GXInitLightColor(GXLightObj* light, GXColor color);
+void GXLoadLightObjImm(const GXLightObj* light, GXLightID id);
+void GXLoadLightObjIndx(u16 index, GXLightID id);
+void GXSetChanAmbColor(GXChannelID chan, GXColor color);
+void GXSetChanMatColor(GXChannelID chan, GXColor color);
+void GXSetNumChans(u8 num);
+void GXSetChanCtrl(GXChannelID chan, GXBool enable, GXColorSrc ambSrc,
+                   GXColorSrc matSrc, GXLightID lightMask, GXDiffuseFn diffFn,
+                   GXAttnFn attnFn);
 
-typedef enum _GXDistAttnFn {
-    GX_DIST_ATTN_FN_0
-} GXDistAttnFn;
-
-void GXInitLightColor(GXLightObj*, GXColor*);
-void GXInitLightPos(GXLightObj*, float, float, float);
-void GXInitLightDir(GXLightObj*, float, float, float);
-void GXInitSpecularDir(GXLightObj*, float, float, float);
-void GXInitLightSpot(GXLightObj*, float, GXSpotFn);
-void GXInitLightAttnA(GXLightObj*, float, float, float);
-void GXInitLightDistAttn(GXLightObj*, float, float, GXDistAttnFn);
-void GXInitLightAttnK(GXLightObj*, float, float, float);
-void GXInitLightAttn(GXLightObj*, float, float, float, float, float, float);
-void GXGetLightPos(const GXLightObj*, float*, float*, float*);
-void GXGetLightDir(const GXLightObj*, float*, float*, float*);
-
-void GXSetChanAmbColor(GXChannelID, GXColor);
-void GXSetChanMatColor(GXChannelID, GXColor);
-void GXSetNumChans(s32 nChans);
-void GXSetChanCtrl(GXChannelID, s32, s32, s32, s32, s32, s32);
+#ifdef __cplusplus
+}
+#endif
 
 #endif

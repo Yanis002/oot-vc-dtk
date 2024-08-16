@@ -1,7 +1,7 @@
 #ifndef _THPINFO_H
 #define _THPINFO_H
 
-#include "dolphin/types.h"
+#include "revolution/types.h"
 
 typedef struct THPFrameCompInfo {
     /* 0x0 */ u32 numComponents;

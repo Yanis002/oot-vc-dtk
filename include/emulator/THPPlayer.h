@@ -1,7 +1,7 @@
 #ifndef _THPPLAYER_H
 #define _THPPLAYER_H
 
-#include "dolphin.h"
+#include "revolution.h"
 #include "emulator/THPBuffer.h"
 #include "emulator/THPFile.h"
 #include "emulator/THPInfo.h"

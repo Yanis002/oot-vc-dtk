@@ -1,64 +1,60 @@
-#ifndef REVOSDK_GX_ATTR_H
-#define REVOSDK_GX_ATTR_H
-#include "GXTexture.h"
-#include "dolphin/types.h"
+#ifndef RVL_SDK_GX_ATTR_H
+#define RVL_SDK_GX_ATTR_H
 
-typedef enum _GXAttr {
-    GX_ATTR_0,
-    GX_ATTR_1,
-    GX_ATTR_2,
-    GX_ATTR_3,
-    GX_ATTR_4,
-    GX_ATTR_5,
-    GX_ATTR_6,
-    GX_ATTR_7,
-    GX_ATTR_8,
+#include "revolution/gx/GXTypes.h"
+#include "revolution/types.h"
 
-    GX_ATTR_VTX,
-
-    GX_ATTR_VTX_POS = GX_ATTR_VTX,
-    GX_ATTR_VTX_NRM,
-
-    GX_ATTR_VTX_CLR,
-    GX_ATTR_VTX_CLR_COUNT = 2,
-
-    GX_ATTR_VTX_TEX_COORD = GX_ATTR_VTX_CLR + GX_ATTR_VTX_CLR_COUNT,
-    GX_ATTR_VTX_TEX_COORD_COUNT = 8,
-
-    GX_ATTR_14 = 14,
-    GX_ATTR_15,
-    GX_ATTR_16,
-    GX_ATTR_17,
-    GX_ATTR_18,
-    GX_ATTR_19,
-    GX_ATTR_20,
-
-    GX_ATTR_COUNT = GX_ATTR_VTX_TEX_COORD + GX_ATTR_VTX_TEX_COORD_COUNT,
-    GX_ATTR_VTX_COUNT = GX_ATTR_COUNT - GX_ATTR_VTX,
-
-    GX_ATTR_INVALID = 0xFF
-} GXAttr;
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 typedef struct _GXVtxDescList {
-    GXAttr mAttr; // at 0x0
-    s32 WORD_0x4;
-} GXVtxDescList[];
+    GXAttr attr;     // at 0x0
+    GXAttrType type; // at  0x4
+} GXVtxDescList;
 
 typedef struct _GXVtxAttrFmtList {
-    GXAttr mAttr; // at 0x0
-    s32 WORD_0x4;
-    s32 WORD_0x8;
-    char BYTE_0xC;
-} GXVtxAttrFmtList[];
+    GXAttr attr;         // at 0x0
+    GXCompCnt compCnt;   // at 0x4
+    GXCompType compType; // at 0x8
+    u8 shift;            // at 0xC
+} GXVtxAttrFmtList;
 
-void GXSetVtxDesc(GXAttr, s32);
-
+void GXSetVtxDesc(GXAttr name, GXAttrType type);
+void GXSetVtxDescv(const GXVtxDescList* list);
+void GXGetVtxDesc(GXAttr name, GXAttrType* type);
+void GXGetVtxDescv(GXVtxDescList* list);
 void GXClearVtxDesc(void);
-void GXSetVtxAttrFmt(s32 formatIndex, GXAttr, s32, s32, s32 fracValue);
+void GXSetVtxAttrFmt(GXVtxFmt fmt, GXAttr attr, GXCompCnt compCnt,
+                     GXCompType compType, u8 shift);
 
-void GXSetArray(GXAttr, const void*, u8);
+// TODO: Please find a way to get rid of this
+#ifdef GXATTR_MATCH_HACK
+void GXSetVtxAttrFmtv(s16 fmt, const GXVtxAttrFmtList* list);
+#else
+void GXSetVtxAttrFmtv(GXVtxFmt fmt, const GXVtxAttrFmtList* list);
+#endif
+
+void GXGetVtxAttrFmt(GXVtxFmt fmt, GXAttr attr, GXCompCnt* compCnt,
+                     GXCompType* compType, u8* shift);
+void GXGetVtxAttrFmtv(GXVtxFmt fmt, GXVtxAttrFmtList* list);
+void GXSetArray(GXAttr attr, const void* base, u8 stride);
 void GXInvalidateVtxCache(void);
-void GXSetTexCoordGen2(GXTexCoordID, GXTexGenType function, GXTexGenSrc, s32, s32, s32);
-void GXSetNumTexGens(s32);
+void GXSetTexCoordGen2(GXTexCoordID id, GXTexGenType type, GXTexGenSrc src,
+                       u32 texMtxIdx, GXBool normalize, u32 dualTexMtxIdx);
+void GXSetNumTexGens(u8 num);
+
+void __GXSetVCD(void);
+void __GXCalculateVLim(void);
+void __GXSetVAT(void);
+
+static inline void GXSetTexCoordGen(GXTexCoordID id, GXTexGenType type,
+                             GXTexGenSrc src, u32 texMtxIdx) {
+    GXSetTexCoordGen2(id, type, src, texMtxIdx, false, GX_DUALMTX_IDENT);
+}
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

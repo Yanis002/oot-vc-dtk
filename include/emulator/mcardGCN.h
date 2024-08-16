@@ -1,7 +1,9 @@
 #ifndef _MCARD_H
 #define _MCARD_H
 
-#include "dolphin.h"
+#include "revolution/types.h"
+#include "revolution/os.h"
+#include "revolution/card.h"
 
 // __anon_0x1BD8E
 typedef enum MemCardCommand {

@@ -1,54 +1,39 @@
-#ifndef REVOSDK_GX_TEV_H
-#define REVOSDK_GX_TEV_H
-#include "GX.h"
-#include "dolphin/types.h"
+#ifndef RVL_SDK_GX_TEV_H
+#define RVL_SDK_GX_TEV_H
 
-typedef enum _GXTevSwapSel {
-    GX_TEV_SWAP_SEL_0,
-    GX_TEV_SWAP_SEL_1,
-    GX_TEV_SWAP_SEL_2,
-    GX_TEV_SWAP_SEL_3,
-    GX_TEV_SWAP_SEL_COUNT
-} GXTevSwapSel;
+#include "revolution/gx/GXTypes.h"
+#include "revolution/types.h"
 
-typedef enum _GXTevColorChan {
+#ifdef __cplusplus
+extern "C" {
+#endif
 
-} GXTevColorChan;
+void GXSetTevOp(GXTevStageID, GXTevMode);
+void GXSetTevColorIn(GXTevStageID, GXTevColorArg, GXTevColorArg, GXTevColorArg,
+                     GXTevColorArg);
+void GXSetTevAlphaIn(GXTevStageID, GXTevAlphaArg, GXTevAlphaArg, GXTevAlphaArg,
+                     GXTevAlphaArg);
+void GXSetTevColorOp(GXTevStageID, GXTevOp, GXTevBias, GXTevScale, GXBool,
+                     GXTevRegID);
+void GXSetTevAlphaOp(GXTevStageID, GXTevOp, GXTevBias, GXTevScale, GXBool,
+                     GXTevRegID);
 
-typedef enum _GXTevStageID {
-    GX_TEV_STAGE_ID_0,
-    GX_TEV_STAGE_ID_1,
-    GX_TEV_STAGE_ID_2,
-    GX_TEV_STAGE_ID_COUNT = 16
-} GXTevStageID;
-
-typedef enum _GXTevColorArg {
-
-} GXTevColorArg;
-
-typedef enum _GXTevRegID {
-    GX_TEV_REG_ID_0,
-    GX_TEV_REG_ID_1,
-    GX_TEV_REG_ID_2,
-    GX_TEV_REG_ID_3,
-} GXTevRegID;
-
-void GXSetTevOp(GXTevStageID, s32 tevMode);
-void GXSetTevColorIn(GXTevStageID, s32 a, s32 b, s32 c, s32 d);
-void GXSetTevAlphaIn(GXTevStageID, s32 a, s32 b, s32 c, s32 d);
-void GXSetTevColorOp(GXTevStageID, s32, s32, s32, s32, s32);
-void GXSetTevAlphaOp(GXTevStageID, s32, s32, s32, s32, s32);
 void GXSetTevColor(GXTevRegID, GXColor);
 
-void GXSetTevKColor(GXTevRegID, GXColor);
-void GXSetTevKColorSel(GXTevStageID, s32);
-void GXSetTevKAlphaSel(GXTevStageID, s32);
+void GXSetTevKColor(GXTevKColorID, GXColor);
+void GXSetTevKColorSel(GXTevStageID, GXTevKColorSel);
+void GXSetTevKAlphaSel(GXTevStageID, GXTevKAlphaSel);
+void GXSetTevSwapMode(GXTevStageID, GXTevSwapSel, GXTevSwapSel);
+void GXSetTevSwapModeTable(GXTevSwapSel, GXTevColorChan, GXTevColorChan,
+                           GXTevColorChan, GXTevColorChan);
 
-void GXSetTevSwapModeTable(GXTevSwapSel, s32, s32, s32, s32);
-
-void GXSetAlphaCompare(s32, s32, s32, s32, s32);
-void GXSetZTexture(s32, s32 zTexFormat, s32);
-
+void GXSetAlphaCompare(GXCompare, u8, GXAlphaOp, GXCompare, u8);
+void GXSetZTexture(GXZTexOp, GXTexFmt, u32);
+void GXSetTevOrder(GXTevStageID, GXTexCoordID, GXTexMapID, GXChannelID);
 void GXSetNumTevStages(u8);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

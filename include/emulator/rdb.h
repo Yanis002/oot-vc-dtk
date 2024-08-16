@@ -1,7 +1,7 @@
 #ifndef _RDB_H
 #define _RDB_H
 
-#include "dolphin.h"
+#include "revolution/types.h"
 #include "emulator/xlObject.h"
 
 // __anon_0x56A0F

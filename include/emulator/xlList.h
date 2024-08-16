@@ -1,7 +1,7 @@
 #ifndef _XL_LIST_H
 #define _XL_LIST_H
 
-#include "dolphin.h"
+#include "revolution/types.h"
 
 // List nodes consist of a pointer to the next node followed by an arbitrary amount of data.
 #define NODE_NEXT(pNode) (*(void**)(pNode))

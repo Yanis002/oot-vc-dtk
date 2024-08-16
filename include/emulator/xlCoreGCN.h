@@ -1,7 +1,8 @@
 #ifndef _XL_CORE_GCN_H
 #define _XL_CORE_GCN_H
 
-#include "dolphin.h"
+#include "revolution/types.h"
+#include "revolution/gx.h"
 
 extern GXRenderModeObj* rmode;
 

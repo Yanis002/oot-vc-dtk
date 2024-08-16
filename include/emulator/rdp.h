@@ -1,7 +1,7 @@
 #ifndef _RDP_H
 #define _RDP_H
 
-#include "dolphin.h"
+#include "revolution/types.h"
 #include "emulator/rsp.h"
 #include "emulator/xlObject.h"
 

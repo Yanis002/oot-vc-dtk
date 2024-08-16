@@ -1,10 +1,13 @@
-#include "dolphin.h"
 #include "emulator/simGCN.h"
 #include "emulator/xlCoreGCN.h"
 #include "emulator/xlHeap.h"
 #include "emulator/xlList.h"
 #include "emulator/xlPostGCN.h"
 #include "macros.h"
+#include "revolution/gx.h"
+// #include "revolution/vi.h"
+#include "revolution/demo.h"
+#include "revolution/sc.h"
 
 static GXRenderModeObj rmodeobj;
 static s32 gnCountArgument;
@@ -12,10 +15,6 @@ static char** gaszArgument;
 static void* DefaultFifo;
 static GXFifoObj* DefaultFifoObj;
 GXRenderModeObj* rmode;
-
-//! TODO: move in the proper header
-void SCInit(void);
-u32 SCCheckStatus();
 
 //! TODO: find these function names
 u32 fn_8009A7C4();
@@ -30,7 +29,7 @@ static inline u32 getFBTotalSize(f32 aspectRatio) {
 }
 
 static void xlCoreInitRenderMode(GXRenderModeObj* mode) {
-    OSTick nTickLast;
+    u32 nTickLast;
 
     SCInit();
 
@@ -76,7 +75,7 @@ static inline void __xlCoreInitGX(void) {
     GXSetCopyFilter(rmode->aa, rmode->sample_pattern, GX_TRUE, rmode->vfilter);
 
     if (rmode->aa != 0) {
-        GXSetPixelFmt(GX_PF_RGB565_Z16, GX_ZC_LINEAR);
+        GXSetPixelFmt(GX_PF_RGBA565_Z16, GX_ZC_LINEAR);
     } else {
         GXSetPixelFmt(GX_PF_RGB8_Z24, GX_ZC_LINEAR);
     }

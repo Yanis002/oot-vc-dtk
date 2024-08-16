@@ -1,7 +1,7 @@
 #ifndef _RAM_H
 #define _RAM_H
 
-#include "dolphin.h"
+#include "revolution/types.h"
 #include "emulator/xlObject.h"
 
 // RDRAM Interface Registers

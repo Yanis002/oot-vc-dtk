@@ -49,6 +49,10 @@
 #define PAD_ERR_NOT_READY -2
 #define PAD_ERR_TRANSFER -3
 
+typedef enum {
+    PAD_FLAG_NO_RECALIBRATE = (1 << 6),
+} PADFlag;
+
 typedef void (*PADSamplingCallback)(void);
 
 typedef struct PADStatus {
@@ -65,6 +69,7 @@ typedef struct PADStatus {
 } PADStatus;
 
 extern u32 __PADFixBits;
+extern u32 __PADSpec;
 
 bool PADInit(void);
 u32 PADRead(PADStatus* status);

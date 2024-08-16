@@ -1,7 +1,7 @@
 #ifndef _SOUNDGCN_H
 #define _SOUNDGCN_H
 
-#include "dolphin.h"
+#include "revolution/types.h"
 #include "emulator/xlObject.h"
 
 // __anon_0x221A3

@@ -1,31 +1,43 @@
-#ifndef REVOSDK_GX_TRANSFORM_H
-#define REVOSDK_GX_TRANSFORM_H
-#include "GX.h"
-#include "dolphin/types.h"
+#ifndef RVL_SDK_GX_TRANSFORM_H
+#define RVL_SDK_GX_TRANSFORM_H
 
-typedef enum _GXProjectionType {
-    GX_PROJECTION_PERSP,
-    GX_PROJECTION_ORTHO
-} GXProjectionType;
+#include "revolution/gx/GXTypes.h"
+#include "revolution/mtx.h"
+#include "revolution/types.h"
 
-void GXSetProjection(float (*)[4], u32);
-void GXSetProjectionv(const f32*);
-void GXGetProjectionv(f32*);
+#ifdef __cplusplus
+extern "C" {
+#endif
 
-void GXLoadPosMtxImm(float (*)[4], u32);
+void GXSetProjection(const Mtx44 proj, GXProjectionType type);
+void GXSetProjectionv(const f32 proj[7]);
+void GXGetProjectionv(f32 proj[7]);
+void GXLoadPosMtxImm(const Mtx mtx, u32 id);
+void GXLoadPosMtxIndx(u16 index, u32 id);
+void GXLoadNrmMtxImm(const Mtx mtx, u32 id);
+void GXLoadNrmMtxIndx3x3(u16 index, u32 id);
+void GXSetCurrentMtx(u32 id);
+void GXLoadTexMtxImm(const Mtx mtx, u32 id, GXMtxType type);
+void GXSetViewportJitter(f32 ox, f32 oy, f32 sx, f32 sy, f32 near, f32 far,
+                         u32 nextField);
+void GXSetViewport(f32 ox, f32 oy, f32 sx, f32 sy, f32 near, f32 far);
+void GXGetViewportv(f32 view[6]);
+void GXSetZScaleOffset(f32 scale, f32 offset);
+void GXSetScissor(u32 x, u32 y, u32 w, u32 h);
+void GXGetScissor(u32* x, u32* y, u32* w, u32* h);
+void GXSetScissorBoxOffset(u32 ox, u32 oy);
+void GXSetClipMode(GXClipMode mode);
 
-void GXLoadTexMtxImm(float (*)[4], s32, s32 type);
+void __GXSetProjection(void);
+void __GXSetViewport(void);
+void __GXSetMatrixIndex(GXAttr index);
 
-void GXSetCurrentMtx(s32);
+static inline void GXSetViewportv(const f32* vp) {
+    GXSetViewport(vp[0], vp[1], vp[2], vp[3], vp[4], vp[5]);
+}
 
-void GXSetViewportJitter(f32, f32, f32, f32, f32, f32, u32);
-void GXSetViewport(f32, f32, f32, f32, f32, f32);
-void GXGetViewportv(f32[6]);
-
-void GXSetScissor(u32 left, u32 top, u32 width, u32 height);
-void GXGetScissor(u32*, u32*, u32*, u32*);
-void GXSetScissorBoxOffset(u32 xOffset, u32 yOffset);
-
-void GXSetClipMode(s32);
+#ifdef __cplusplus
+}
+#endif
 
 #endif

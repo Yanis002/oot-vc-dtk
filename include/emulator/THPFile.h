@@ -1,7 +1,7 @@
 #ifndef _THPFILE_H
 #define _THPFILE_H
 
-#include "dolphin/types.h"
+#include "revolution/types.h"
 
 typedef struct THPHeader {
     /* 0x00 */ char magic[4];

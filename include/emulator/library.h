@@ -1,7 +1,7 @@
 #ifndef _LIBRARY_H
 #define _LIBRARY_H
 
-#include "dolphin.h"
+#include "revolution/types.h"
 #include "emulator/cpu.h"
 #include "emulator/xlObject.h"
 

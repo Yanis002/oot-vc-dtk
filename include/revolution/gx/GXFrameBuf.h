@@ -1,32 +1,52 @@
-#ifndef REVOSDK_GX_FRAME_BUF_H
-#define REVOSDK_GX_FRAME_BUF_H
-#include "GX.h"
-#include "dolphin/types.h"
+#ifndef RVL_SDK_GX_FRAMEBUF_H
+#define RVL_SDK_GX_FRAMEBUF_H
+
+#include "revolution/types.h"
+#include "revolution/vi/vitypes.h"
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+typedef enum VIXfbMode;
 
 typedef struct _GXRenderModeObj {
-    u32 INT_0x0;
-    u16 mFbWidth; // at 0x4
-    u16 mEfbHeight; // at 0x6
-    u16 mFbHeight; // at 0x8
-    u16 SHORT_0xA;
-    u16 SHORT_0xC;
-    u16 SHORT_0xE;
-    u16 SHORT_0x10;
-    u16 UNUSED_0x12;
-    u32 INT_0x14;
-    u8 BYTE_0x18;
-    u8 BYTE_0x19;
-    u8 BYTES_0x1A[24];
-    u8 BYTES_0x32[7];
+    VITvFormat viTVmode;      // at 0x0
+    u16 fbWidth;              // at 0x4
+    u16 efbHeight;            // at 0x6
+    u16 xfbHeight;            // at 0x8
+    u16 viXOrigin;            // at 0xA
+    u16 viYOrigin;            // at 0xC
+    u16 viWidth;              // at 0xE
+    u16 viHeight;             // at 0x10
+    VIXfbMode xfbMode;        // at 0x14
+    u8 field_rendering;       // at 0x18
+    u8 aa;                    // at 0x19
+    u8 sample_pattern[12][2]; // at 0x1A
+    u8 vfilter[7];            // at 0x32
 } GXRenderModeObj;
 
 extern GXRenderModeObj GXNtsc480IntDf;
+extern GXRenderModeObj GXNtsc480Prog;
 extern GXRenderModeObj GXPal528IntDf;
 extern GXRenderModeObj GXEurgb60Hz480IntDf;
 extern GXRenderModeObj GXMpal480IntDf;
 
-void GXCopyDisp(void*, u8);
-void GXSetCopyClear(GXColor, s32 zClear);
-void GXSetCopyFilter(u8, u8 (*)[24], u8, u8 (*)[7]);
+void GXSetTexCopySrc(u16 x, u16 y, u16 w, u16 h);
+void GXSetTexCopyDst(u16 w, u16 h, GXTexFmt fmt, GXBool mipmap);
+
+void GXSetCopyClamp(GXCopyClamp clamp);
+
+void GXSetCopyClear(GXColor color, u32 z);
+void GXSetCopyFilter(GXBool, u8 sample_pattern[12][2], GXBool, u8 vfilter[7]);
+
+void GXCopyDisp(void*, GXBool);
+void GXCopyTex(void*, GXBool);
+
+u16 GXGetNumXfbLines(const u16 efbHeight, f32 yScale);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

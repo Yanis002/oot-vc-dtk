@@ -1,8 +1,6 @@
-// #include "emulator/xlFile.h"
-#include "dolphin/types.h"
+#include "emulator/xlFile.h"
 #include "emulator/xlFileGCN.h"
 #include "emulator/xlHeap.h"
-#include "emulator/xlObject.h"
 
 bool xlFileGetSize(s32* pnSize, char* szFileName) {
     tXL_FILE* pFile;

@@ -1,7 +1,7 @@
 #ifndef _ROM_H
 #define _ROM_H
 
-#include "dolphin.h"
+#include "revolution/types.h"
 #include "emulator/xlFileGCN.h"
 #include "emulator/xlObject.h"
 

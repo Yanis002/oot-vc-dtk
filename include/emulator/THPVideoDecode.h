@@ -1,7 +1,7 @@
 #ifndef THP_VIDEO_DECODE_H
 #define THP_VIDEO_DECODE_H
 
-#include "dolphin.h"
+#include "revolution/types.h"
 
 bool CreateVideoDecodeThread(OSPriority priority, u8* ptr);
 void VideoDecodeThreadStart(void);

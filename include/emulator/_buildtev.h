@@ -1,7 +1,8 @@
 #ifndef _BUILDTEV_H
 #define _BUILDTEV_H
 
-#include "dolphin.h"
+#include "revolution/types.h"
+#include "revolution/gx.h"
 
 // __anon_0x89C77
 typedef struct TevOrder {

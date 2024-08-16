@@ -1,7 +1,7 @@
 #ifndef _SRAM_H
 #define _SRAM_H
 
-#include "dolphin.h"
+#include "revolution/types.h"
 #include "emulator/xlObject.h"
 
 // __anon_0x74AB9

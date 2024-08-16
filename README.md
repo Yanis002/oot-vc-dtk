@@ -1,6 +1,6 @@
-# oot-gc
+# oot-vc
 
-A work-in-progress decompilation of the N64 emulator used in the GameCube releases of The Legend of Zelda: Ocarina of Time.
+A work-in-progress decompilation of the N64 emulator used in the Wii Virtual Console releases of The Legend of Zelda: Ocarina of Time.
 
 Supported versions:
 

@@ -1,4 +1,5 @@
 #include "emulator/xlHeap.h"
+#include "macros.h"
 
 s32 gnSizeHeap[HEAP_COUNT];
 static u32* gpHeap[HEAP_COUNT];

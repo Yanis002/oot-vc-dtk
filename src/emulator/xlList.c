@@ -1,5 +1,4 @@
 #include "emulator/xlList.h"
-#include "dolphin.h"
 #include "emulator/xlHeap.h"
 #include "macros.h"
 

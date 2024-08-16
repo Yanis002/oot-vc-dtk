@@ -1,7 +1,17 @@
-#ifndef REVOSDK_AX
-#define REVOSDK_AX
+#ifndef RVL_SDK_AX_H
+#define RVL_SDK_AX_H
 
-typedef void (*AXCallback)(void);
-typedef void (*AXAuxCallback)(void*, void*);
+#include "revolution/types.h"
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+void AXInit(void);
+void AXInitEx(u32 mode);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

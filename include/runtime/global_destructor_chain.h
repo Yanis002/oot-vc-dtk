@@ -1,7 +1,7 @@
 #ifndef _GLOBALDESTRUCTORCHAIN
 #define _GLOBALDESTRUCTORCHAIN
 
-#include "dolphin/types.h"
+#include "revolution/types.h"
 
 typedef struct DestructorChain {
     struct DestructorChain* next;

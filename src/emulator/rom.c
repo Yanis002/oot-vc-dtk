@@ -1,5 +1,4 @@
 #include "emulator/rom.h"
-#include "dolphin.h"
 #include "emulator/cpu.h"
 #include "emulator/frame.h"
 #include "emulator/ram.h"
@@ -7,15 +6,8 @@
 #include "emulator/system.h"
 #include "emulator/xlCoreGCN.h"
 #include "emulator/xlHeap.h"
+#include "revolution/os.h"
 #include "macros.h"
-
-//! TODO: remove when headers are better
-typedef void* (*OSThreadFunc)(void* arg);
-extern OSThread DefaultThread;
-bool OSIsThreadTerminated(OSThread*);
-bool OSCreateThread(OSThread* thread, OSThreadFunc func, void* funcArg, void* stackBegin, u32 stackSize, s32 prio,
-                    u16 flags);
-s32 OSResumeThread(OSThread* thread);
 
 //! TODO: document these
 void fn_80063D78(s32);
@@ -807,7 +799,7 @@ bool romUpdate(Rom* pROM) {
             }
         }
 
-        nStatus = DVDGetCommandBlockStatus(&pROM->fileInfo.cb);
+        nStatus = DVDGetCommandBlockStatus(&pROM->fileInfo.block);
         if (nStatus != 1) {
             if (!simulatorDVDShowError(nStatus, pROM->load.anData, pROM->load.nSizeRead,
                                        pROM->offsetToRom + pROM->load.nOffset)) {

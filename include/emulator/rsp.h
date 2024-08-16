@@ -1,7 +1,7 @@
 #ifndef _RSP_H
 #define _RSP_H
 
-#include "dolphin.h"
+#include "revolution/types.h"
 #include "emulator/xlList.h"
 #include "emulator/xlObject.h"
 

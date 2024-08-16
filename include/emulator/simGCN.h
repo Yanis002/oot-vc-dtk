@@ -1,7 +1,9 @@
 #ifndef _SIMGCN_H
 #define _SIMGCN_H
 
-#include "dolphin.h"
+#include "revolution/types.h"
+#include "revolution/tex.h"
+#include "revolution/dvd.h"
 #include "emulator/system.h"
 
 typedef enum SimulatorMessage {

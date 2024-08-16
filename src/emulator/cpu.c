@@ -1,5 +1,4 @@
 #include "emulator/cpu.h"
-#include "dolphin.h"
 #include "emulator/cpu_jumptable.h"
 #include "emulator/frame.h"
 #include "emulator/library.h"
@@ -13,6 +12,7 @@
 #include "emulator/xlHeap.h"
 #include "emulator/xlObject.h"
 #include "emulator/xlPostGCN.h"
+#include "revolution/vi.h"
 #include "macros.h"
 
 #define DONT_INLINE_SQRT

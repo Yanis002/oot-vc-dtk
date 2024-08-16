@@ -175,16 +175,16 @@ if config.non_matching:
 def EmulatorLib(lib_name: str, objects: List[Object]) -> Dict[str, Any]:
     return {
         "lib": lib_name,
-        "mw_version": "GC/3.0a3.4",
+        "mw_version": "GC/3.0a5",
         "cflags": [*cflags_base, "-inline auto"],
         "host": False,
         "objects": objects,
     }
 
-def DolphinLib(lib_name: str, objects: List[Object]) -> Dict[str, Any]:
+def RevolutionLib(lib_name: str, objects: List[Object]) -> Dict[str, Any]:
     return {
         "lib": lib_name,
-        "mw_version": "GC/1.2.5n", # unknown
+        "mw_version": "GC/3.0a5", # from strings, note: dvd is using a different version
         "cflags": cflags_base,
         "host": False,
         "objects": objects,

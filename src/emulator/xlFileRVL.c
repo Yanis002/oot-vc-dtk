@@ -1,13 +1,12 @@
-#include "dolphin.h"
 #include "emulator/xlFileGCN.h"
 #include "emulator/xlHeap.h"
-#include "emulator/xlObject.h"
 #include "revolution/arc/arc.h"
-#include "revolution/cnt/cnt.h"
+#include "stddef.h"
 
 extern ARCHandle lbl_801C9680;
 extern u8 lbl_801C96A8[16];
 
+//! TODO: document this
 void* fn_800B0DF0(void*, size_t, s32);
 
 _XL_OBJECTTYPE gTypeFile = {
@@ -160,7 +159,7 @@ bool xlFileEvent(tXL_FILE* pFile, s32 nEvent, void* pArgument) {
             if (!xlFileEventInline()) {
                 return false;
             }
-            contentInitHandleNAND(5, &lbl_801C9680.hdr, &lbl_801C96A8);
+            contentInitHandleNAND(5, &lbl_801C9680.header, &lbl_801C96A8);
             break;
         case 1:
             contentReleaseHandleNAND(&lbl_801C9680);

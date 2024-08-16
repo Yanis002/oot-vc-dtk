@@ -1,7 +1,7 @@
 #ifndef DEBUGGER_H
 #define DEBUGGER_H
 
-#include "dolphin.h"
+#include "revolution/types.h"
 
 // EXI error codes
 typedef enum {

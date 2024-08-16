@@ -1,7 +1,7 @@
 #ifndef _XL_OBJECT_H
 #define _XL_OBJECT_H
 
-#include "dolphin.h"
+#include "revolution/types.h"
 
 typedef struct _XL_OBJECTTYPE _XL_OBJECTTYPE;
 
@@ -12,7 +12,7 @@ struct _XL_OBJECTTYPE {
     /* 0x4 */ s32 nSizeObject;
     /* 0x8 */ _XL_OBJECTTYPE* pClassBase;
     /* 0xC */ EventFunc pfEvent;
-}; // size: 0x10
+}; // size = 0x10
 
 typedef struct __anon_0x5062 {
     /* 0x0 */ struct tXL_LIST* pList;

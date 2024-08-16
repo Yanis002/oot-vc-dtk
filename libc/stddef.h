@@ -12,4 +12,8 @@ typedef long ptrdiff_t;
 #define NULL 0L
 #endif
 
+#ifndef __cplusplus
+typedef unsigned short wchar_t;
+#endif
+
 #endif

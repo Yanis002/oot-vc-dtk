@@ -1,40 +1,36 @@
-#ifndef REVOSDK_GX_PIXEL_H
-#define REVOSDK_GX_PIXEL_H
-#include "GX.h"
-#include "dolphin/types.h"
+#ifndef RVL_SDK_GX_PIXEL_H
+#define RVL_SDK_GX_PIXEL_H
 
-typedef enum _GXFogType {
-    GX_FOG_TYPE_0,
-    GX_FOG_TYPE_1,
-    GX_FOG_TYPE_2,
-} GXFogType;
+#include "revolution/gx/GXTypes.h"
+#include "revolution/mtx.h"
+#include "revolution/types.h"
 
-// Unofficial name
-typedef enum _GXPixelFmt {
-    GX_PIXEL_FMT_0,
-    GX_PF_RGBA6_Z24,
-    GX_PIXEL_FMT_2,
-    GX_PIXEL_FMT_3,
-    GX_PIXEL_FMT_4,
-    GX_PIXEL_FMT_5,
-    GX_PIXEL_FMT_6,
-    GX_PIXEL_FMT_7,
-} GXPixelFmt;
+#ifdef __cplusplus
+extern "C" {
+#endif
 
-void GXSetFog(GXFogType, GXColor, float startz, float endz, float nearz, float farz);
+typedef struct _GXFogAdjTable {
+    u16 r[10]; // at 0x0
+} GXFogAdjTable;
 
-void GXInitFogAdjTable(u16* table, u16 width, const float (*)[4]);
-void GXSetFogRangeAdj(u8, u16, u16* table);
+void GXSetFog(GXFogType type, GXColor color, f32 start, f32 end, f32 near,
+              f32 far);
+void GXInitFogAdjTable(GXFogAdjTable* table, u16 width, const Mtx44 proj);
+void GXSetFogRangeAdj(GXBool enable, u16 center, const GXFogAdjTable* table);
+void GXSetBlendMode(GXBlendMode mode, GXBlendFactor src, GXBlendFactor dst,
+                    GXLogicOp op);
+void GXSetColorUpdate(GXBool enable);
+void GXSetAlphaUpdate(GXBool enable);
+void GXSetZMode(GXBool enableTest, GXCompare func, GXBool enableUpdate);
+void GXSetZCompLoc(GXBool beforeTex);
+void GXSetPixelFmt(GXPixelFmt pixelFmt, GXZFmt16 zFmt);
+void GXSetDither(GXBool enable);
+void GXSetDstAlpha(GXBool enable, u8 alpha);
+void GXSetFieldMask(GXBool enableEven, GXBool enableOdd);
+void GXSetFieldMode(GXBool texLOD, GXBool adjustAR);
 
-void GXSetBlendMode(s32, s32, s32, s32);
-
-void GXSetColorUpdate(u8);
-void GXSetAlphaUpdate(u8);
-void GXSetZMode(s32, s32, s32);
-void GXSetZCompLoc(s32);
-
-void GXSetPixelFmt(GXPixelFmt, s32);
-void GXSetDither(u8);
-void GXSetDstAlpha(s32, s32);
+#ifdef __cplusplus
+}
+#endif
 
 #endif

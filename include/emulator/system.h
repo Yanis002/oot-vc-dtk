@@ -1,7 +1,7 @@
 #ifndef _SYSTEM_H
 #define _SYSTEM_H
 
-#include "dolphin.h"
+#include "revolution/types.h"
 #include "emulator/cpu.h"
 #include "emulator/mips.h"
 #include "emulator/xlObject.h"

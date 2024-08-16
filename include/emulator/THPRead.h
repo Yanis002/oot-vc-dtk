@@ -1,7 +1,7 @@
 #ifndef _THPREAD_H
 #define _THPREAD_H
 
-#include "dolphin.h"
+#include "revolution.h"
 
 typedef enum MovieMessage {
     M_M_NONE = -1,

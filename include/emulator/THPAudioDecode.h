@@ -1,7 +1,7 @@
 #ifndef THP_AUDIO_DECODE_H
 #define THP_AUDIO_DECODE_H
 
-#include "dolphin.h"
+#include "revolution.h"
 
 bool CreateAudioDecodeThread(OSPriority prio, void* param);
 void AudioDecodeThreadStart(void);

@@ -1,7 +1,7 @@
 #ifndef _PERIPHERAL_H
 #define _PERIPHERAL_H
 
-#include "dolphin.h"
+#include "revolution/types.h"
 #include "emulator/xlObject.h"
 
 // __anon_0x83D15
