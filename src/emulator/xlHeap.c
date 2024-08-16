@@ -629,12 +629,9 @@ bool __xlHeapGetFree(s32 iHeap, s32* pnFreeBytes) {
     return true;
 }
 
-bool xlHeapGetFree(s32* pnFreeBytes) {
-    return __xlHeapGetFree(0, pnFreeBytes);
-}
+bool xlHeapGetFree(s32* pnFreeBytes) { return __xlHeapGetFree(0, pnFreeBytes); }
 
-bool xlHeapSetup(void) {
-}
+bool xlHeapSetup(void) {}
 
 bool xlHeapReset(void) {
     OSSetMEM1ArenaLo(gnHeapOS[0]);

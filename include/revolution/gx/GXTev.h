@@ -1,42 +1,36 @@
 #ifndef REVOSDK_GX_TEV_H
 #define REVOSDK_GX_TEV_H
-#include "dolphin/types.h"
 #include "GX.h"
+#include "dolphin/types.h"
 
-
-typedef enum _GXTevSwapSel
-{
-	GX_TEV_SWAP_SEL_0,
-	GX_TEV_SWAP_SEL_1,
-	GX_TEV_SWAP_SEL_2,
-	GX_TEV_SWAP_SEL_3,
-	GX_TEV_SWAP_SEL_COUNT
+typedef enum _GXTevSwapSel {
+    GX_TEV_SWAP_SEL_0,
+    GX_TEV_SWAP_SEL_1,
+    GX_TEV_SWAP_SEL_2,
+    GX_TEV_SWAP_SEL_3,
+    GX_TEV_SWAP_SEL_COUNT
 } GXTevSwapSel;
 
-typedef enum _GXTevColorChan
-{
-	
+typedef enum _GXTevColorChan {
+
 } GXTevColorChan;
 
-typedef enum _GXTevStageID
-{
-	GX_TEV_STAGE_ID_0,
-	GX_TEV_STAGE_ID_1,
-	GX_TEV_STAGE_ID_2,
-	GX_TEV_STAGE_ID_COUNT = 16
+typedef enum _GXTevStageID {
+    GX_TEV_STAGE_ID_0,
+    GX_TEV_STAGE_ID_1,
+    GX_TEV_STAGE_ID_2,
+    GX_TEV_STAGE_ID_COUNT = 16
 } GXTevStageID;
 
-typedef enum _GXTevColorArg
-{
-	
+typedef enum _GXTevColorArg {
+
 } GXTevColorArg;
 
-typedef enum _GXTevRegID
-{
-	GX_TEV_REG_ID_0,
-	GX_TEV_REG_ID_1,
-	GX_TEV_REG_ID_2,
-	GX_TEV_REG_ID_3,
+typedef enum _GXTevRegID {
+    GX_TEV_REG_ID_0,
+    GX_TEV_REG_ID_1,
+    GX_TEV_REG_ID_2,
+    GX_TEV_REG_ID_3,
 } GXTevRegID;
 
 void GXSetTevOp(GXTevStageID, s32 tevMode);
@@ -56,6 +50,5 @@ void GXSetAlphaCompare(s32, s32, s32, s32, s32);
 void GXSetZTexture(s32, s32 zTexFormat, s32);
 
 void GXSetNumTevStages(u8);
-
 
 #endif

@@ -1,8 +1,8 @@
 #include "emulator/ram.h"
 #include "emulator/cpu.h"
+#include "emulator/simGCN.h"
 #include "emulator/system.h"
 #include "emulator/xlHeap.h"
-#include "emulator/simGCN.h"
 
 static bool ramPutControl8(Ram* pRAM, u32 nAddress, s8* pData) { return false; }
 
@@ -328,7 +328,7 @@ bool ramEvent(Ram* pRAM, s32 nEvent, void* pArgument) {
         case 0x1002:
             switch (((CpuDevice*)pArgument)->nType & 0xFF) {
                 case 0:
-                    if (!cpuSetGetBlock(SYSTEM_CPU(gpSystem), pArgument, ramGetBlock)) {
+                    if (!cpuSetGetBlock(SYSTEM_CPU(gpSystem), pArgument, (GetBlockFunc)ramGetBlock)) {
                         return false;
                     }
 

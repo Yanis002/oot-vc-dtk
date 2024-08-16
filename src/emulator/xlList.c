@@ -79,9 +79,7 @@ bool xlListFree(tXL_LIST** ppList) {
 }
 
 //! TODO: figure out what's going on with this function
-bool xlListMakeItem(tXL_LIST* pList, void** ppItem) {
-    return __xlListMakeItem(pList, ppItem);
-}
+bool xlListMakeItem(tXL_LIST* pList, void** ppItem) { return __xlListMakeItem(pList, ppItem); }
 
 bool xlListFreeItem(tXL_LIST* pList, void** ppItem) {
     void* pNode;

@@ -106,7 +106,7 @@ typedef struct cpu_blk_req_t {
     s32 dev_addr;
     u32 dst_phys_ram;
 } cpu_blk_req_t;
-typedef bool (*GetBlockFunc)(void *pObject, cpu_blk_req_t *pBlock);
+typedef bool (*GetBlockFunc)(void* pObject, cpu_blk_req_t* pBlock);
 
 // __anon_0x3E22D
 typedef union CpuGpr {

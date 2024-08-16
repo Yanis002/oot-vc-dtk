@@ -3,8 +3,7 @@
 
 #include "dolphin/types.h"
 
-typedef struct
-{
+typedef struct {
 
 } KPADStatus;
 

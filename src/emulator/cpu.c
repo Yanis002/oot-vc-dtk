@@ -9,10 +9,10 @@
 #include "emulator/simGCN.h"
 #include "emulator/system.h"
 #include "emulator/video.h"
+#include "emulator/xlCoreGCN.h"
 #include "emulator/xlHeap.h"
 #include "emulator/xlObject.h"
 #include "emulator/xlPostGCN.h"
-#include "emulator/xlCoreGCN.h"
 #include "macros.h"
 
 #define DONT_INLINE_SQRT
@@ -97,7 +97,7 @@ s32 ganOpcodeSaveFP2_1[] = {
 };
 
 s32 ganOpcodeLoadFP[] = {
-    0x8F5B0018, 0x13600013, 0x00000000, 0x8F5B012C, 0x44DBF800, 
+    0x8F5B0018, 0x13600013, 0x00000000, 0x8F5B012C, 0x44DBF800,
 };
 
 s32 ganMapGPR[] = {
@@ -1144,7 +1144,7 @@ s32 fn_8000E81C(Cpu* pCPU, s32 arg1, s32 arg2, s32 arg3, s32 arg5, s32* arg6, s3
         if (arg1 == 0xAFBF003C && arg2 == 0x0080A025 && arg3 == 0xAFB00018) {
             if (arg6 != NULL) {
                 temp_r5_4 = *arg7;
-                arg6[temp_r5_4] =  0x80A30000;
+                arg6[temp_r5_4] = 0x80A30000;
                 *arg7 = temp_r5_4 + 1;
             } else {
                 *arg7 += 1;
@@ -1153,7 +1153,7 @@ s32 fn_8000E81C(Cpu* pCPU, s32 arg1, s32 arg2, s32 arg3, s32 arg5, s32* arg6, s3
             if (ganMapGPR[31] & 0x100) {
                 if (arg6 != NULL) {
                     temp_r5_5 = *arg7;
-                    arg6[temp_r5_5] =  0x90A30000;
+                    arg6[temp_r5_5] = 0x90A30000;
                     *arg7 = temp_r5_5 + 1;
                 } else {
                     *arg7 += 1;
@@ -1172,7 +1172,6 @@ s32 fn_8000E81C(Cpu* pCPU, s32 arg1, s32 arg2, s32 arg3, s32 arg5, s32* arg6, s3
 
     return 1;
 }
-
 
 static bool cpuGetPPC(Cpu* pCPU, s32* pnAddress, CpuFunction* pFunction, s32* anCode, s32* piCode, bool bSlot);
 // #pragma GLOBAL_ASM("asm/non_matchings/cpu/cpuGetPPC.s")
@@ -1442,7 +1441,6 @@ static bool cpuCutStoreLoadF(Cpu* pCPU, s32 currentAddress, s32 source) {
     return true;
 }
 
-
 static bool cpuStackOffset(Cpu* pCPU, s32 currentAddress, s32* anCode, s32 source, s32 target) {
     if (anCode == NULL) {
         return false;
@@ -1527,7 +1525,7 @@ static bool cpuNextInstruction(Cpu* pCPU, s32 addressN64, s32 opcode, s32* anCod
     return false;
 }
 
-void cpuRetraceCallback(u32 nCount) { 
+void cpuRetraceCallback(u32 nCount) {
     SYSTEM_CPU(gpSystem)->nRetrace = nCount;
 
     if (__cpuRetraceCallback != NULL) {
@@ -1635,7 +1633,6 @@ static bool cpuExecuteUpdate(Cpu* pCPU, s32* pnAddressGCN, u32 nCount) {
     }
     return true;
 }
-
 
 static bool cpuCompile_DSLLV(Cpu* pCPU, s32* addressGCN) {
     s32* compile;
@@ -2750,26 +2747,26 @@ static bool cpuCompile_LWR(Cpu* pCPU, s32* addressGCN) {
     return true;
 }
 
-static inline cpuUnknownMarioKartFrameSet(SystemRomType eTypeROM, void* pFrame, s32 nAddressN64) {   
-    if(eTypeROM == 'NKTJ') {
-        if(nAddressN64 == 0x802A4118) {
+static inline cpuUnknownMarioKartFrameSet(SystemRomType eTypeROM, void* pFrame, s32 nAddressN64) {
+    if (eTypeROM == 'NKTJ') {
+        if (nAddressN64 == 0x802A4118) {
             *((s32*)pFrame + 0x11) = 0;
         }
-        if(nAddressN64 == 0x800729D4) {
+        if (nAddressN64 == 0x800729D4) {
             *((s32*)pFrame + 0x11) = 1;
         }
-    } else if(eTypeROM == 'NKTP') {
-        if(nAddressN64 == 0x802A4160) {
+    } else if (eTypeROM == 'NKTP') {
+        if (nAddressN64 == 0x802A4160) {
             *((s32*)pFrame + 0x11) = 0;
         }
-        if(nAddressN64 == 0x80072E34) {
+        if (nAddressN64 == 0x80072E34) {
             *((s32*)pFrame + 0x11) = 1;
         }
-    } else if(eTypeROM == 'NKTE') {
-        if(nAddressN64 == 0x802A4160) {
+    } else if (eTypeROM == 'NKTE') {
+        if (nAddressN64 == 0x802A4160) {
             *((s32*)pFrame + 0x11) = 0;
         }
-        if(nAddressN64 == 0x80072E54) {
+        if (nAddressN64 == 0x80072E54) {
             *((s32*)pFrame + 0x11) = 1;
         }
     }
@@ -5175,33 +5172,32 @@ bool cpuMapObject(Cpu* pCPU, void* pObject, u32 nAddress0, u32 nAddress1, s32 nT
     return true;
 }
 
-bool cpuGetBlock(Cpu* pCPU, cpu_blk_req_t *req) {
+bool cpuGetBlock(Cpu* pCPU, cpu_blk_req_t* req) {
     u32 nAddress;
     CpuDevice* pDevice;
     s32 iDevice;
-    
+
     nAddress = req->dev_addr;
 
-    if(nAddress < 0x4000000) {
+    if (nAddress < 0x4000000) {
         nAddress = req->dst_phys_ram;
     }
 
     for (iDevice = 1; pCPU->apDevice[iDevice] != NULL; iDevice++) {
         pDevice = pCPU->apDevice[iDevice];
 
-        if(pDevice->nAddressPhysical0 <= nAddress && nAddress <= pDevice->nAddressPhysical1) {
-            if(pDevice->pfGetBlock != NULL) {
+        if (pDevice->nAddressPhysical0 <= nAddress && nAddress <= pDevice->nAddressPhysical1) {
+            if (pDevice->pfGetBlock != NULL) {
                 return pDevice->pfGetBlock(pDevice->pObject, req);
             }
 
             return false;
         }
-
     }
 
     pDevice = pCPU->apDevice[pCPU->iDeviceDefault];
 
-    if(pDevice != NULL && pDevice->pfGetBlock != NULL) {
+    if (pDevice != NULL && pDevice->pfGetBlock != NULL) {
         return pDevice->pfGetBlock(pDevice->pObject, req);
     }
 
@@ -5364,7 +5360,7 @@ bool cpuReset(Cpu* pCPU) {
 }
 
 bool cpuGetXPC(Cpu* pCPU, s64* pnPC, s64* pnLo, s64* pnHi) {
-    if(!xlObjectTest(pCPU, &gClassCPU)) {
+    if (!xlObjectTest(pCPU, &gClassCPU)) {
         return false;
     }
 
@@ -6093,22 +6089,23 @@ bool cpuFindFunction(Cpu* pCPU, s32 theAddress, CpuFunction** tree_node) {
             }
 
             if (check == 1) {
-                if(gpSystem->eTypeROM == 'NM8E') {
-                    if(anAddr[2] == 0x802F1FF0) {
+                if (gpSystem->eTypeROM == 'NM8E') {
+                    if (anAddr[2] == 0x802F1FF0) {
                         anAddr[0] = 0x802F1F50;
-                    } else if(anAddr[2] == 0x80038308) {
+                    } else if (anAddr[2] == 0x80038308) {
                         anAddr[0] = 0x800382F0;
                     }
-                } else if(gpSystem->eTypeROM == 'NMFE') {
-                    if(anAddr[2] == 0x8009E420) {
+                } else if (gpSystem->eTypeROM == 'NMFE') {
+                    if (anAddr[2] == 0x8009E420) {
                         anAddr[0] = 0x8009E380;
                     }
-                } else if(gpSystem->eTypeROM == 'NMQE' || gpSystem->eTypeROM == 'NMQJ' || gpSystem->eTypeROM == 'NMQP') {
-                    if(anAddr[0] == 0x802C88FC) {
+                } else if (gpSystem->eTypeROM == 'NMQE' || gpSystem->eTypeROM == 'NMQJ' ||
+                           gpSystem->eTypeROM == 'NMQP') {
+                    if (anAddr[0] == 0x802C88FC) {
                         anAddr[2] = 0x802C8974;
-                    } else if(anAddr[0] = 0x802C8978) {
+                    } else if (anAddr[0] = 0x802C8978) {
                         anAddr[2] = 0x802C8A5C;
-                    } else if(anAddr[0] == 0x802C8A60) {
+                    } else if (anAddr[0] == 0x802C8A60) {
                         anAddr[2] = 0x802C8C60;
                     }
                 }

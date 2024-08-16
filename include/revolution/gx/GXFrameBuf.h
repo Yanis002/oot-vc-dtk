@@ -1,11 +1,9 @@
 #ifndef REVOSDK_GX_FRAME_BUF_H
 #define REVOSDK_GX_FRAME_BUF_H
-#include "dolphin/types.h"
 #include "GX.h"
+#include "dolphin/types.h"
 
-
-typedef struct _GXRenderModeObj
-{
+typedef struct _GXRenderModeObj {
     u32 INT_0x0;
     u16 mFbWidth; // at 0x4
     u16 mEfbHeight; // at 0x6
@@ -27,9 +25,8 @@ extern GXRenderModeObj GXPal528IntDf;
 extern GXRenderModeObj GXEurgb60Hz480IntDf;
 extern GXRenderModeObj GXMpal480IntDf;
 
-void GXCopyDisp(void *, u8);
+void GXCopyDisp(void*, u8);
 void GXSetCopyClear(GXColor, s32 zClear);
-void GXSetCopyFilter(u8, u8(*)[24], u8, u8(*)[7]);
-
+void GXSetCopyFilter(u8, u8 (*)[24], u8, u8 (*)[7]);
 
 #endif

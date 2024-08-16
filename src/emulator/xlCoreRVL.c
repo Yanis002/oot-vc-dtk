@@ -1,6 +1,6 @@
-#include "emulator/xlCoreGCN.h"
 #include "dolphin.h"
 #include "emulator/simGCN.h"
+#include "emulator/xlCoreGCN.h"
 #include "emulator/xlHeap.h"
 #include "emulator/xlList.h"
 #include "emulator/xlPostGCN.h"
@@ -21,12 +21,12 @@ u32 SCCheckStatus();
 u32 fn_8009A7C4();
 u32 fn_800B6F8C();
 
-#define ROUND_UP(v, x) (((v) + ((x)-1)) & ~((x)-1))
+#define ROUND_UP(v, x) (((v) + ((x) - 1)) & ~((x) - 1))
 
 static inline u32 getFBTotalSize(f32 aspectRatio) {
     u16 lineCount = GXGetNumXfbLines(rmode->efbHeight, aspectRatio);
     u16 fbWith = ROUND_UP(rmode->fbWidth, 16);
-    return  fbWith * lineCount;
+    return fbWith * lineCount;
 }
 
 static void xlCoreInitRenderMode(GXRenderModeObj* mode) {
@@ -127,9 +127,7 @@ bool xlCoreGetArgument(s32 iArgument, char** pszArgument) {
     return false;
 }
 
-bool xlCoreHiResolution(void) {
-    return true;
-}
+bool xlCoreHiResolution(void) { return true; }
 
 bool fn_8007FC84(void) {
     switch (VIGetTvFormat()) {
@@ -144,10 +142,7 @@ bool fn_8007FC84(void) {
     return false;
 }
 
-
-void xlExit(void) {
-    OSPanic("xlCoreRVL.c", 524, "xlExit");
-}
+void xlExit(void) { OSPanic("xlCoreRVL.c", 524, "xlExit"); }
 
 int main(int nCount, char** aszArgument) {
     s32 nSizeHeap;

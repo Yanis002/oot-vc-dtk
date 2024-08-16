@@ -4,10 +4,9 @@
 #include "dolphin/types.h"
 #include "revolution/gx/GXFrameBuf.h"
 
-typedef void (* VIPostRetraceCallback)(void);
+typedef void (*VIPostRetraceCallback)(void);
 
-enum VITvFormat
-{
+enum VITvFormat {
     VI_NTSC,
     VI_PAL,
     VI_MPAL,
@@ -18,19 +17,18 @@ enum VITvFormat
 
 void VIInit(void);
 void VISetBlack(s32);
-void VIConfigure(GXRenderModeObj *);
+void VIConfigure(GXRenderModeObj*);
 void VIWaitForRetrace(void);
 
 void VISetPostRetraceCallback(VIPostRetraceCallback);
 
 void VIFlush(void);
 
-void * VIGetCurrentFrameBuffer(void);
+void* VIGetCurrentFrameBuffer(void);
 
-void VISetNextFrameBuffer(void *);
+void VISetNextFrameBuffer(void*);
 
 s32 VIGetRetraceCount(void);
 enum VITvFormat VIGetTvFormat(void);
-
 
 #endif

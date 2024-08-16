@@ -1,9 +1,9 @@
 #ifndef REVOSDK_TRK_SCANF_H
 #define REVOSDK_TRK_SCANF_H
 
-#include "stddef.h"
 #include "stdarg.h"
+#include "stddef.h"
 
-int sscanf(const char *, const char *, ...);
+int sscanf(const char*, const char*, ...);
 
 #endif

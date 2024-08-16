@@ -3,6 +3,6 @@
 
 #include "dolphin/types.h"
 
-void WENCGetEncodeData(void *, s32, const s16 *, s32, void *);
+void WENCGetEncodeData(void*, s32, const s16*, s32, void*);
 
 #endif

@@ -3,8 +3,7 @@
 
 #include "dolphin/types.h"
 
-typedef enum SCAspectRatio
-{
+typedef enum SCAspectRatio {
     SC_ASPECT_4_3,
     SC_ASPECT_16_9
 } SCAspectRatio;

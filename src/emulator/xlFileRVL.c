@@ -1,5 +1,5 @@
-#include "emulator/xlFileGCN.h"
 #include "dolphin.h"
+#include "emulator/xlFileGCN.h"
 #include "emulator/xlHeap.h"
 #include "emulator/xlObject.h"
 #include "revolution/arc/arc.h"
@@ -20,13 +20,9 @@ _XL_OBJECTTYPE gTypeFile = {
 static DVDReadCallback gpfRead;
 static DVDOpenCallback gpfOpen;
 
-bool xlFileSetOpen(DVDOpenCallback pfOpen) {
-    return true;
-}
+bool xlFileSetOpen(DVDOpenCallback pfOpen) { return true; }
 
-bool xlFileSetRead(DVDReadCallback pfRead) {
-    return true;
-}
+bool xlFileSetRead(DVDReadCallback pfRead) { return true; }
 
 static inline bool xlFileGetFile(tXL_FILE** ppFile, char* szFileName) {
     if (gpfOpen != NULL) {
@@ -97,13 +93,14 @@ bool xlFileGet(tXL_FILE* pFile, void* pTarget, s32 nSizeBytes) {
         }
 
         if (nSizeBytes > 0) {
-            if (!((s32) pTarget & 0x1F) && (nOffset = pFile->nOffset, (((nOffset & 3) == 0) != 0)) && !(nSizeBytes & 0x1F)) {
+            if (!((s32)pTarget & 0x1F) && (nOffset = pFile->nOffset, (((nOffset & 3) == 0) != 0)) &&
+                !(nSizeBytes & 0x1F)) {
                 s32 temp_r0;
 
-                if (((s32 (*)(CNTFileInfo*, void*, s32, s32, void (*)(s32, DVDFileInfo*))) gpfRead) != NULL) {
-                    gpfRead((CNTFileInfo* ) pFile->pData, pTarget, nSizeBytes, nOffset, NULL);
+                if (((s32(*)(CNTFileInfo*, void*, s32, s32, void (*)(s32, DVDFileInfo*)))gpfRead) != NULL) {
+                    gpfRead((CNTFileInfo*)pFile->pData, pTarget, nSizeBytes, nOffset, NULL);
                 } else {
-                    contentReadNAND((CNTFileInfo* ) pFile->pData, pTarget, nSizeBytes, nOffset);
+                    contentReadNAND((CNTFileInfo*)pFile->pData, pTarget, nSizeBytes, nOffset);
                 }
 
                 temp_r0 = pFile->nOffset + nSizeBytes;
@@ -119,14 +116,13 @@ bool xlFileGet(tXL_FILE* pFile, void* pTarget, s32 nSizeBytes) {
                     nSize = (nOffsetExtra + 0x1F) & ~0x1F;
                 }
 
-                if (((s32 (*)(CNTFileInfo*, void*, s32, s32, void (*)(s32, DVDFileInfo*))) gpfRead) != NULL) {
-                    gpfRead((CNTFileInfo* ) pFile->pData, pFile->pBuffer, nSize, nOffset, NULL);
+                if (((s32(*)(CNTFileInfo*, void*, s32, s32, void (*)(s32, DVDFileInfo*)))gpfRead) != NULL) {
+                    gpfRead((CNTFileInfo*)pFile->pData, pFile->pBuffer, nSize, nOffset, NULL);
                 } else {
-                    contentReadNAND((CNTFileInfo* ) pFile->pData, pFile->pBuffer, nSize, nOffset);
+                    contentReadNAND((CNTFileInfo*)pFile->pData, pFile->pBuffer, nSize, nOffset);
                 }
             }
         }
-        
     }
 
     return true;

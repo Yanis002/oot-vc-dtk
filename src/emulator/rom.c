@@ -600,8 +600,8 @@ bool romGetPC(Rom* pROM, u64* pnPC) {
 }
 
 bool romGetCode(Rom* pROM, s32* acCode) {
-    *acCode =
-        (pROM->acHeader[0x3B] << 0x18) | (pROM->acHeader[0x3C] << 0x10) | (pROM->acHeader[0x3D] << 0x8) | pROM->acHeader[0x3E];
+    *acCode = (pROM->acHeader[0x3B] << 0x18) | (pROM->acHeader[0x3C] << 0x10) | (pROM->acHeader[0x3D] << 0x8) |
+              pROM->acHeader[0x3E];
     return true;
 }
 
@@ -872,27 +872,27 @@ bool romSetImage(Rom* pROM, char* szNameFile) {
 
     if (!xlFileOpen(&pFile, 1, szNameFile)) {
         return false;
-    } 
-    
+    }
+
     if (!xlFileSetPosition(pFile, pROM->offsetToRom)) {
         return false;
-    } 
-    
+    }
+
     if (!xlFileGet(pFile, &pROM->acHeader, sizeof(pROM->acHeader))) {
         return false;
-    } 
-    
+    }
+
     if (!xlFileSetPosition(pFile, pROM->offsetToRom + 0x1000)) {
         return false;
-    } 
-    
+    }
+
     if (!xlFileGet(pFile, &pData, sizeof(pData))) {
         return false;
-    } 
-    
+    }
+
     if (!xlFileClose(&pFile)) {
         return false;
-    } 
+    }
 
     pROM->UNKNOWN_19ABC = 0;
 
@@ -975,7 +975,7 @@ bool romEvent(Rom* pROM, s32 nEvent, void* pArgument) {
         case 0x1002:
             switch (((CpuDevice*)pArgument)->nType) {
                 case 0:
-                    if (!cpuSetGetBlock(SYSTEM_CPU(gpSystem), pArgument, romGetBlock)) {
+                    if (!cpuSetGetBlock(SYSTEM_CPU(gpSystem), pArgument, (GetBlockFunc)romGetBlock)) {
                         return false;
                     }
                     if (!cpuSetDevicePut(SYSTEM_CPU(gpSystem), pArgument, (Put8Func)romPut8, (Put16Func)romPut16,

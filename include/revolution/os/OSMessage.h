@@ -3,10 +3,9 @@
 
 #include "dolphin/types.h"
 
-typedef void * OSMessage;
+typedef void* OSMessage;
 
-struct OSMessageQueue
-{
+struct OSMessageQueue {
     s32 WORD_0x0;
     s32 WORD_0x4;
     s32 WORD_0x8;
@@ -17,10 +16,10 @@ struct OSMessageQueue
     s32 WORD_0x1C;
 };
 
-s32 OSInitMessageQueue(struct OSMessageQueue *, OSMessage * buffer, s32 mesgCount);
+s32 OSInitMessageQueue(struct OSMessageQueue*, OSMessage* buffer, s32 mesgCount);
 
-bool OSSendMessage(struct OSMessageQueue *, OSMessage, s32);
-bool OSReceiveMessage(struct OSMessageQueue *, OSMessage *, s32);
-bool OSJamMessage(struct OSMessageQueue *, s32, s32);
+bool OSSendMessage(struct OSMessageQueue*, OSMessage, s32);
+bool OSReceiveMessage(struct OSMessageQueue*, OSMessage*, s32);
+bool OSJamMessage(struct OSMessageQueue*, s32, s32);
 
 #endif

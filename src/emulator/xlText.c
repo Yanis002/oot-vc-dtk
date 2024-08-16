@@ -25,10 +25,9 @@ s32 xlTextAppend(char* acTextTarget, char* szTextSource) {
     s32 iSource;
     s32 iTarget;
 
-    for (iTarget = 0; acTextTarget[iTarget] != '\0'; iTarget++) {
-    }
+    for (iTarget = 0; acTextTarget[iTarget] != '\0'; iTarget++) {}
 
-    for (iSource = 0; szTextSource[iSource] != '\0'; ) {
+    for (iSource = 0; szTextSource[iSource] != '\0';) {
         acTextTarget[iTarget++] = szTextSource[iSource++];
     }
 

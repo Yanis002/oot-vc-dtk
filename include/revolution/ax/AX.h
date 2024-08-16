@@ -1,9 +1,7 @@
 #ifndef REVOSDK_AX
 #define REVOSDK_AX
 
-
-typedef void (* AXCallback)(void);
-typedef void (* AXAuxCallback)(void *, void *);
-
+typedef void (*AXCallback)(void);
+typedef void (*AXAuxCallback)(void*, void*);
 
 #endif

@@ -7,7 +7,6 @@ typedef void (*WPADCallback)(s32, s32);
 
 void WPADControlSpeaker(s32, s32, WPADCallback);
 bool WPADCanSendStreamData(s32);
-s32 WPADSendStreamData(s32, void *, s32);
-
+s32 WPADSendStreamData(s32, void*, s32);
 
 #endif
