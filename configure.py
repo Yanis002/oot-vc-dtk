@@ -216,6 +216,7 @@ config.libs = [
         "emulator",
         [
             Object(NonMatching, "emulator/cpu.c", asm_processor=True),
+            Object(NonMatching, "emulator/pif.c"),
             Object(MatchingFor("vc-j"), "emulator/ram.c"),
             Object(MatchingFor("vc-j"), "emulator/rom.c"),
             Object(NonMatching, "emulator/rdp.c"),
