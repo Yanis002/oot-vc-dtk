@@ -253,9 +253,9 @@ static bool ramGet64(Ram* pRAM, u32 nAddress, s64* pData) {
     return true;
 }
 
-static bool ramGetBlock(Ram* pRAM, cpu_blk_req_t* req) {
-    if (req->handler != NULL) {
-        if (!req->handler(req, 1)) {
+static bool ramGetBlock(Ram* pRAM, CpuBlock* pBlock) {
+    if (pBlock->pfUnknown != NULL) {
+        if (!pBlock->pfUnknown(pBlock, 1)) {
             return false;
         }
     }

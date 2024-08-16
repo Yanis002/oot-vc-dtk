@@ -33,6 +33,19 @@
 #define TLB_PGSZ_4M 0x7FE000
 #define TLB_PGSZ_16M 0x1FFE000
 
+typedef struct CpuBlock CpuBlock;
+typedef bool UnknownBlockCallback(CpuBlock*, s32);
+
+struct CpuBlock {
+    /* 0x00 */ struct CpuBlock* pNext;
+    /* 0x04 */ u32 nSize;
+    /* 0x08 */ UnknownBlockCallback* pfUnknown; // unused?
+    /* 0x0C */ u32 nAddress0;
+    /* 0x10 */ u32 nAddress1;
+}; // size = 0x14
+
+typedef bool (*GetBlockFunc)(void* pObject, CpuBlock* pBlock);
+
 typedef bool (*Put8Func)(void* pObject, u32 nAddress, s8* pData);
 typedef bool (*Put16Func)(void* pObject, u32 nAddress, s16* pData);
 typedef bool (*Put32Func)(void* pObject, u32 nAddress, s32* pData);
@@ -96,17 +109,6 @@ typedef enum CpuSize {
     CS_64BIT = 1,
 } CpuSize;
 
-//! TODO: document this
-struct cpu_blk_req_t;
-typedef s32 blockReqHandler(struct cpu_blk_req_t*, s32);
-typedef struct cpu_blk_req_t {
-    struct cpu_blk_req_t* done;
-    u32 len;
-    blockReqHandler* handler;
-    s32 dev_addr;
-    u32 dst_phys_ram;
-} cpu_blk_req_t;
-typedef bool (*GetBlockFunc)(void* pObject, cpu_blk_req_t* pBlock);
 
 // __anon_0x3E22D
 typedef union CpuGpr {

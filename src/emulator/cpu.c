@@ -5172,15 +5172,15 @@ bool cpuMapObject(Cpu* pCPU, void* pObject, u32 nAddress0, u32 nAddress1, s32 nT
     return true;
 }
 
-bool cpuGetBlock(Cpu* pCPU, cpu_blk_req_t* req) {
+bool cpuGetBlock(Cpu* pCPU, CpuBlock* pBlock) {
     u32 nAddress;
     CpuDevice* pDevice;
     s32 iDevice;
 
-    nAddress = req->dev_addr;
+    nAddress = pBlock->nAddress0;
 
-    if (nAddress < 0x4000000) {
-        nAddress = req->dst_phys_ram;
+    if (nAddress < 0x04000000) {
+        nAddress = pBlock->nAddress1;
     }
 
     for (iDevice = 1; pCPU->apDevice[iDevice] != NULL; iDevice++) {
@@ -5188,7 +5188,7 @@ bool cpuGetBlock(Cpu* pCPU, cpu_blk_req_t* req) {
 
         if (pDevice->nAddressPhysical0 <= nAddress && nAddress <= pDevice->nAddressPhysical1) {
             if (pDevice->pfGetBlock != NULL) {
-                return pDevice->pfGetBlock(pDevice->pObject, req);
+                return pDevice->pfGetBlock(pDevice->pObject, pBlock);
             }
 
             return false;
@@ -5198,7 +5198,7 @@ bool cpuGetBlock(Cpu* pCPU, cpu_blk_req_t* req) {
     pDevice = pCPU->apDevice[pCPU->iDeviceDefault];
 
     if (pDevice != NULL && pDevice->pfGetBlock != NULL) {
-        return pDevice->pfGetBlock(pDevice->pObject, req);
+        return pDevice->pfGetBlock(pDevice->pObject, pBlock);
     }
 
     return false;

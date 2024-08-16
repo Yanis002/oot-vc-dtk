@@ -650,20 +650,20 @@ static bool romGet64(Rom* pROM, u32 nAddress, s64* pData) {
     return true;
 }
 
-static bool romGetBlock(Rom* pROM, cpu_blk_req_t* req) {
+static bool romGetBlock(Rom* pROM, CpuBlock* pBlock) {
     void* buf;
 
-    if (req->dst_phys_ram < 0x4000000) {
-        if (!ramGetBuffer(SYSTEM_RAM(gpSystem), &buf, req->dst_phys_ram, &req->len)) {
+    if (pBlock->nAddress1 < 0x04000000) {
+        if (!ramGetBuffer(SYSTEM_RAM(gpSystem), &buf, pBlock->nAddress1, &pBlock->nSize)) {
             return false;
         }
 
-        if (!romCopy(pROM, buf, req->dev_addr, req->len, NULL)) {
+        if (!romCopy(pROM, buf, pBlock->nAddress0, pBlock->nSize, NULL)) {
             return false;
         }
     }
 
-    if (!(*req->handler)(req, 1)) {
+    if (!pBlock->pfUnknown(pBlock, 1)) {
         return false;
     }
 
