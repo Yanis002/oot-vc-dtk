@@ -2,6 +2,7 @@
 #define RVL_SDK_DVD_BROADWAY_H
 
 #include "revolution/types.h"
+#include "revolution/os/OSAlarm.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -15,7 +16,6 @@ typedef struct DVDDiskID;
 typedef struct DVDDriveInfo;
 typedef struct ESPTicket;
 typedef struct ESPTmd;
-typedef struct OSAlarm;
 
 typedef enum {
     DVD_INTTYPE_TC = (1 << 0), // Transaction callback?

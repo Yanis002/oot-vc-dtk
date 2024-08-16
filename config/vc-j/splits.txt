@@ -18,6 +18,7 @@ emulator/cpu.c:
 	.data       start:0x80170780 end:0x80172060
 	.sdata      start:0x8025C750 end:0x8025C758
 	.sbss       start:0x8025CFE8 end:0x8025D068
+	.sdata2     start:0x8025DD50 end:0x8025DD78
 
 emulator/ram.c:
 	.text       start:0x80041844 end:0x80042064

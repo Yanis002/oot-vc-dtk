@@ -3,6 +3,7 @@
 
 #include "emulator/xlObject.h"
 #include "revolution/types.h"
+#include "revolution/os.h"
 
 // MIPS instruction encoding:
 // R-type: opcode (6 bits) | rs (5 bits) | rt (5 bits) | rd (5 bits) | sa (5 bits) | funct (6 bits)

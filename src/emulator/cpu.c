@@ -100,12 +100,58 @@ s32 ganOpcodeLoadFP[] = {
     0x8F5B0018, 0x13600013, 0x00000000, 0x8F5B012C, 0x44DBF800,
 };
 
+#ifndef NON_MATCHING
+void* jumptable_80170A68[] = {
+    &lbl_8000E130, &lbl_8000E260, &lbl_8000E25C, &lbl_8000E25C, &lbl_8000E25C, &lbl_8000E25C, &lbl_8000E25C,
+    &lbl_8000E260, &lbl_8000E260, &lbl_8000E164, &lbl_8000E25C, &lbl_8000E16C, &lbl_8000E1C8, &lbl_8000E1EC,
+    &lbl_8000E234, &lbl_8000E260, &lbl_8000E23C, &lbl_8000E25C, &lbl_8000E25C, &lbl_8000E25C, &lbl_8000E25C,
+    &lbl_8000E260, &lbl_8000E260, &lbl_8000E260, &lbl_8000E260, &lbl_8000E260, &lbl_8000E25C, &lbl_8000E260,
+    &lbl_8000E25C, &lbl_8000E25C, &lbl_8000E25C, &lbl_8000E260,
+};
+#else
+void* jumptable_80170A68[] = {0};
+#endif
+
+#ifndef NON_MATCHING
+void* jumptable_80170AE8[] = {
+    &lbl_8000E3F4, &lbl_8000E2D4, &lbl_8000E3F4, &lbl_8000E3F4, &lbl_8000E3F4, &lbl_8000E3F4, &lbl_8000E3F4,
+    &lbl_8000E37C, &lbl_8000E38C, &lbl_8000E364, &lbl_8000E3F4, &lbl_8000E36C, &lbl_8000E3F4, &lbl_8000E3F4,
+    &lbl_8000E374, &lbl_8000E3F4, &lbl_8000E3F4, &lbl_8000E3F4, &lbl_8000E3F4, &lbl_8000E3F4, &lbl_8000E3F4,
+    &lbl_8000E394, &lbl_8000E3A4, &lbl_8000E3B4, &lbl_8000E3C4, &lbl_8000E3D4, &lbl_8000E3F4, &lbl_8000E3F4,
+    &lbl_8000E3F4, &lbl_8000E3F4, &lbl_8000E3F4, &lbl_8000E3E4,
+};
+#else
+void* jumptable_80170AE8[] = {0};
+#endif
+
 s32 ganMapGPR[] = {
     0x0000000A, 0x0000000B, 0x0000000C, 0x0000000E, 0x0000000F, 0x00000010, 0x00000011, 0x00000012,
     0x00000013, 0x00000014, 0x00000015, 0x00000016, 0x00000017, 0x00000018, 0x00000019, 0x0000001A,
     0x00000110, 0x00000111, 0x00000112, 0x00000113, 0x00000114, 0x00000115, 0x00000116, 0x00000117,
     0x0000001B, 0x0000001C, 0x0000001D, 0x0000001E, 0x0000011C, 0x0000001F, 0x0000011E, 0x0000011F,
 };
+
+#ifndef NON_MATCHING
+void* jumptable_80170BE8[] = {
+    &lbl_8000E5DC, &lbl_8000E64C, &lbl_8000E64C, &lbl_8000E5DC, &lbl_8000E5DC, &lbl_8000E64C, &lbl_8000E5DC,
+    &lbl_8000E5DC, &lbl_8000E64C, &lbl_8000E5DC, &lbl_8000E5DC, &lbl_8000E5DC, &lbl_8000E5DC, &lbl_8000E5DC,
+    &lbl_8000E5DC, &lbl_8000E5DC, &lbl_8000E5DC, &lbl_8000E5DC, &lbl_8000E5DC, &lbl_8000E5DC, &lbl_8000E5DC,
+    &lbl_8000E5DC, &lbl_8000E5DC, &lbl_8000E5DC, &lbl_8000E64C,
+};
+#else
+void* jumptable_80170BE8[] = {0};
+#endif
+
+#ifndef NON_MATCHING
+void* jumptable_80170C4C[] = {
+    &lbl_8000E55C, &lbl_8000E588, &lbl_8000E638, &lbl_8000E640, &lbl_8000E648, &lbl_8000E648,
+    &lbl_8000E648, &lbl_8000E648, &lbl_8000E64C, &lbl_8000E64C, &lbl_8000E64C, &lbl_8000E64C,
+    &lbl_8000E64C, &lbl_8000E64C, &lbl_8000E64C, &lbl_8000E64C, &lbl_8000E5B8, &lbl_8000E60C,
+    &lbl_8000E64C, &lbl_8000E64C, &lbl_8000E648, &lbl_8000E648, &lbl_8000E648, &lbl_8000E648,
+};
+#else
+void* jumptable_80170C4C[] = {0};
+#endif
 
 char lbl_80170CAC[] = "CALLED: ceil_w single (%p)\n";
 char lbl_80170CC8[] = "CALLED: floor_w single (%p)\n";
@@ -171,6 +217,328 @@ char lbl_801710D8[] = "ERROR: C.NGE_L\n";
 char lbl_801710E8[] = "ERROR: C.LE_L\n";
 char lbl_801710F8[] = "ERROR: C.NGT_L\n";
 
+#ifndef NON_MATCHING
+void* jumptable_80171108[] = {
+    &lbl_80025B34, &lbl_80025B64, &lbl_80025B94, &lbl_80025BC4, &lbl_80025BF4, &lbl_80025C0C, &lbl_80025C3C,
+    &lbl_80025C54, &lbl_80031A30, &lbl_80031A30, &lbl_80031A30, &lbl_80031A30, &lbl_80025C84, &lbl_80025C9C,
+    &lbl_80025CB4, &lbl_80025CCC, &lbl_80025F88, &lbl_80025F88, &lbl_80025F88, &lbl_80025F88, &lbl_80025F88,
+    &lbl_80025F88, &lbl_80025F88, &lbl_80025F88, &lbl_80025F88, &lbl_80025F88, &lbl_80025F88, &lbl_80025F88,
+    &lbl_80025F88, &lbl_80025F88, &lbl_80025F88, &lbl_80025F88, &lbl_80031A30, &lbl_80025CE4, &lbl_80025F88,
+    &lbl_80025F88, &lbl_80025E08, &lbl_80031A30, &lbl_80025F88, &lbl_80025F88, &lbl_80025F88, &lbl_80025F88,
+    &lbl_80025F88, &lbl_80025F88, &lbl_80025F88, &lbl_80025F88, &lbl_80025F88, &lbl_80025F88, &lbl_80025E20,
+    &lbl_80025E30, &lbl_80025E40, &lbl_80025E58, &lbl_80025E70, &lbl_80025E88, &lbl_80025EA0, &lbl_80025EB8,
+    &lbl_80025ED0, &lbl_80025EE0, &lbl_80025EF8, &lbl_80025F10, &lbl_80025F28, &lbl_80025F40, &lbl_80025F58,
+    &lbl_80025F70,
+};
+#else
+void* jumptable_80171108[] = {0};
+#endif
+
+#ifndef NON_MATCHING
+void* jumptable_80171208[] = {
+    &lbl_800256F4, &lbl_80025724, &lbl_80025754, &lbl_80025784, &lbl_800257B4, &lbl_800257CC, &lbl_800257FC,
+    &lbl_80025814, &lbl_80031A30, &lbl_80031A30, &lbl_80031A30, &lbl_80031A30, &lbl_80025844, &lbl_8002585C,
+    &lbl_80025874, &lbl_8002588C, &lbl_80025B08, &lbl_80025B08, &lbl_80025B08, &lbl_80025B08, &lbl_80025B08,
+    &lbl_80025B08, &lbl_80025B08, &lbl_80025B08, &lbl_80025B08, &lbl_80025B08, &lbl_80025B08, &lbl_80025B08,
+    &lbl_80025B08, &lbl_80025B08, &lbl_80025B08, &lbl_80025B08, &lbl_80031A30, &lbl_800258A4, &lbl_80025B08,
+    &lbl_80025B08, &lbl_80025988, &lbl_80031A30, &lbl_80025B08, &lbl_80025B08, &lbl_80025B08, &lbl_80025B08,
+    &lbl_80025B08, &lbl_80025B08, &lbl_80025B08, &lbl_80025B08, &lbl_80025B08, &lbl_80025B08, &lbl_800259A0,
+    &lbl_800259B0, &lbl_800259C0, &lbl_800259D8, &lbl_800259F0, &lbl_80025A08, &lbl_80025A20, &lbl_80025A38,
+    &lbl_80025A50, &lbl_80025A60, &lbl_80025A78, &lbl_80025A90, &lbl_80025AA8, &lbl_80025AC0, &lbl_80025AD8,
+    &lbl_80025AF0,
+};
+#else
+void* jumptable_80171208[] = {0};
+#endif
+
+#ifndef NON_MATCHING
+void* jumptable_80171308[] = {
+    &lbl_80021CB8, &lbl_80021EBC, &lbl_800220B8, &lbl_800222BC, &lbl_800224B8, &lbl_800225EC, &lbl_80022744,
+    &lbl_800227D8, &lbl_80031A30, &lbl_80031A30, &lbl_80031A30, &lbl_80031A30, &lbl_80022930, &lbl_80022A68,
+    &lbl_80022BA0, &lbl_80022CE8, &lbl_800256C8, &lbl_800256C8, &lbl_800256C8, &lbl_800256C8, &lbl_800256C8,
+    &lbl_800256C8, &lbl_800256C8, &lbl_800256C8, &lbl_800256C8, &lbl_800256C8, &lbl_800256C8, &lbl_800256C8,
+    &lbl_800256C8, &lbl_800256C8, &lbl_800256C8, &lbl_800256C8, &lbl_80031A30, &lbl_80022E30, &lbl_800256C8,
+    &lbl_800256C8, &lbl_80022E48, &lbl_80031A30, &lbl_800256C8, &lbl_800256C8, &lbl_800256C8, &lbl_800256C8,
+    &lbl_800256C8, &lbl_800256C8, &lbl_800256C8, &lbl_800256C8, &lbl_800256C8, &lbl_800256C8, &lbl_80022F80,
+    &lbl_80023028, &lbl_800230D0, &lbl_80023398, &lbl_80023660, &lbl_8002392C, &lbl_80023BF8, &lbl_80023EF8,
+    &lbl_800241F8, &lbl_800242A0, &lbl_800245A0, &lbl_80024868, &lbl_80024B30, &lbl_80024DFC, &lbl_800250C8,
+    &lbl_800253C8,
+};
+#else
+void* jumptable_80171308[] = {0};
+#endif
+
+#ifndef NON_MATCHING
+void* jumptable_80171408[] = {
+    &lbl_8001E130, &lbl_8001E340, &lbl_8001E548, &lbl_8001E758, &lbl_8001E960, &lbl_8001EA9C, &lbl_8001EBFC,
+    &lbl_8001EC98, &lbl_80031A30, &lbl_80031A30, &lbl_80031A30, &lbl_80031A30, &lbl_8001EDF8, &lbl_8001EF34,
+    &lbl_8001F070, &lbl_8001F1BC, &lbl_80021C8C, &lbl_80021C8C, &lbl_80021C8C, &lbl_80021C8C, &lbl_80021C8C,
+    &lbl_80021C8C, &lbl_80021C8C, &lbl_80021C8C, &lbl_80021C8C, &lbl_80021C8C, &lbl_80021C8C, &lbl_80021C8C,
+    &lbl_80021C8C, &lbl_80021C8C, &lbl_80021C8C, &lbl_80021C8C, &lbl_80031A30, &lbl_8001F308, &lbl_80021C8C,
+    &lbl_80021C8C, &lbl_8001F3A0, &lbl_80031A30, &lbl_80021C8C, &lbl_80021C8C, &lbl_80021C8C, &lbl_80021C8C,
+    &lbl_80021C8C, &lbl_80021C8C, &lbl_80021C8C, &lbl_80021C8C, &lbl_80021C8C, &lbl_80021C8C, &lbl_8001F4DC,
+    &lbl_8001F584, &lbl_8001F62C, &lbl_8001F8FC, &lbl_8001FBCC, &lbl_8001FEA0, &lbl_80020174, &lbl_8002047C,
+    &lbl_80020784, &lbl_8002082C, &lbl_80020B34, &lbl_80020E04, &lbl_800210D4, &lbl_800213A8, &lbl_8002167C,
+    &lbl_80021984,
+};
+#else
+void* jumptable_80171408[] = {0};
+#endif
+
+#ifndef NON_MATCHING
+void* jumptable_80171508[] = {
+    &lbl_8001D16C, &lbl_8001D2F0, &lbl_8001D484, &lbl_8001D9C0, &lbl_8001D598, &lbl_8001D760, &lbl_8001D8E8,
+};
+#else
+void* jumptable_80171508[] = {0};
+#endif
+
+#ifndef NON_MATCHING
+void* jumptable_80171524[] = {
+    &lbl_8001D090, &lbl_80031A30, &lbl_80031A30, &lbl_8001D090, &lbl_8001D090, &lbl_80031A30, &lbl_8001D090,
+    &lbl_8001D090, &lbl_80031A30, &lbl_8001D090, &lbl_8001D090, &lbl_8001D090, &lbl_8001D090, &lbl_8001D090,
+    &lbl_8001D090, &lbl_8001D090, &lbl_8001D090, &lbl_8001D090, &lbl_8001D090, &lbl_8001D090, &lbl_8001D090,
+    &lbl_8001D090, &lbl_8001D090, &lbl_8001D090, &lbl_80031A30,
+};
+#else
+void* jumptable_80171524[] = {0};
+#endif
+
+#ifndef NON_MATCHING
+void* jumptable_80171588[] = {
+    &lbl_80018B84, &lbl_80018D94, &lbl_80018FA4, &lbl_800191E0, &lbl_8001A444, &lbl_8001A444, &lbl_8001A444,
+    &lbl_8001A444, &lbl_80031A30, &lbl_80031A30, &lbl_80031A30, &lbl_80031A30, &lbl_80031A30, &lbl_8001A444,
+    &lbl_80031A30, &lbl_8001A444, &lbl_8001941C, &lbl_80019810, &lbl_80019C04, &lbl_8001A024,
+};
+#else
+void* jumptable_80171588[] = {0};
+#endif
+
+#ifndef NON_MATCHING
+void* jumptable_801715D8[] = {
+    &lbl_8000EFB8, &lbl_80018B58, &lbl_8000F20C, &lbl_8000F424, &lbl_8000F60C, &lbl_80018B58, &lbl_8000F904,
+    &lbl_8000FBFC, &lbl_8000FEF4, &lbl_80010140, &lbl_80018B58, &lbl_80018B58, &lbl_80031A30, &lbl_80031A30,
+    &lbl_80018B58, &lbl_80031A30, &lbl_8001070C, &lbl_80010918, &lbl_80010B08, &lbl_80010D14, &lbl_80010F04,
+    &lbl_80018B58, &lbl_800111EC, &lbl_800114D4, &lbl_800117BC, &lbl_800119A0, &lbl_80011B84, &lbl_80011DBC,
+    &lbl_80011FF4, &lbl_800125D4, &lbl_80012A64, &lbl_80013044, &lbl_800134D4, &lbl_80013ED0, &lbl_800148CC,
+    &lbl_80014BDC, &lbl_80014EEC, &lbl_800151FC, &lbl_80015BF8, &lbl_80015F08, &lbl_80018B58, &lbl_80018B58,
+    &lbl_80016218, &lbl_8001659C, &lbl_80016924, &lbl_80016D74, &lbl_800171C4, &lbl_80017614, &lbl_80031A30,
+    &lbl_80031A30, &lbl_80031A30, &lbl_80031A30, &lbl_80031A30, &lbl_80018B58, &lbl_80031A30, &lbl_80018B58,
+    &lbl_80017A64, &lbl_80018B58, &lbl_80017D20, &lbl_80017FE4, &lbl_8001829C, &lbl_80018B58, &lbl_80018584,
+    &lbl_80018874,
+};
+#else
+void* jumptable_801715D8[] = {0};
+#endif
+
+#ifndef NON_MATCHING
+void* jumptable_801716D8[] = {
+    &lbl_8000EF90, &lbl_80018B60, &lbl_8001A44C, &lbl_8001A6BC, &lbl_8001ABD8, &lbl_8001B024, &lbl_8001B310,
+    &lbl_8001B520, &lbl_8001B730, &lbl_8001BD1C, &lbl_8001C328, &lbl_8001C5D4, &lbl_8001C8C4, &lbl_8001CAA0,
+    &lbl_8001CCDC, &lbl_8001CEF4, &lbl_8001D06C, &lbl_8001D134, &lbl_80025F90, &lbl_80025F98, &lbl_80025FA0,
+    &lbl_80026378, &lbl_80026690, &lbl_800268CC, &lbl_80026B08, &lbl_80026FD4, &lbl_800274D8, &lbl_800274F8,
+    &lbl_80031A2C, &lbl_80031A2C, &lbl_80031A2C, &lbl_800274A0, &lbl_80027538, &lbl_80027F60, &lbl_80028988,
+    &lbl_80028D88, &lbl_800297FC, &lbl_8002A1DC, &lbl_8002ABBC, &lbl_80027518, &lbl_8002AFBC, &lbl_8002BAAC,
+    &lbl_8002C59C, &lbl_8002C8DC, &lbl_80031A30, &lbl_80031A30, &lbl_8002D5DC, &lbl_8002D918, &lbl_8002D94C,
+    &lbl_8002D96C, &lbl_80031A2C, &lbl_80031A2C, &lbl_8002E740, &lbl_8002E760, &lbl_80031A2C, &lbl_8002F444,
+    &lbl_80031A30, &lbl_8002F8E8, &lbl_80031A2C, &lbl_80031A2C, &lbl_80030758, &lbl_80030778, &lbl_80031A2C,
+    &lbl_80031594,
+};
+#else
+void* jumptable_801716D8[] = {0};
+#endif
+
+#ifndef NON_MATCHING
+void* jumptable_801717D8[] = {
+    &lbl_80038570, &lbl_800385AC, &lbl_800385E8, &lbl_80038634, &lbl_8003866C, &lbl_8003869C, &lbl_800386CC,
+    &lbl_800386F0, &lbl_8003871C, &lbl_80038740, &lbl_80038764, &lbl_80038794, &lbl_800387C4, &lbl_800387E0,
+    &lbl_800387FC, &lbl_80038830, &lbl_80039BC8, &lbl_80039BC8, &lbl_80039BC8, &lbl_80039BC8, &lbl_80039BC8,
+    &lbl_80039BC8, &lbl_80039BC8, &lbl_80039BC8, &lbl_80039BC8, &lbl_80039BC8, &lbl_80039BC8, &lbl_80039BC8,
+    &lbl_80039BC8, &lbl_80039BC8, &lbl_80039BC8, &lbl_80039BC8, &lbl_80038864, &lbl_80038888, &lbl_80039BC8,
+    &lbl_80039BC8, &lbl_800388AC, &lbl_800388C8, &lbl_80039BC8, &lbl_80039BC8, &lbl_80039BC8, &lbl_80039BC8,
+    &lbl_80039BC8, &lbl_80039BC8, &lbl_80039BC8, &lbl_80039BC8, &lbl_80039BC8, &lbl_80039BC8, &lbl_800388EC,
+    &lbl_800388FC, &lbl_8003890C, &lbl_8003895C, &lbl_800389AC, &lbl_80038A08, &lbl_80038A64, &lbl_80038AC0,
+    &lbl_80038B1C, &lbl_80038B2C, &lbl_80038B88, &lbl_80038BD8, &lbl_80038C28, &lbl_80038C84, &lbl_80038CE0,
+    &lbl_80038D3C,
+};
+#else
+void* jumptable_801717D8[] = {0};
+#endif
+
+#ifndef NON_MATCHING
+void* jumptable_801718D8[] = {
+    &lbl_80037E58, &lbl_80037E84, &lbl_80037EB0, &lbl_80037EDC, &lbl_80037F08, &lbl_80037F48, &lbl_80037F88,
+    &lbl_80037FA4, &lbl_80037FC4, &lbl_80037FE8, &lbl_8003800C, &lbl_80038048, &lbl_80038084, &lbl_800380A0,
+    &lbl_800380BC, &lbl_800380FC, &lbl_80039BC8, &lbl_80039BC8, &lbl_80039BC8, &lbl_80039BC8, &lbl_80039BC8,
+    &lbl_80039BC8, &lbl_80039BC8, &lbl_80039BC8, &lbl_80039BC8, &lbl_80039BC8, &lbl_80039BC8, &lbl_80039BC8,
+    &lbl_80039BC8, &lbl_80039BC8, &lbl_80039BC8, &lbl_80039BC8, &lbl_8003813C, &lbl_8003816C, &lbl_80039BC8,
+    &lbl_80039BC8, &lbl_8003819C, &lbl_800381B8, &lbl_80039BC8, &lbl_80039BC8, &lbl_80039BC8, &lbl_80039BC8,
+    &lbl_80039BC8, &lbl_80039BC8, &lbl_80039BC8, &lbl_80039BC8, &lbl_80039BC8, &lbl_80039BC8, &lbl_800381DC,
+    &lbl_800381EC, &lbl_800381FC, &lbl_8003823C, &lbl_8003827C, &lbl_800382BC, &lbl_800382FC, &lbl_8003833C,
+    &lbl_8003837C, &lbl_8003838C, &lbl_800383CC, &lbl_8003840C, &lbl_8003844C, &lbl_8003848C, &lbl_800384CC,
+    &lbl_8003850C,
+};
+#else
+void* jumptable_801718D8[] = {0};
+#endif
+
+#ifndef NON_MATCHING
+void* jumptable_801719D8[] = {
+    &lbl_800377AC, &lbl_800377D8, &lbl_80037804, &lbl_80037830, &lbl_8003785C, &lbl_8003787C, &lbl_8003789C,
+    &lbl_800378B8, &lbl_800378D8, &lbl_80037904, &lbl_80037928, &lbl_80037950, &lbl_80037978, &lbl_800379A8,
+    &lbl_800379D0, &lbl_800379FC, &lbl_80039BC8, &lbl_80039BC8, &lbl_80039BC8, &lbl_80039BC8, &lbl_80039BC8,
+    &lbl_80039BC8, &lbl_80039BC8, &lbl_80039BC8, &lbl_80039BC8, &lbl_80039BC8, &lbl_80039BC8, &lbl_80039BC8,
+    &lbl_80039BC8, &lbl_80039BC8, &lbl_80039BC8, &lbl_80039BC8, &lbl_80037A28, &lbl_80037A48, &lbl_80039BC8,
+    &lbl_80039BC8, &lbl_80037A64, &lbl_80037A8C, &lbl_80039BC8, &lbl_80039BC8, &lbl_80039BC8, &lbl_80039BC8,
+    &lbl_80039BC8, &lbl_80039BC8, &lbl_80039BC8, &lbl_80039BC8, &lbl_80039BC8, &lbl_80039BC8, &lbl_80037AB0,
+    &lbl_80037AC0, &lbl_80037AD0, &lbl_80037B10, &lbl_80037B50, &lbl_80037B90, &lbl_80037BD0, &lbl_80037C14,
+    &lbl_80037C58, &lbl_80037C68, &lbl_80037CAC, &lbl_80037CEC, &lbl_80037D2C, &lbl_80037D6C, &lbl_80037DAC,
+    &lbl_80037DF0,
+};
+#else
+void* jumptable_801719D8[] = {0};
+#endif
+
+#ifndef NON_MATCHING
+void* jumptable_80171AD8[] = {
+    &lbl_800370FC, &lbl_80037128, &lbl_80037154, &lbl_80037180, &lbl_800371AC, &lbl_800371D0, &lbl_800371F4,
+    &lbl_80037210, &lbl_80037230, &lbl_8003725C, &lbl_80037280, &lbl_800372A8, &lbl_800372D0, &lbl_80037300,
+    &lbl_80037328, &lbl_80037354, &lbl_80039BC8, &lbl_80039BC8, &lbl_80039BC8, &lbl_80039BC8, &lbl_80039BC8,
+    &lbl_80039BC8, &lbl_80039BC8, &lbl_80039BC8, &lbl_80039BC8, &lbl_80039BC8, &lbl_80039BC8, &lbl_80039BC8,
+    &lbl_80039BC8, &lbl_80039BC8, &lbl_80039BC8, &lbl_80039BC8, &lbl_80037380, &lbl_8003739C, &lbl_80039BC8,
+    &lbl_80039BC8, &lbl_800373B8, &lbl_800373E0, &lbl_80039BC8, &lbl_80039BC8, &lbl_80039BC8, &lbl_80039BC8,
+    &lbl_80039BC8, &lbl_80039BC8, &lbl_80039BC8, &lbl_80039BC8, &lbl_80039BC8, &lbl_80039BC8, &lbl_80037404,
+    &lbl_80037414, &lbl_80037424, &lbl_80037464, &lbl_800374A4, &lbl_800374E4, &lbl_80037524, &lbl_80037568,
+    &lbl_800375AC, &lbl_800375BC, &lbl_80037600, &lbl_80037640, &lbl_80037680, &lbl_800376C0, &lbl_80037700,
+    &lbl_80037744,
+};
+#else
+void* jumptable_80171AD8[] = {0};
+#endif
+
+#ifndef NON_MATCHING
+void* jumptable_80171BD8[] = {
+    &lbl_80036E64, &lbl_80036EB0, &lbl_80036ED4, &lbl_80039BC8, &lbl_80036EF0, &lbl_80036F58, &lbl_80036F7C,
+};
+#else
+void* jumptable_80171BD8[] = {0};
+#endif
+
+#ifndef NON_MATCHING
+void* jumptable_80171BF4[] = {
+    &lbl_80036D80, &lbl_80036DBC, &lbl_80039BC8, &lbl_80039BC8, &lbl_80036DF0,
+    &lbl_80036E10, &lbl_80039BC8, &lbl_80039BC8, &lbl_80039BC8,
+};
+#else
+void* jumptable_80171BF4[] = {0};
+#endif
+
+#ifndef NON_MATCHING
+void* jumptable_80171C18[] = {
+    &lbl_80036D5C, &lbl_80036ACC, &lbl_80036B20, &lbl_80036D5C, &lbl_80036D5C, &lbl_80036B34, &lbl_80036D5C,
+    &lbl_80036D5C, &lbl_80036BCC, &lbl_80036D5C, &lbl_80036D5C, &lbl_80036D5C, &lbl_80036D5C, &lbl_80036D5C,
+    &lbl_80036D5C, &lbl_80036D5C, &lbl_80036D5C, &lbl_80036D5C, &lbl_80036D5C, &lbl_80036D5C, &lbl_80036D5C,
+    &lbl_80036D5C, &lbl_80036D5C, &lbl_80036D5C, &lbl_80036CF8,
+};
+#else
+void* jumptable_80171C18[] = {0};
+#endif
+
+#ifndef NON_MATCHING
+void* jumptable_80171C7C[] = {
+    &lbl_80036484, &lbl_800364B4, &lbl_800364E4, &lbl_80036530, &lbl_80039BC8, &lbl_80039BC8, &lbl_80039BC8,
+    &lbl_80039BC8, &lbl_8003657C, &lbl_800365AC, &lbl_800365DC, &lbl_8003660C, &lbl_8003663C, &lbl_80039BC8,
+    &lbl_8003666C, &lbl_80039BC8, &lbl_8003669C, &lbl_800366D8, &lbl_80036714, &lbl_80036768,
+};
+#else
+void* jumptable_80171C7C[] = {0};
+#endif
+
+#ifndef NON_MATCHING
+void* jumptable_80171CCC[] = {
+    &lbl_800359F8, &lbl_80039BC8, &lbl_80035A1C, &lbl_80035A40, &lbl_80035A64, &lbl_80039BC8, &lbl_80035A94,
+    &lbl_80035AC4, &lbl_80035AF4, &lbl_80035B08, &lbl_80039BC8, &lbl_80039BC8, &lbl_80035B38, &lbl_80035B4C,
+    &lbl_80039BC8, &lbl_80039BC8, &lbl_80035B60, &lbl_80035B7C, &lbl_80035B98, &lbl_80035BB4, &lbl_80035BD0,
+    &lbl_80039BC8, &lbl_80035C08, &lbl_80035C40, &lbl_80035C78, &lbl_80035CCC, &lbl_80035D20, &lbl_80035D74,
+    &lbl_80035DC8, &lbl_80035E38, &lbl_80035EA8, &lbl_80035EFC, &lbl_80035F50, &lbl_80035F7C, &lbl_80035FA8,
+    &lbl_80035FD4, &lbl_80036000, &lbl_8003602C, &lbl_80036058, &lbl_80036084, &lbl_80039BC8, &lbl_80039BC8,
+    &lbl_800360B0, &lbl_800360EC, &lbl_80036124, &lbl_80036160, &lbl_8003619C, &lbl_800361D8, &lbl_80036214,
+    &lbl_80036248, &lbl_8003627C, &lbl_800362B0, &lbl_800362E4, &lbl_80039BC8, &lbl_80036318, &lbl_80039BC8,
+    &lbl_8003634C, &lbl_80039BC8, &lbl_80036378, &lbl_800363A4, &lbl_800363D0, &lbl_80039BC8, &lbl_80036400,
+    &lbl_80036430,
+};
+#else
+void* jumptable_80171CCC[] = {0};
+#endif
+
+#ifndef NON_MATCHING
+void* jumptable_80171DCC[] = {
+    &lbl_800359D4, &lbl_80036460, &lbl_800367BC, &lbl_80036818, &lbl_80036844, &lbl_800368D0, &lbl_8003690C,
+    &lbl_8003693C, &lbl_8003696C, &lbl_80036994, &lbl_800369BC, &lbl_800369F4, &lbl_80036A28, &lbl_80036A4C,
+    &lbl_80036A70, &lbl_80036A94, &lbl_80036AA8, &lbl_80036E30, &lbl_80039BC8, &lbl_80039BC8, &lbl_80038D98,
+    &lbl_80038DF0, &lbl_80038E48, &lbl_80038E94, &lbl_80038EE0, &lbl_80038F18, &lbl_80038F78, &lbl_80039040,
+    &lbl_80039BC8, &lbl_80039BC8, &lbl_80039BC8, &lbl_80038F50, &lbl_80039174, &lbl_800391D8, &lbl_80039238,
+    &lbl_800392C8, &lbl_80039328, &lbl_80039388, &lbl_80039418, &lbl_80039108, &lbl_800394A8, &lbl_800394F8,
+    &lbl_80039548, &lbl_800395B8, &lbl_80039608, &lbl_80039684, &lbl_800396FC, &lbl_80039BC8, &lbl_8003976C,
+    &lbl_800397CC, &lbl_80039BC8, &lbl_80039BC8, &lbl_80039870, &lbl_800398DC, &lbl_80039BC8, &lbl_80039944,
+    &lbl_800399AC, &lbl_80039A14, &lbl_80039BC8, &lbl_80039BC8, &lbl_80039A90, &lbl_80039B0C, &lbl_80039BC8,
+    &lbl_80039B6C,
+};
+#else
+void* jumptable_80171DCC[] = {0};
+#endif
+
+#ifndef NON_MATCHING
+void* jumptable_80171ECC[] = {
+    &lbl_8003A0D8, &lbl_8003A38C, &lbl_8003AB40, &lbl_8003A640, &lbl_8003A240, &lbl_8003A4F4,
+    &lbl_8003AB40, &lbl_8003AB40, &lbl_8003A78C, &lbl_8003A8C8, &lbl_8003AB40, &lbl_8003AA04,
+};
+#else
+void* jumptable_80171ECC[] = {0};
+#endif
+
+#ifndef NON_MATCHING
+void* jumptable_80171EFC[] = {
+    &lbl_8003AEBC, &lbl_8003B5F8, &lbl_8003B5F8, &lbl_8003B5F8, &lbl_8003B100,
+    &lbl_8003B5F8, &lbl_8003B300, &lbl_8003B5F8, &lbl_8003AFEC, &lbl_8003B5F8,
+    &lbl_8003B5F8, &lbl_8003B5F8, &lbl_8003B200, &lbl_8003B5F8, &lbl_8003B47C,
+};
+#else
+void* jumptable_80171EFC[] = {0};
+#endif
+
+_XL_OBJECTTYPE gClassCPU = {
+    "CPU",
+    sizeof(Cpu),
+    NULL,
+    (EventFunc)cpuEvent,
+};
+
+#ifndef NON_MATCHING
+void* jumptable_80171F48[] = {
+    &lbl_8003E0F0, &lbl_8003E338, &lbl_8003E338, &lbl_8003E0F0, &lbl_8003E0F0, &lbl_8003E338, &lbl_8003E0F0,
+    &lbl_8003E0F0, &lbl_8003E338, &lbl_8003E0F0, &lbl_8003E0F0, &lbl_8003E0F0, &lbl_8003E0F0, &lbl_8003E0F0,
+    &lbl_8003E0F0, &lbl_8003E0F0, &lbl_8003E0F0, &lbl_8003E0F0, &lbl_8003E0F0, &lbl_8003E0F0, &lbl_8003E0F0,
+    &lbl_8003E0F0, &lbl_8003E0F0, &lbl_8003E0F0, &lbl_8003E0C4,
+};
+#else
+void* jumptable_80171F48[] = {0};
+#endif
+
+#ifndef NON_MATCHING
+void* jumptable_80171FAC[] = {
+    &lbl_8003DDB8, &lbl_8003DE78, &lbl_8003DE3C, &lbl_8003E330, &lbl_8003DF14, &lbl_8003E038, &lbl_8003E038,
+    &lbl_8003E038, &lbl_8003E330, &lbl_8003E330, &lbl_8003E330, &lbl_8003E330, &lbl_8003E330, &lbl_8003E330,
+    &lbl_8003E330, &lbl_8003E330, &lbl_8003E0A0, &lbl_8003E180, &lbl_8003E330, &lbl_8003E330, &lbl_8003DF14,
+    &lbl_8003E038, &lbl_8003E038, &lbl_8003E038, &lbl_8003E330, &lbl_8003E330, &lbl_8003E330, &lbl_8003E330,
+    &lbl_8003E330, &lbl_8003E330, &lbl_8003E330, &lbl_8003E330, &lbl_8003E330, &lbl_8003E330, &lbl_8003E330,
+    &lbl_8003E220, &lbl_8003E330, &lbl_8003E330, &lbl_8003E330, &lbl_8003E330, &lbl_8003E330, &lbl_8003E330,
+    &lbl_8003E330, &lbl_8003E20C,
+};
+#else
+void* jumptable_80171FAC[] = {0};
+#endif
+
 static s32 cpuCompile_DSLLV_function;
 static s32 cpuCompile_DSRLV_function;
 static s32 cpuCompile_DSRAV_function;
@@ -203,19 +571,6 @@ static s32 cpuCompile_SDC_function;
 static s32 cpuCompile_LWL_function;
 static s32 cpuCompile_LWR_function;
 static VIRetraceCallback __cpuRetraceCallback;
-
-// const f64 D_80135FA0 = 0.0;
-// const f64 D_80135FA8 = 0.5;
-// const f64 D_80135FB0 = 3.0;
-// const f32 D_80135FB8 = 0.5f;
-// const f64 D_80135FC0 = 4503601774854144.0;
-
-// _XL_OBJECTTYPE gClassCPU = {
-//     "CPU",
-//     sizeof(Cpu),
-//     NULL,
-//     (EventFunc)cpuEvent,
-// };
 
 static inline bool cpuCheckInterrupts(Cpu* pCPU) {
     System* pSystem;
@@ -4851,14 +5206,6 @@ static bool cpuExecuteLoadStoreF(Cpu* pCPU, s32 nCount, s32 nAddressN64, s32 nAd
     return (s32)anCode;
 }
 
-// temp location because of jumptables
-_XL_OBJECTTYPE gClassCPU = {
-    "CPU",
-    sizeof(Cpu),
-    NULL,
-    (EventFunc)cpuEvent,
-};
-
 static bool cpuMakeLink(Cpu* pCPU, CpuExecuteFunc* ppfLink, CpuExecuteFunc pfFunction) {
     s32 iGPR;
     s32* pnCode;
@@ -5332,7 +5679,7 @@ bool cpuReset(Cpu* pCPU) {
     //! TODO: make this struct match
     // pCPU->alarmRetrace.handler = NULL;
     // pCPU->alarmRetrace.tag = 0;
-    // pCPU->alarmRetrace.fire = 0;
+    // pCPU->alarmRetrace.end = 0;
     // pCPU->alarmRetrace.prev = NULL;
     // pCPU->alarmRetrace.next = NULL;
     // pCPU->alarmRetrace.period = 0;

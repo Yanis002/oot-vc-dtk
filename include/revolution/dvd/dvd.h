@@ -2,6 +2,7 @@
 #define RVL_SDK_DVD_H
 
 #include "revolution/types.h"
+#include "revolution/os/OSAlarm.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -14,7 +15,6 @@ extern "C" {
 // Forward declarations
 typedef struct DVDCommandBlock;
 typedef struct DVDFileInfo;
-typedef struct OSAlarm;
 
 typedef enum {
     DVD_RESULT_COVER_CLOSED = -4,
