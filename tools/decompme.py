@@ -21,7 +21,7 @@ INCLUDE_DIRS = [
     Path("include"),
     Path("libc"),
 ]
-COMPILER_NAME = "mwcc_41_60831"
+COMPILER_NAME = "mwcc_42_60422"
 # We don't set -inline deferred because otherwise the reversed function order
 # would require manually deleting all previous function definitions from the
 # context.
