@@ -20,6 +20,11 @@ emulator/cpu.c:
 	.sbss       start:0x8025CFE8 end:0x8025D068
 	.sdata2     start:0x8025DD50 end:0x8025DD78
 
+emulator/pif.c:
+	.text       start:0x80040B24 end:0x80041844
+	.data       start:0x80172060 end:0x80172070
+	.sdata      start:0x8025C758 end:0x8025C760
+
 emulator/ram.c:
 	.text       start:0x80041844 end:0x80042064
 	.data       start:0x80172070 end:0x80172290

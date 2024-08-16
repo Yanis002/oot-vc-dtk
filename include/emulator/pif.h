@@ -16,25 +16,24 @@
 
 // __anon_0x3C277
 typedef enum ControllerType {
-    CT_NONE = 0,
-    CT_CONTROLLER = 1,
-    CT_CONTROLLER_W_PAK = 2, // Controller Pak?
-    CT_CONTROLLER_W_RPAK = 3, // Rumble Pak
-    CT_MOUSE = 4,
-    CT_VOICE = 5,
-    CT_4K = 6, // Mem Pak?
-    CT_16K = 7, // Mem Pak?
-    CT_COUNT = 8,
+    CT_NONE = -1,
+    CT_CONTROLLER = 0,
+    CT_CONTROLLER_W_PAK = 1, // Controller Pak?
+    CT_CONTROLLER_W_RPAK = 2, // Rumble Pak
+    CT_MOUSE = 3,
+    CT_VOICE = 4,
+    CT_4K = 5, // Mem Pak?
+    CT_16K = 6, // Mem Pak?
+    CT_COUNT = 7,
 } ControllerType;
 
 // __anon_0x3C350
 typedef struct Pif {
     /* 0x00 */ void* pROM;
     /* 0x04 */ void* pRAM;
-    /* 0x08 */ void* pHost;
-    /* 0x0C */ u16 controllerType[5];
-    /* 0x16 */ char controllerStatus[5];
-    /* 0x1C */ ControllerType eControllerType[5];
+    /* 0x16 */ char controllerStatus[4];
+    /* 0x0C */ u16 controllerType[4];
+    /* 0x1C */ ControllerType eControllerType[4];
 } Pif; // size = 0x30
 
 bool pifReadRumble(Pif* pPIF, s32 channel, u16 address, u8* data);

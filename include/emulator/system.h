@@ -86,7 +86,7 @@ typedef enum SystemObjectType {
 
     SOT_RDP = 5,
     SOT_DISK = 6,
-    SOT_FLASH = 7,
+    SOT_UNK7 = 7,
     SOT_AUDIO = 8,
 
     SOT_VIDEO = 9, // 0x34
@@ -94,9 +94,10 @@ typedef enum SystemObjectType {
     SOT_MIPS = 10,
     SOT_SRAM = 11,
     SOT_SERIAL = 12,
-    SOT_PERIPHERAL = 13,
-    SOT_RDB = 14,
-    SOT_UNK16 = 16,
+    SOT_EEPROM = 13, // 0x44
+    SOT_PERIPHERAL = 14,
+    SOT_FLASH = 15, // 0x4C
+    SOT_RDB = 16,
 
     SOT_HELP = 17, // 0x54
     SOT_LIBRARY = 18, // 0x58
@@ -155,6 +156,7 @@ typedef struct System {
 
     // not ok
     /* 0x60 */ u64 nAddressBreak;
+    s32 controllerChannel;
     /* 0x68 */ SystemRomCopy romCopy;
     /* 0x78 */ u8 anException[16];
     /* 0x88 */ bool bJapaneseVersion;
@@ -189,7 +191,8 @@ typedef struct SystemRomConfig {
 #define SYSTEM_PERIPHERAL(pSystem) ((Peripheral*)(((System*)(pSystem))->apObject[SOT_PERIPHERAL]))
 #define SYSTEM_RDB(pSystem) ((Rdb*)(((System*)(pSystem))->apObject[SOT_RDB]))
 
-//! TODO: replace void* by the help struct name
+//! TODO: replace void* by the struct names
+#define SYSTEM_EEPROM(pSystem) ((void*)(((System*)(pSystem))->apObject[SOT_EEPROM]))
 #define SYSTEM_HELP(pSystem) ((void*)(((System*)(pSystem))->apObject[SOT_HELP]))
 
 extern u32 nTickMultiplier;
