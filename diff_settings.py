@@ -1,10 +1,10 @@
 def add_custom_arguments(parser):
-    parser.add_argument("-v", "--version", help="Emulator version to diff", default="ce-j")
+    parser.add_argument("-v", "--version", help="Emulator version to diff", default="vc-j")
 
 def apply(config, args):
     version = args.version
     config["make_command"] = ["ninja"]
-    config["mapfile"] = f"build/{version}/oot-gc.elf.MAP"
+    config["mapfile"] = f"build/{version}/oot-vc.elf.MAP"
     config["source_directories"] = ["src", "include"]
     config["arch"] = "ppc"
     config["map_format"] = "mw" # gnu, mw, ms
