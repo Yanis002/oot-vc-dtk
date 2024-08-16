@@ -1,8 +1,8 @@
 #ifndef RVL_SDK_VI_H
 #define RVL_SDK_VI_H
 
-#include "revolution/types.h"
 #include "revolution/gx/GXFramebuf.h"
+#include "revolution/types.h"
 #include "revolution/vi/vitypes.h"
 
 #ifdef __cplusplus

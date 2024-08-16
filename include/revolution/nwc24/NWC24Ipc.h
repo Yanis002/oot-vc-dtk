@@ -9,15 +9,11 @@
 extern "C" {
 #endif
 
-NWC24Err NWC24iOpenResourceManager(const char* user, const char* name,
-                                   s32* fdOut, IPCOpenMode mode);
+NWC24Err NWC24iOpenResourceManager(const char* user, const char* name, s32* fdOut, IPCOpenMode mode);
 NWC24Err NWC24iCloseResourceManager(const char* user, s32 fd);
 
-NWC24Err NWC24iIoctlResourceManager(const char* user, s32 fd, s32 type,
-                                    void* in, s32 inSize, void* out,
-                                    s32 outSize);
-NWC24Err NWC24iIoctlResourceManagerAsync(const char* user, s32 fd, s32 type,
-                                         void* in, s32 inSize, void* out,
+NWC24Err NWC24iIoctlResourceManager(const char* user, s32 fd, s32 type, void* in, s32 inSize, void* out, s32 outSize);
+NWC24Err NWC24iIoctlResourceManagerAsync(const char* user, s32 fd, s32 type, void* in, s32 inSize, void* out,
                                          s32 outSize, void* callbackArg);
 
 bool NWC24iIsAsyncRequestPending(void);

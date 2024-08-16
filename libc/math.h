@@ -1,9 +1,9 @@
 #ifndef _MATH_H_
 #define _MATH_H_
 
-#include "revolution/types.h"
 #include "intrinsics.h"
 #include "macros.h"
+#include "revolution/types.h"
 
 #define M_PI 3.1415926535897932
 #define M_SQRT3 1.7320499420166016

@@ -6,8 +6,8 @@
 #include "emulator/system.h"
 #include "emulator/xlCoreGCN.h"
 #include "emulator/xlHeap.h"
-#include "revolution/os.h"
 #include "macros.h"
+#include "revolution/os.h"
 
 //! TODO: document these
 void fn_80063D78(s32);

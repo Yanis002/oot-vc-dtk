@@ -8,15 +8,15 @@ extern "C" {
 #endif
 
 typedef struct OSSram {
-    u16 checksum;    // at 0x0
+    u16 checksum; // at 0x0
     u16 invchecksum; // at 0x2
-    u32 ead0;        // at 0x4
-    u32 ead1;        // at 0x8
+    u32 ead0; // at 0x4
+    u32 ead1; // at 0x8
     u32 counterBias; // at 0xC
-    u8 dispOfsH;     // at 0x10
-    u8 ntd;          // at 0x11
-    u8 lang;         // at 0x12
-    u8 flags;        // at 0x13
+    u8 dispOfsH; // at 0x10
+    u8 ntd; // at 0x11
+    u8 lang; // at 0x12
+    u8 flags; // at 0x13
 } OSSram;
 
 typedef struct OSSramEx {

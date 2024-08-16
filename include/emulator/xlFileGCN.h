@@ -1,10 +1,10 @@
 #ifndef _XL_FILE_GCN_H
 #define _XL_FILE_GCN_H
 
-#include "revolution/types.h"
+#include "emulator/xlObject.h"
 #include "revolution/cnt.h"
 #include "revolution/dvd.h"
-#include "emulator/xlObject.h"
+#include "revolution/types.h"
 
 typedef bool (*DVDOpenCallback)(char*, CNTFileInfo*);
 typedef bool (*DVDReadCallback)(CNTFileInfo*, void*, s32, s32, DVDCallback);

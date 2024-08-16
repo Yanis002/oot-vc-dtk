@@ -1,10 +1,10 @@
 #ifndef RVL_SDK_NAND_CORE_H
 #define RVL_SDK_NAND_CORE_H
 
+#include "macros.h"
 #include "revolution/nand/nand.h"
 #include "revolution/types.h"
 #include "stddef.h"
-#include "macros.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -26,12 +26,9 @@ s32 NANDGetCurrentDir(char* out);
 s32 NANDGetHomeDir(char* out);
 void nandCallback(s32 result, void* arg);
 s32 NANDGetType(const char* path, u8* type);
-s32 NANDPrivateGetTypeAsync(const char* path, u8* type,
-                            NANDAsyncCallback callback,
-                            NANDCommandBlock* block);
+s32 NANDPrivateGetTypeAsync(const char* path, u8* type, NANDAsyncCallback callback, NANDCommandBlock* block);
 const char* nandGetHomeDir(void);
-void NANDInitBanner(NANDBanner* banner, u32 flags, const wchar_t* title,
-                    const wchar_t* subtitle);
+void NANDInitBanner(NANDBanner* banner, u32 flags, const wchar_t* title, const wchar_t* subtitle);
 
 #ifdef __cplusplus
 }

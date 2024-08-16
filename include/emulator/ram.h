@@ -1,8 +1,8 @@
 #ifndef _RAM_H
 #define _RAM_H
 
-#include "revolution/types.h"
 #include "emulator/xlObject.h"
+#include "revolution/types.h"
 
 // RDRAM Interface Registers
 #define RI_MODE 0x00

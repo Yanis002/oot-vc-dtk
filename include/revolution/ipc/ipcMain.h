@@ -1,8 +1,8 @@
 #ifndef RVL_SDK_IPC_MAIN_H
 #define RVL_SDK_IPC_MAIN_H
 
-#include "revolution/types.h"
 #include "macros.h"
+#include "revolution/types.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -10,13 +10,9 @@ extern "C" {
 
 u32 IPC_HW_REGS[] AT_ADDRESS(0xCD000000);
 
-inline u32 ACRReadReg(u32 reg) {
-    return IPC_HW_REGS[reg / 4];
-}
+inline u32 ACRReadReg(u32 reg) { return IPC_HW_REGS[reg / 4]; }
 
-inline void ACRWriteReg(u32 reg, u32 val) {
-    IPC_HW_REGS[reg / 4] = val;
-}
+inline void ACRWriteReg(u32 reg, u32 val) { IPC_HW_REGS[reg / 4] = val; }
 
 void IPCInit(void);
 u32 IPCReadReg(s32 index);

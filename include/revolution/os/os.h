@@ -54,12 +54,12 @@ typedef enum {
 } OSExceptionType;
 
 typedef struct OSIOSRev {
-    u8 idHi;       // at 0x0
-    u8 idLo;       // at 0x1
-    u8 verMajor;   // at 0x2
-    u8 verMinor;   // at 0x3
-    u8 buildMon;   // at 0x4
-    u8 buildDay;   // at 0x5
+    u8 idHi; // at 0x0
+    u8 idLo; // at 0x1
+    u8 verMajor; // at 0x2
+    u8 verMinor; // at 0x3
+    u8 buildMon; // at 0x4
+    u8 buildDay; // at 0x5
     u16 buildYear; // at 0x6
 } OSIOSRev;
 

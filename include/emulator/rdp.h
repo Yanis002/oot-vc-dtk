@@ -1,9 +1,9 @@
 #ifndef _RDP_H
 #define _RDP_H
 
-#include "revolution/types.h"
 #include "emulator/rsp.h"
 #include "emulator/xlObject.h"
+#include "revolution/types.h"
 
 typedef struct Rdp {
     /* 0x00 */ s32 nBIST;

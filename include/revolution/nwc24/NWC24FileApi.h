@@ -1,11 +1,11 @@
 #ifndef RVL_SDK_NWC24_FILE_API_H
 #define RVL_SDK_NWC24_FILE_API_H
 
+#include "macros.h"
 #include "revolution/nand.h"
 #include "revolution/nwc24/NWC24Types.h"
-#include "revolution/vf.h"
 #include "revolution/types.h"
-#include "macros.h"
+#include "revolution/vf.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -49,11 +49,11 @@ typedef enum {
 } NWC24SeekMode;
 
 typedef struct NWC24File {
-    u32 id;             // at 0x0
-    u32 mode;           // at 0x4
-    u32 align;          // at 0x8
+    u32 id; // at 0x0
+    u32 mode; // at 0x4
+    u32 align; // at 0x8
     NANDFileInfo nandf; // at 0xC
-    VFFile vff;         // at 0x98
+    VFFile vff; // at 0x98
 } NWC24File;
 
 NWC24Err NWC24FOpen(NWC24File* file, const char* path, u32 mode);

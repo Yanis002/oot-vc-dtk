@@ -1,8 +1,8 @@
 #ifndef _AUDIO_H
 #define _AUDIO_H
 
-#include "revolution/types.h"
 #include "emulator/xlObject.h"
+#include "revolution/types.h"
 
 // __anon_0x753E7
 typedef struct Audio {

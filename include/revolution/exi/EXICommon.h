@@ -1,8 +1,8 @@
 #ifndef RVL_SDK_EXI_COMMON_H
 #define RVL_SDK_EXI_COMMON_H
 
-#include "revolution/types.h"
 #include "revolution/os/OSContext.h"
+#include "revolution/types.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -28,11 +28,26 @@ typedef enum {
     EXI_MAX_FREQ
 } EXIFreq;
 
-typedef enum { EXI_CHAN_0, EXI_CHAN_1, EXI_CHAN_2, EXI_MAX_CHAN } EXIChannel;
+typedef enum {
+    EXI_CHAN_0,
+    EXI_CHAN_1,
+    EXI_CHAN_2,
+    EXI_MAX_CHAN
+} EXIChannel;
 
-typedef enum { EXI_DEV_EXT, EXI_DEV_INT, EXI_DEV_NET, EXI_MAX_DEV } EXIDev;
+typedef enum {
+    EXI_DEV_EXT,
+    EXI_DEV_INT,
+    EXI_DEV_NET,
+    EXI_MAX_DEV
+} EXIDev;
 
-typedef enum { EXI_READ, EXI_WRITE, EXI_TYPE_2, EXI_MAX_TYPE } EXIType;
+typedef enum {
+    EXI_READ,
+    EXI_WRITE,
+    EXI_TYPE_2,
+    EXI_MAX_TYPE
+} EXIType;
 
 typedef enum {
     EXI_ID_MEMCARD_59 = 0x00000004,
@@ -52,8 +67,7 @@ typedef void (*EXICallback)(EXIChannel chan, struct OSContext* ctx);
 extern const u32 __EXIFreq;
 
 static u32 __EXISwap32(u32 val) {
-    return val >> 24 & 0x000000FF | val >> 8 & 0x0000FF00 |
-           val << 8 & 0x00FF0000 | val << 24 & 0xFF000000;
+    return val >> 24 & 0x000000FF | val >> 8 & 0x0000FF00 | val << 8 & 0x00FF0000 | val << 24 & 0xFF000000;
 }
 
 bool EXIWriteReg(EXIChannel chan, u32 dev, u32 cmd, const void* buf, s32 len);

@@ -1,9 +1,9 @@
 #ifndef _ROM_H
 #define _ROM_H
 
-#include "revolution/types.h"
 #include "emulator/xlFileGCN.h"
 #include "emulator/xlObject.h"
+#include "revolution/types.h"
 
 #define ROM_THREAD_SIZE 0x2000
 

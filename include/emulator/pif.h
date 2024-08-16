@@ -1,8 +1,8 @@
 #ifndef _PIF_H
 #define _PIF_H
 
-#include "revolution/types.h"
 #include "emulator/xlObject.h"
+#include "revolution/types.h"
 
 #define PIF_RAM_START 0x7C0
 #define PIF_RAM_END 0x7FF

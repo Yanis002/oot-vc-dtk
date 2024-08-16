@@ -12,7 +12,7 @@ typedef struct OSExecParams {
     UNKWORD WORD_0x4;
     char UNK_0x8[0x4];
     void* regionStart; // at 0xC
-    void* regionEnd;   // at 0x10
+    void* regionEnd; // at 0x10
     char UNK_0x14[0x1C - 0x14];
 } OSExecParams;
 

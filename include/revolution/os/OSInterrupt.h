@@ -1,8 +1,8 @@
 #ifndef RVL_SDK_OS_INTERRUPT_H
 #define RVL_SDK_OS_INTERRUPT_H
 
-#include "revolution/types.h"
 #include "revolution/os/OSContext.h"
+#include "revolution/types.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -58,8 +58,7 @@ bool OSDisableInterrupts(void);
 bool OSEnableInterrupts(void);
 bool OSRestoreInterrupts(bool status);
 
-OSInterruptHandler __OSSetInterruptHandler(OSInterruptType type,
-                                           OSInterruptHandler handler);
+OSInterruptHandler __OSSetInterruptHandler(OSInterruptType type, OSInterruptHandler handler);
 OSInterruptHandler __OSGetInterruptHandler(OSInterruptType type);
 
 void __OSInterruptInit(void);

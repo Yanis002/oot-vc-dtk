@@ -10,9 +10,9 @@ extern "C" {
 
 typedef struct AXFX_CHORUS {
     AXFX_CHORUS_EXP exp; // at 0x0
-    u32 baseDelay;       // at 0xA0
-    u32 variation;       // at 0xA4
-    u32 period;          // at 0xA8
+    u32 baseDelay; // at 0xA0
+    u32 variation; // at 0xA4
+    u32 period; // at 0xA8
 } AXFX_CHORUS;
 
 u32 AXFXChorusGetMemSize(const AXFX_CHORUS* fx);

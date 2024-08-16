@@ -250,8 +250,7 @@ void PPCMthid4(u32 val);
 // Locked cache enable
 #define HID2_LCE (1 << (31 - 3))
 // DMA queue length (read only)
-#define HID2_DMAQL                                                             \
-    ((1 << (31 - 4)) | (1 << (31 - 5)) | (1 << (31 - 6)) | (1 << (31 - 7)))
+#define HID2_DMAQL ((1 << (31 - 4)) | (1 << (31 - 5)) | (1 << (31 - 6)) | (1 << (31 - 7)))
 // dcbz_l cache hit error
 #define HID2_DCHERR (1 << (31 - 8))
 // DMA access to normal cache error

@@ -17,8 +17,8 @@ typedef enum {
 } OSShutdownEvent;
 
 typedef struct OSShutdownFunctionInfo {
-    OSShutdownFunction func;             // at 0x0
-    u32 prio;                            // at 0x4
+    OSShutdownFunction func; // at 0x0
+    u32 prio; // at 0x4
     struct OSShutdownFunctionInfo* next; // at 0x8
     struct OSShutdownFunctionInfo* prev; // at 0xC
 } OSShutdownFunctionInfo;

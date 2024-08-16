@@ -1,8 +1,8 @@
 #ifndef _SERIAL_H
 #define _SERIAL_H
 
-#include "revolution/types.h"
 #include "emulator/xlObject.h"
+#include "revolution/types.h"
 
 // __anon_0x78791
 typedef struct Serial {

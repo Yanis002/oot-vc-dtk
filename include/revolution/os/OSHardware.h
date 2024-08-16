@@ -8,12 +8,12 @@
 #ifndef RVL_SDK_OS_HARDWARE_H
 #define RVL_SDK_OS_HARDWARE_H
 
+#include "macros.h"
 #include "revolution/dvd/dvd.h"
 #include "revolution/os/OSAddress.h"
+#include "revolution/os/OSContext.h"
 #include "revolution/os/OSThread.h"
 #include "revolution/types.h"
-#include "revolution/os/OSContext.h"
-#include "macros.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -23,28 +23,28 @@ extern "C" {
 typedef struct OSExecParams;
 
 // Derive offsets for use with OSAddress functions
-#define __DEF_ADDR_OFFSETS(name, addr)                                         \
-    static const u32 OS_PHYS_##name = (addr)-0x80000000;                       \
-    static const u32 OS_CACHED_##name = (addr);                                \
+#define __DEF_ADDR_OFFSETS(name, addr)                     \
+    static const u32 OS_PHYS_##name = (addr) - 0x80000000; \
+    static const u32 OS_CACHED_##name = (addr);            \
     static const u32 OS_UNCACHED_##name = (addr) + (0xC0000000 - 0x80000000);
 
 // Define a global variable in *CACHED* MEM1.
 // Can be accessed directly or with OSAddress functions.
-#define OS_DEF_GLOBAL_VAR(type, name, addr)                                    \
-    /* Memory-mapped value for direct access */                                \
-    type OS_##name AT_ADDRESS(addr);                                           \
+#define OS_DEF_GLOBAL_VAR(type, name, addr)     \
+    /* Memory-mapped value for direct access */ \
+    type OS_##name AT_ADDRESS(addr);            \
     __DEF_ADDR_OFFSETS(name, addr)
 
 // Define a global array in *CACHED* MEM1.
 // Can be accessed directly or with OSAddress functions.
-#define OS_DEF_GLOBAL_ARR(type, name, arr, addr)                               \
-    /* Memory-mapped value for direct access */                                \
-    type OS_##name AT_ADDRESS(addr);                                           \
+#define OS_DEF_GLOBAL_ARR(type, name, arr, addr) \
+    /* Memory-mapped value for direct access */  \
+    type OS_##name AT_ADDRESS(addr);             \
     __DEF_ADDR_OFFSETS(name, addr)
 
 // Define an global variable in the hardware-register range.
-#define OS_DEF_HW_REG(type, name, addr)                                        \
-    /* Memory-mapped value for direct access */                                \
+#define OS_DEF_HW_REG(type, name, addr)         \
+    /* Memory-mapped value for direct access */ \
     type OS_##name AT_ADDRESS(addr);
 
 typedef enum {
@@ -54,36 +54,36 @@ typedef enum {
 
 typedef struct OSBootInfo {
     DVDDiskID diskID; // at 0x0
-    u32 bootMagic;    // at 0x20
-    u32 aplVersion;   // at 0x24
-    u32 physMemSize;  // at 0x28
-    u32 consoleType;  // at 0x2C
-    void* arenaLo;    // at 0x30
-    void* arenaHi;    // at 0x34
-    void* fstStart;   // at 0x38
-    u32 fstSize;      // at 0x3C
+    u32 bootMagic; // at 0x20
+    u32 aplVersion; // at 0x24
+    u32 physMemSize; // at 0x28
+    u32 consoleType; // at 0x2C
+    void* arenaLo; // at 0x30
+    void* arenaHi; // at 0x34
+    void* fstStart; // at 0x38
+    u32 fstSize; // at 0x3C
 } OSBootInfo;
 
 typedef struct OSDebugInterface {
-    bool usingDebugger;    // at 0x0
-    u32 exceptionMask;     // at 0x4
-    void* exceptionHook;   // at 0x8
+    bool usingDebugger; // at 0x0
+    u32 exceptionMask; // at 0x4
+    void* exceptionHook; // at 0x8
     void* exceptionHookLR; // at 0xC
 } OSDebugInterface;
 
 typedef struct OSBI2 {
-    u32 dbgMonitorSize;   // at 0x0
+    u32 dbgMonitorSize; // at 0x0
     u32 simulatedMemSize; // at 0x4
-    u32 argumentOfs;      // at 0x8
-    u32 debugFlag;        // at 0xC
-    u32 trackLocation;    // at 0x10
-    u32 trackSize;        // at 0x14
-    u32 countryCode;      // at 0x18
+    u32 argumentOfs; // at 0x8
+    u32 debugFlag; // at 0xC
+    u32 trackLocation; // at 0x10
+    u32 trackSize; // at 0x14
+    u32 countryCode; // at 0x18
     u32 WORD_0x1C;
     u32 lastInsert;
-    u32 padSpec;            // at 0x24
+    u32 padSpec; // at 0x24
     u32 totalTextDataLimit; // at 0x28
-    u32 simulatedMem2Size;  // at 0x2C
+    u32 simulatedMem2Size; // at 0x2C
 } OSBI2;
 
 /**
@@ -165,16 +165,16 @@ OS_DEF_GLOBAL_ARR(u8, SC_PRDINFO, [0x100],               0x80003800);
  */
 volatile u32 PI_HW_REGS[] AT_ADDRESS(0xCC003000);
 typedef enum {
-    PI_INTSR,    //!< 0xCC003000
-    PI_INTMR,    //!< 0xCC003004
-    PI_REG_0x8,  //!< 0xCC003008
-    PI_REG_0xC,  //!< 0xCC00300C
+    PI_INTSR, //!< 0xCC003000
+    PI_INTMR, //!< 0xCC003004
+    PI_REG_0x8, //!< 0xCC003008
+    PI_REG_0xC, //!< 0xCC00300C
     PI_REG_0x10, //!< 0xCC003010
     PI_REG_0x14, //!< 0xCC003014
     PI_REG_0x18, //!< 0xCC003018
     PI_REG_0x1C, //!< 0xCC00301C
     PI_REG_0x20, //!< 0xCC003020
-    PI_RESET,    //!< 0xCC003024
+    PI_RESET, //!< 0xCC003024
     // . . .
 } PIHwReg;
 
@@ -226,19 +226,19 @@ typedef enum {
     MI_PAGE_MEM2_L, //!< 0xCC00400A
     MI_PAGE_MEM3_H, //!< 0xCC00400C
     MI_PAGE_MEM3_L, //!< 0xCC00400E
-    MI_PROT_MEM0,   //!< 0xCC004010
-    MI_PROT_MEM1,   //!< 0xCC004012
-    MI_PROT_MEM2,   //!< 0xCC004014
-    MI_PROT_MEM3,   //!< 0xCC004016
-    MI_REG_0x18,    //!< 0xCC004018
-    MI_REG_0x1A,    //!< 0xCC00401A
-    MI_INTMR,       //!< 0xCC00401C
-    MI_INTSR,       //!< 0xCC00401E
-    MI_REG_0x20,    //!< 0xCC004020
-    MI_ADDRLO,      //!< 0xCC004022
-    MI_ADDRHI,      //!< 0xCC004024
-    MI_REG_0x26,    //!< 0xCC004026
-    MI_REG_0x28,    //!< 0xCC004028
+    MI_PROT_MEM0, //!< 0xCC004010
+    MI_PROT_MEM1, //!< 0xCC004012
+    MI_PROT_MEM2, //!< 0xCC004014
+    MI_PROT_MEM3, //!< 0xCC004016
+    MI_REG_0x18, //!< 0xCC004018
+    MI_REG_0x1A, //!< 0xCC00401A
+    MI_INTMR, //!< 0xCC00401C
+    MI_INTSR, //!< 0xCC00401E
+    MI_REG_0x20, //!< 0xCC004020
+    MI_ADDRLO, //!< 0xCC004022
+    MI_ADDRHI, //!< 0xCC004024
+    MI_REG_0x26, //!< 0xCC004026
+    MI_REG_0x28, //!< 0xCC004028
     // . . .
 } MIHwReg;
 

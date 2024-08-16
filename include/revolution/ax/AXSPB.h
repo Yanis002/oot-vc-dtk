@@ -1,9 +1,9 @@
 #ifndef RVL_SDK_AX_SPB_H
 #define RVL_SDK_AX_SPB_H
 
-#include "revolution/types.h"
-#include "revolution/ax/AXPB.h"
 #include "macros.h"
+#include "revolution/ax/AXPB.h"
+#include "revolution/types.h"
 
 #ifdef __cplusplus
 extern "C" {

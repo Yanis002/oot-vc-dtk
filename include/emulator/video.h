@@ -1,8 +1,8 @@
 #ifndef _VIDEO_H
 #define _VIDEO_H
 
-#include "revolution/types.h"
 #include "emulator/xlObject.h"
+#include "revolution/types.h"
 
 // __anon_0x75B37
 typedef struct Video {

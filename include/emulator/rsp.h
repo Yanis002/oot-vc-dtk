@@ -1,9 +1,9 @@
 #ifndef _RSP_H
 #define _RSP_H
 
-#include "revolution/types.h"
 #include "emulator/xlList.h"
 #include "emulator/xlObject.h"
+#include "revolution/types.h"
 
 #define SP_DMEM_SIZE 0x1000
 

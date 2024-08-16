@@ -12,8 +12,8 @@
 #include "emulator/xlHeap.h"
 #include "emulator/xlObject.h"
 #include "emulator/xlPostGCN.h"
-#include "revolution/vi.h"
 #include "macros.h"
+#include "revolution/vi.h"
 
 #define DONT_INLINE_SQRT
 #include "math.h"

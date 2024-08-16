@@ -1,12 +1,12 @@
 #ifndef _FRAME_H
 #define _FRAME_H
 
-#include "revolution/types.h"
-#include "revolution/gx.h"
-#include "revolution/mtx.h"
 #include "emulator/rdp.h"
 #include "emulator/rsp.h"
 #include "emulator/xlObject.h"
+#include "revolution/gx.h"
+#include "revolution/mtx.h"
+#include "revolution/types.h"
 
 #define FRAME_SYNC_TOKEN 0x7D00
 

@@ -25,8 +25,8 @@ typedef struct MEMiExpHeapMBlock {
             u16 align : 7;
             u16 group : 8;
         };
-    };                              // at 0x2
-    u32 size;                       // at 0x4
+    }; // at 0x2
+    u32 size; // at 0x4
     struct MEMiExpHeapMBlock* prev; // at 0x8
     struct MEMiExpHeapMBlock* next; // at 0xC
 } MEMiExpHeapMBlock;
@@ -40,7 +40,7 @@ typedef struct MEMiExpHeapMBlockList {
 typedef struct MEMiExpHeapHead {
     MEMiExpHeapMBlockList freeMBlocks; // at 0x0
     MEMiExpHeapMBlockList usedMBlocks; // at 0x8
-    u16 group;                         // at 0x10
+    u16 group; // at 0x10
     union {
         u16 SHORT_0x12;
         struct {
@@ -53,19 +53,14 @@ typedef struct MEMiExpHeapHead {
 struct MEMiHeapHead* MEMCreateExpHeapEx(void* start, u32 size, u16 opt);
 struct MEMiHeapHead* MEMDestroyExpHeap(struct MEMiHeapHead* heap);
 void* MEMAllocFromExpHeapEx(struct MEMiHeapHead* heap, u32 size, s32 align);
-u32 MEMResizeForMBlockExpHeap(struct MEMiHeapHead* heap, void* memBlock,
-                              u32 size);
+u32 MEMResizeForMBlockExpHeap(struct MEMiHeapHead* heap, void* memBlock, u32 size);
 void MEMFreeToExpHeap(struct MEMiHeapHead* heap, void* memBlock);
 u32 MEMGetAllocatableSizeForExpHeapEx(struct MEMiHeapHead* heap, s32 align);
 u32 MEMAdjustExpHeap(struct MEMiHeapHead* heap);
 
-static struct MEMiHeapHead* MEMCreateExpHeap(void* start, u32 size) {
-    return MEMCreateExpHeapEx(start, size, 0);
-}
+static struct MEMiHeapHead* MEMCreateExpHeap(void* start, u32 size) { return MEMCreateExpHeapEx(start, size, 0); }
 
-static void* MEMAllocFromExpHeap(struct MEMiHeapHead* heap, u32 size) {
-    return MEMAllocFromExpHeapEx(heap, size, 4);
-}
+static void* MEMAllocFromExpHeap(struct MEMiHeapHead* heap, u32 size) { return MEMAllocFromExpHeapEx(heap, size, 4); }
 
 static u32 MEMGetAllocatableSizeForExpHeap(struct MEMiHeapHead* heap) {
     return MEMGetAllocatableSizeForExpHeapEx(heap, 4);

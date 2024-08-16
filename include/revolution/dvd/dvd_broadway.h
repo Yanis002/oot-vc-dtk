@@ -8,7 +8,7 @@ extern "C" {
 #endif
 
 #define DVD_LOW_OFFSET(x) ((x) >> 2)
-#define DVD_LOW_SPEED(x) (((x)&3) << 16)
+#define DVD_LOW_SPEED(x) (((x) & 3) << 16)
 
 // Forward declarations
 typedef struct DVDDiskID;
@@ -18,10 +18,10 @@ typedef struct ESPTmd;
 typedef struct OSAlarm;
 
 typedef enum {
-    DVD_INTTYPE_TC = (1 << 0),   // Transaction callback?
-    DVD_INTTYPE_DE = (1 << 1),   // Drive error
-    DVD_INTTYPE_CVR = (1 << 2),  // Something with DVD cover
-    DVD_INTTYPE_BR = (1 << 3),   // Break requested
+    DVD_INTTYPE_TC = (1 << 0), // Transaction callback?
+    DVD_INTTYPE_DE = (1 << 1), // Drive error
+    DVD_INTTYPE_CVR = (1 << 2), // Something with DVD cover
+    DVD_INTTYPE_BR = (1 << 3), // Break requested
     DVD_INTTYPE_TIME = (1 << 4), // Time out
     DVD_INTTYPE_SERR = (1 << 5), // Security error
     DVD_INTTYPE_VERR = (1 << 6), // Verify error
@@ -37,12 +37,10 @@ typedef void (*DVDLowCallback)(u32 intType);
 
 bool DVDLowInit(void);
 bool DVDLowReadDiskID(struct DVDDiskID* out, DVDLowCallback callback);
-bool DVDLowOpenPartition(u32 offset, const struct ESPTicket* ticket,
-                         u32 certsSize, const void* certs, struct ESPTmd* tmd,
-                         DVDLowCallback callback);
+bool DVDLowOpenPartition(u32 offset, const struct ESPTicket* ticket, u32 certsSize, const void* certs,
+                         struct ESPTmd* tmd, DVDLowCallback callback);
 bool DVDLowClosePartition(DVDLowCallback callback);
-bool DVDLowUnencryptedRead(void* dst, u32 size, u32 offset,
-                           DVDLowCallback callback);
+bool DVDLowUnencryptedRead(void* dst, u32 size, u32 offset, DVDLowCallback callback);
 bool DVDLowStopMotor(bool eject, bool kill, DVDLowCallback callback);
 bool DVDLowInquiry(struct DVDDriveInfo* out, DVDLowCallback callback);
 bool DVDLowRequestError(DVDLowCallback callback);

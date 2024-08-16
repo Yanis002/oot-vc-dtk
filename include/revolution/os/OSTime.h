@@ -27,16 +27,16 @@ extern "C" {
 #define OS_TICKS_DELTA(x, y) ((s32)x - (s32)y)
 
 typedef struct OSCalendarTime {
-    s32 sec;   // at 0x0
-    s32 min;   // at 0x4
-    s32 hour;  // at 0x8
-    s32 mday;  // at 0xC
+    s32 sec; // at 0x0
+    s32 min; // at 0x4
+    s32 hour; // at 0x8
+    s32 mday; // at 0xC
     s32 month; // at 0x10
-    s32 year;  // at 0x14
-    s32 wday;  // at 0x18
-    s32 yday;  // at 0x1C
-    s32 msec;  // at 0x20
-    s32 usec;  // at 0x24
+    s32 year; // at 0x14
+    s32 wday; // at 0x18
+    s32 yday; // at 0x1C
+    s32 msec; // at 0x20
+    s32 usec; // at 0x24
 } OSCalendarTime;
 
 s64 OSGetTime(void);

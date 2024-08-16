@@ -1,20 +1,20 @@
 #ifndef RVL_SDK_DSP_TASK_H
 #define RVL_SDK_DSP_TASK_H
 
-#include "revolution/types.h"
 #include "revolution/os/OSContext.h"
+#include "revolution/types.h"
 #include "stdint.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-#define DSP_SEND_MAIL_SYNC(x)                                                  \
-    do {                                                                       \
-        DSPSendMailToDSP((DSPMail)(x));                                        \
-        while (DSPCheckMailToDSP()) {                                          \
-            ;                                                                  \
-        }                                                                      \
+#define DSP_SEND_MAIL_SYNC(x)           \
+    do {                                \
+        DSPSendMailToDSP((DSPMail)(x)); \
+        while (DSPCheckMailToDSP()) {   \
+            ;                           \
+        }                               \
     } while (0)
 
 // Forward declarations
@@ -35,23 +35,23 @@ typedef enum {
 typedef void (*DSPTaskCallback)(struct DSPTask* task);
 
 typedef struct DSPTask {
-    u32 state;                       // at 0x0
-    volatile u32 prio;               // at 0x4
-    u32 flags;                       // at 0x8
-    void* iramMmemAddr;              // at 0xC
-    u32 iramMmemLen;                 // at 0x10
-    uintptr_t iramDspAddr;           // at 0x14
-    void* dramMmemAddr;              // at 0x18
-    u32 dramMmemLen;                 // at 0x1C
-    uintptr_t dramDspAddr;           // at 0x20
-    u16 startVector;                 // at 0x24
-    u16 resumeVector;                // at 0x26
-    DSPTaskCallback initCallback;    // at 0x28
-    DSPTaskCallback resumeCallback;  // at 0x2C
-    DSPTaskCallback doneCallback;    // at 0x30
+    u32 state; // at 0x0
+    volatile u32 prio; // at 0x4
+    u32 flags; // at 0x8
+    void* iramMmemAddr; // at 0xC
+    u32 iramMmemLen; // at 0x10
+    uintptr_t iramDspAddr; // at 0x14
+    void* dramMmemAddr; // at 0x18
+    u32 dramMmemLen; // at 0x1C
+    uintptr_t dramDspAddr; // at 0x20
+    u16 startVector; // at 0x24
+    u16 resumeVector; // at 0x26
+    DSPTaskCallback initCallback; // at 0x28
+    DSPTaskCallback resumeCallback; // at 0x2C
+    DSPTaskCallback doneCallback; // at 0x30
     DSPTaskCallback requestCallback; // at 0x34
-    struct DSPTask* next;            // at 0x38
-    struct DSPTask* prev;            // at 0x3C
+    struct DSPTask* next; // at 0x38
+    struct DSPTask* prev; // at 0x3C
     char UNK_0x40[0x50 - 0x40];
 } DSPTask;
 

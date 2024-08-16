@@ -329,7 +329,6 @@ typedef enum {
 #define GX_XF_GET_DUALTEX_NORMALIZE(reg) GX_BITGET(reg, 23, 1)
 #define GX_XF_SET_DUALTEX_NORMALIZE(reg, x) ((reg) = GX_BITSET(reg, 23, 1, x))
 
-
 #ifdef __cplusplus
 }
 #endif

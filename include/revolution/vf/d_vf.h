@@ -17,7 +17,10 @@ typedef enum {
 } VFError;
 
 // Sync and async?
-typedef enum { VF_SYNC_MODE_0, VF_SYNC_MODE_1 } VFSyncMode;
+typedef enum {
+    VF_SYNC_MODE_0,
+    VF_SYNC_MODE_1
+} VFSyncMode;
 
 s32 VFIsAvailable(void);
 s32 VFMountDriveNANDFlashEx(const char* i_drive, const char* i_sys_file_name_p);

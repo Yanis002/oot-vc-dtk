@@ -8,7 +8,7 @@
 // Get TV format from TV info
 #define VI_TV_INFO_FMT(info) ((info) >> 2)
 // Get TV scan mode from TV info
-#define VI_TV_INFO_MODE(info) ((info)&0b00000011)
+#define VI_TV_INFO_MODE(info) ((info) & 0b00000011)
 
 #define VI_INTERLACE 0
 #define VI_NON_INTERLACE 1

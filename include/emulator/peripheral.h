@@ -1,8 +1,8 @@
 #ifndef _PERIPHERAL_H
 #define _PERIPHERAL_H
 
-#include "revolution/types.h"
 #include "emulator/xlObject.h"
+#include "revolution/types.h"
 
 // __anon_0x83D15
 typedef struct Peripheral {

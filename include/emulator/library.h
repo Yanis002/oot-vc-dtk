@@ -1,9 +1,9 @@
 #ifndef _LIBRARY_H
 #define _LIBRARY_H
 
-#include "revolution/types.h"
 #include "emulator/cpu.h"
 #include "emulator/xlObject.h"
+#include "revolution/types.h"
 
 typedef void (*LibraryFuncImpl)(Cpu*);
 

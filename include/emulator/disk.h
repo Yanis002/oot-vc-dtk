@@ -1,8 +1,8 @@
 #ifndef _DISK_H
 #define _DISK_H
 
-#include "revolution/types.h"
 #include "emulator/xlObject.h"
+#include "revolution/types.h"
 
 // __anon_0x73B29
 typedef struct Disk {

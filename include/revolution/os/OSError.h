@@ -1,9 +1,9 @@
 #ifndef RVL_SDK_OS_ERROR_H
 #define RVL_SDK_OS_ERROR_H
 
-#include "revolution/types.h"
-#include "revolution/os/OSContext.h"
 #include "macros.h"
+#include "revolution/os/OSContext.h"
+#include "revolution/types.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -11,8 +11,8 @@ extern "C" {
 
 #define OSError(...) OSPanic(__FILE__, __LINE__, __VA_ARGS__)
 
-#define OS_ASSERT(exp, ...)                                                    \
-    if (!(exp))                                                                \
+#define OS_ASSERT(exp, ...) \
+    if (!(exp))             \
     OSPanic(__FILE__, __LINE__, __VA_ARGS__)
 
 typedef enum {
@@ -37,8 +37,7 @@ typedef enum {
     OS_ERR_MAX
 } OSErrorType;
 
-typedef void (*OSErrorHandler)(u8 error, struct OSContext* ctx, u32 dsisr,
-                               u32 dar, ...);
+typedef void (*OSErrorHandler)(u8 error, struct OSContext* ctx, u32 dsisr, u32 dar, ...);
 
 extern OSErrorHandler __OSErrorTable[OS_ERR_MAX];
 extern u32 __OSFpscrEnableBits;
@@ -47,8 +46,7 @@ WEAK void OSReport(const char* msg, ...);
 WEAK void OSPanic(const char* file, int line, const char* msg, ...);
 
 OSErrorHandler OSSetErrorHandler(u16 error, OSErrorHandler handler);
-void __OSUnhandledException(u8 error, struct OSContext* ctx, u32 dsisr,
-                            u32 dar);
+void __OSUnhandledException(u8 error, struct OSContext* ctx, u32 dsisr, u32 dar);
 
 #ifdef __cplusplus
 }

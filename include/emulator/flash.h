@@ -1,8 +1,8 @@
 #ifndef _FLASH_H
 #define _FLASH_H
 
-#include "revolution/types.h"
 #include "emulator/xlObject.h"
+#include "revolution/types.h"
 
 // __anon_0x7428F
 typedef struct Flash {

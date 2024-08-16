@@ -1,8 +1,8 @@
 #ifndef _XL_CORE_GCN_H
 #define _XL_CORE_GCN_H
 
-#include "revolution/types.h"
 #include "revolution/gx.h"
+#include "revolution/types.h"
 
 extern GXRenderModeObj* rmode;
 

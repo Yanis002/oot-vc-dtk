@@ -1,8 +1,8 @@
 #ifndef RVL_SDK_AI_H
 #define RVL_SDK_AI_H
 
-#include "revolution/types.h"
 #include "revolution/os/OSContext.h"
+#include "revolution/types.h"
 
 #ifdef __cplusplus
 extern "C" {

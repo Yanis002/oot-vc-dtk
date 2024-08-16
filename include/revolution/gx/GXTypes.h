@@ -12,32 +12,29 @@ extern "C" {
  * Value is shifted to the specified bit position.
  * (Bit indices are LSB)
  */
-#define GX_BITSET(field, pos, size, value)                                     \
-    __rlwimi((field), (value), 31 - (pos) - (size) + 1, (pos), (pos) + (size)-1)
+#define GX_BITSET(field, pos, size, value) \
+    __rlwimi((field), (value), 31 - (pos) - (size) + 1, (pos), (pos) + (size) - 1)
 
 /**
  * Compose value from bitfield.
  * Value is shifted after masking.
  * (Bit indices are LSB)
  */
-#define GX_BITGET(field, pos, size)                                            \
-    ((field) >> (31 - (pos) - (size) + 1) & ((1 << (size)) - 1))
+#define GX_BITGET(field, pos, size) ((field) >> (31 - (pos) - (size) + 1) & ((1 << (size)) - 1))
 
 /**
  * Pack value into bitfield.
  * Value is not shifted, only masked.
  * (Bit indices are LSB)
  */
-#define GX_BITSET_TRUNC(field, pos, size, value)                               \
-    __rlwimi((field), (value), 0, (pos), (pos) + (size)-1)
+#define GX_BITSET_TRUNC(field, pos, size, value) __rlwimi((field), (value), 0, (pos), (pos) + (size) - 1)
 
 /**
  * Compose value from bitfield.
  * Value is not shifted, only masked.
  * (Bit indices are LSB)
  */
-#define GX_BITGET_TRUNC(field, pos, size)                                      \
-    ((field) & (((1 << (size)) - 1) << (32 - (pos) - (size))))
+#define GX_BITGET_TRUNC(field, pos, size) ((field) & (((1 << (size)) - 1) << (32 - (pos) - (size))))
 
 /**
  * Common types used throughout many GX files.
@@ -128,7 +125,7 @@ typedef enum _GXAttr {
 } GXAttr;
 
 typedef enum _GXAttrType {
-    GX_NONE,   //! No data sent
+    GX_NONE, //! No data sent
     GX_DIRECT, //! Data sent directly to FIFO
     GX_INDEX8, //! 8-bit index sent to FIFO
     GX_INDEX16 //! 16-bit index sent to FIFO
@@ -188,7 +185,10 @@ typedef enum _GXClipMode {
     GX_CLIP_DISABLE,
 } GXClipMode;
 
-typedef enum _GXColorSrc { GX_SRC_REG, GX_SRC_VTX } GXColorSrc;
+typedef enum _GXColorSrc {
+    GX_SRC_REG,
+    GX_SRC_VTX
+} GXColorSrc;
 
 typedef enum _GXCompare {
     GX_NEVER,
@@ -245,7 +245,11 @@ typedef enum _GXCullMode {
     GX_CULL_ALL
 } GXCullMode;
 
-typedef enum _GXDiffuseFn { GX_DF_NONE, GX_DF_SIGN, GX_DF_CLAMP } GXDiffuseFn;
+typedef enum _GXDiffuseFn {
+    GX_DF_NONE,
+    GX_DF_SIGN,
+    GX_DF_CLAMP
+} GXDiffuseFn;
 
 typedef enum _GXDirtyFlag {
     GX_DIRTY_SU_TEX = (1 << 0),
@@ -276,12 +280,10 @@ typedef enum _GXDirtyFlag {
     GX_DIRTY_PROJECTION = (1 << 27),
     GX_DIRTY_VIEWPORT = (1 << 28),
 
-    GX_AMB_MAT_MASK = GX_DIRTY_AMB_COLOR0 | GX_DIRTY_AMB_COLOR1 |
-                      GX_DIRTY_MAT_COLOR0 | GX_DIRTY_MAT_COLOR1,
+    GX_AMB_MAT_MASK = GX_DIRTY_AMB_COLOR0 | GX_DIRTY_AMB_COLOR1 | GX_DIRTY_MAT_COLOR0 | GX_DIRTY_MAT_COLOR1,
 
-    GX_LIGHT_CHAN_MASK = GX_DIRTY_CHAN_COLOR0 | GX_DIRTY_CHAN_COLOR1 |
-                         GX_DIRTY_CHAN_ALPHA0 | GX_DIRTY_CHAN_ALPHA1 |
-                         GX_DIRTY_NUM_COLORS,
+    GX_LIGHT_CHAN_MASK =
+        GX_DIRTY_CHAN_COLOR0 | GX_DIRTY_CHAN_COLOR1 | GX_DIRTY_CHAN_ALPHA0 | GX_DIRTY_CHAN_ALPHA1 | GX_DIRTY_NUM_COLORS,
 
     GX_TEX_GEN_MASK = 0x2FF0000,
 } GXDirtyFlag;
@@ -312,7 +314,7 @@ typedef enum _GXFogType {
 
 // Access components of the fog type
 #define GX_FOG_GET_PROJ(x) ((x) >> 3 & 1)
-#define GX_FOG_GET_FSEL(x) ((x)&7)
+#define GX_FOG_GET_FSEL(x) ((x) & 7)
 
 typedef enum _GXIndTexAlphaSel {
     GX_ITBA_OFF,
@@ -434,14 +436,14 @@ typedef enum _GXMtxType {
 } GXMtxType;
 
 typedef enum _GXPixelFmt {
-    GX_PF_RGB8_Z24,    // from Dolphin
-    GX_PF_RGBA6_Z24,   // from EGG
+    GX_PF_RGB8_Z24, // from Dolphin
+    GX_PF_RGBA6_Z24, // from EGG
     GX_PF_RGBA565_Z16, // from Dolphin
-    GX_PF_Z24,         // from Dolphin
-    GX_PF_Y8,          // from Dolphin
-    GX_PF_U8,          // from Dolphin
-    GX_PF_V8,          // from Dolphin
-    GX_PF_YUV420,      // from Dolphin
+    GX_PF_Z24, // from Dolphin
+    GX_PF_Y8, // from Dolphin
+    GX_PF_U8, // from Dolphin
+    GX_PF_V8, // from Dolphin
+    GX_PF_YUV420, // from Dolphin
 
     GX_MAX_PIXELFMT
 } GXPixelFmt;

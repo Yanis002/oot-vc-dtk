@@ -1,9 +1,9 @@
 #ifndef RVL_SDK_OS_PPC_EABI_INIT_H
 #define RVL_SDK_OS_PPC_EABI_INIT_H
 
+#include "macros.h"
 #include "revolution/types.h"
 #include "stddef.h"
-#include "macros.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -24,14 +24,14 @@ void _ExitProcess(void);
  */
 
 // Declare linker symbols for a section in the ROM
-#define DECL_ROM_SECTION(x)                                                    \
-    extern u8 _f##x[];                                                         \
-    extern u8 _f##x##_rom[];                                                   \
+#define DECL_ROM_SECTION(x)  \
+    extern u8 _f##x[];       \
+    extern u8 _f##x##_rom[]; \
     extern u8 _e##x[];
 
 // Declare linker symbols for a BSS section
-#define DECL_BSS_SECTION(x)                                                    \
-    extern u8 _f##x[];                                                         \
+#define DECL_BSS_SECTION(x) \
+    extern u8 _f##x[];      \
     extern u8 _e##x[];
 
 // Debugger stack
@@ -69,21 +69,21 @@ DECL_BSS_SECTION(_sbss);
 DECL_BSS_SECTION(_sbss2);
 
 typedef struct RomSection {
-    void* phys;  // at 0x4
-    void* virt;  // at 0x0
+    void* phys; // at 0x4
+    void* virt; // at 0x0
     size_t size; // at 0x8
 } RomSection;
 
 typedef struct BssSection {
-    void* virt;  // at 0x0
+    void* virt; // at 0x0
     size_t size; // at 0x8
 } BssSection;
 
 typedef struct ExtabIndexInfo {
-    void* section;                // at 0x0
+    void* section; // at 0x0
     struct ExtabIndexInfo* extab; // at 0x4
-    void* codeStart;              // at 0x8
-    u32 codeSize;                 // at 0xC
+    void* codeStart; // at 0x8
+    u32 codeSize; // at 0xC
 } ExtabIndexInfo;
 
 INIT extern const RomSection _rom_copy_info[];

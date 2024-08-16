@@ -7,9 +7,15 @@
 extern "C" {
 #endif
 
-typedef enum { SC_ASPECT_STD, SC_ASPECT_WIDE } SCAspectRatio;
+typedef enum {
+    SC_ASPECT_STD,
+    SC_ASPECT_WIDE
+} SCAspectRatio;
 
-typedef enum { SC_EURGB_50_HZ, SC_EURGB_60_HZ } SCEuRgb60Mode;
+typedef enum {
+    SC_EURGB_50_HZ,
+    SC_EURGB_60_HZ
+} SCEuRgb60Mode;
 
 typedef enum {
     SC_LANG_JP,
@@ -24,24 +30,31 @@ typedef enum {
     SC_LANG_KR,
 } SCLanguage;
 
-typedef enum { SC_SND_MONO, SC_SND_STEREO, SC_SND_SURROUND } SCSoundMode;
+typedef enum {
+    SC_SND_MONO,
+    SC_SND_STEREO,
+    SC_SND_SURROUND
+} SCSoundMode;
 
-typedef enum { SC_SENSOR_BAR_BOTTOM, SC_SENSOR_BAR_TOP } SCSensorBarPos;
+typedef enum {
+    SC_SENSOR_BAR_BOTTOM,
+    SC_SENSOR_BAR_TOP
+} SCSensorBarPos;
 
 typedef struct SCIdleModeInfo {
-    u8 wc24;      // at 0x0
+    u8 wc24; // at 0x0
     u8 slotLight; // at 0x1
 } SCIdleModeInfo;
 
 typedef struct SCBtDeviceInfo {
-    u8 mac[6];     // at 0x0
+    u8 mac[6]; // at 0x0
     char name[64]; // at 0x6
 } SCBtDeviceInfo;
 
 typedef struct SCBtDeviceInfoArray {
-    u8 numRegist;              // at 0x0
+    u8 numRegist; // at 0x0
     SCBtDeviceInfo regist[10]; // at 0x1
-    SCBtDeviceInfo active[6];  // at 0x2BD
+    SCBtDeviceInfo active[6]; // at 0x2BD
 } SCBtDeviceInfoArray;
 
 u8 SCGetAspectRatio(void);

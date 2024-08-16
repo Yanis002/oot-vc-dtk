@@ -1,10 +1,10 @@
 #ifndef _SIMGCN_H
 #define _SIMGCN_H
 
-#include "revolution/types.h"
-#include "revolution/tex.h"
-#include "revolution/dvd.h"
 #include "emulator/system.h"
+#include "revolution/dvd.h"
+#include "revolution/tex.h"
+#include "revolution/types.h"
 
 typedef enum SimulatorMessage {
     S_M_NONE = -1,

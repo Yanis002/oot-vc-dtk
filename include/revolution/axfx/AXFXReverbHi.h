@@ -10,12 +10,12 @@ extern "C" {
 
 typedef struct AXFX_REVERBHI {
     AXFX_REVERBHI_EXP exp; // at 0x0
-    f32 coloration;        // at 0x148
-    f32 mix;               // at 0x14C
-    f32 time;              // at 0x150
-    f32 damping;           // at 0x154
-    f32 preDelay;          // at 0x158
-    f32 crosstalk;         // at 0x15C
+    f32 coloration; // at 0x148
+    f32 mix; // at 0x14C
+    f32 time; // at 0x150
+    f32 damping; // at 0x154
+    f32 preDelay; // at 0x158
+    f32 crosstalk; // at 0x15C
 } AXFX_REVERBHI;
 
 u32 AXFXReverbHiGetMemSize(AXFX_REVERBHI* fx);

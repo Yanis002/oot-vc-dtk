@@ -1,8 +1,8 @@
 #ifndef _RDB_H
 #define _RDB_H
 
-#include "revolution/types.h"
 #include "emulator/xlObject.h"
+#include "revolution/types.h"
 
 // __anon_0x56A0F
 typedef struct Rdb {

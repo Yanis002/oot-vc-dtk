@@ -10,14 +10,14 @@ extern "C" {
 
 typedef struct CNTHandle {
     ARCHandle arcHandle; // at 0x0
-    s32 fd;              // at 0x1C
+    s32 fd; // at 0x1C
 } CNTHandle;
 
 typedef struct CNTFileInfo {
     CNTHandle* handle; // at 0x0
-    u32 offset;        // at 0x4
-    u32 length;        // at 0x8
-    u32 position;      // at 0xC
+    u32 offset; // at 0x4
+    u32 length; // at 0x8
+    u32 position; // at 0xC
 } CNTFileInfo;
 
 s32 contentFastOpenNAND(CNTHandle* handle, s32 entrynum, CNTFileInfo* info);

@@ -1,8 +1,8 @@
 #ifndef _CODEGCN_H
 #define _CODEGCN_H
 
-#include "revolution/types.h"
 #include "emulator/xlObject.h"
+#include "revolution/types.h"
 
 // __anon_0x57A1
 typedef struct Code {

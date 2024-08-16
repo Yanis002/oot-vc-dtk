@@ -972,7 +972,6 @@ typedef enum {
 #define GX_BP_GET_FOGCOLOR_RGB(reg) GX_BITGET(reg, 8, 24)
 #define GX_BP_SET_FOGCOLOR_RGB(reg, x) ((reg) = GX_BITSET(reg, 8, 24, x))
 
-
 #ifdef __cplusplus
 }
 #endif

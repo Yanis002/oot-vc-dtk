@@ -21,7 +21,9 @@ typedef enum {
     OS_THREAD_STATE_MORIBUND = 8
 } OSThreadState;
 
-typedef enum { OS_THREAD_DETACHED = (1 << 0) } OSThreadFlag;
+typedef enum {
+    OS_THREAD_DETACHED = (1 << 0)
+} OSThreadFlag;
 
 typedef struct OSThreadQueue {
     struct OSThread* head; // at 0x0
@@ -35,32 +37,30 @@ typedef struct OSMutexQueue {
 
 typedef struct OSThread {
     OSContext context;
-    u16 state;                   // at 0x2C8
-    u16 flags;                   // at 0x2CA
-    s32 suspend;                 // at 0x2CC
-    s32 priority;                // at 0x2D0
-    s32 base;                    // at 0x2D4
-    u32 val;                     // at 0x2D8
-    OSThreadQueue* queue;        // at 0x2DC
-    struct OSThread* next;       // at 0x2E0
-    struct OSThread* prev;       // at 0x2E4
-    OSThreadQueue joinQueue;     // at 0x2E8
-    struct OSMutex* mutex;       // at 0x2F0
-    OSMutexQueue mutexQueue;     // at 0x2F4
+    u16 state; // at 0x2C8
+    u16 flags; // at 0x2CA
+    s32 suspend; // at 0x2CC
+    s32 priority; // at 0x2D0
+    s32 base; // at 0x2D4
+    u32 val; // at 0x2D8
+    OSThreadQueue* queue; // at 0x2DC
+    struct OSThread* next; // at 0x2E0
+    struct OSThread* prev; // at 0x2E4
+    OSThreadQueue joinQueue; // at 0x2E8
+    struct OSMutex* mutex; // at 0x2F0
+    OSMutexQueue mutexQueue; // at 0x2F4
     struct OSThread* nextActive; // at 0x2FC
     struct OSThread* prevActive; // at 0x300
-    u32* stackBegin;             // at 0x304
-    u32* stackEnd;               // at 0x308
-    s32 error;                   // at 0x30C
-    void* specific[2];           // at 0x310
+    u32* stackBegin; // at 0x304
+    u32* stackEnd; // at 0x308
+    s32 error; // at 0x30C
+    void* specific[2]; // at 0x310
 } OSThread;
 
-typedef void (*OSSwitchThreadCallback)(OSThread* currThread,
-                                       OSThread* newThread);
+typedef void (*OSSwitchThreadCallback)(OSThread* currThread, OSThread* newThread);
 typedef void* (*OSThreadFunc)(void* arg);
 
-OSSwitchThreadCallback
-OSSetSwitchThreadCallback(OSSwitchThreadCallback callback);
+OSSwitchThreadCallback OSSetSwitchThreadCallback(OSSwitchThreadCallback callback);
 void __OSThreadInit(void);
 void OSSetCurrentThread(OSThread* thread);
 void OSInitMutexQueue(OSMutexQueue* queue);
@@ -73,8 +73,8 @@ s32 __OSGetEffectivePriority(OSThread* thread);
 void __OSPromoteThread(OSThread* thread, s32 prio);
 void __OSReschedule(void);
 void OSYieldThread(void);
-bool OSCreateThread(OSThread* thread, OSThreadFunc func, void* funcArg,
-                    void* stackBegin, u32 stackSize, s32 prio, u16 flags);
+bool OSCreateThread(OSThread* thread, OSThreadFunc func, void* funcArg, void* stackBegin, u32 stackSize, s32 prio,
+                    u16 flags);
 void OSExitThread(OSThread* thread);
 void OSCancelThread(OSThread* thread);
 bool OSJoinThread(OSThread* thread, void* val);

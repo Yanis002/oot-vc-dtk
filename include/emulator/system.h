@@ -1,10 +1,10 @@
 #ifndef _SYSTEM_H
 #define _SYSTEM_H
 
-#include "revolution/types.h"
 #include "emulator/cpu.h"
 #include "emulator/mips.h"
 #include "emulator/xlObject.h"
+#include "revolution/types.h"
 
 #define N64_BTN_A (1 << 31)
 #define N64_BTN_B (1 << 30)

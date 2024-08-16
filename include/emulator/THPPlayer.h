@@ -1,11 +1,11 @@
 #ifndef _THPPLAYER_H
 #define _THPPLAYER_H
 
-#include "revolution.h"
 #include "emulator/THPBuffer.h"
 #include "emulator/THPFile.h"
 #include "emulator/THPInfo.h"
 #include "emulator/xlObject.h"
+#include "revolution.h"
 
 typedef struct THPPlayer {
     /* 0x000 */ DVDFileInfo fileInfo;

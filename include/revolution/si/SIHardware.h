@@ -1,8 +1,8 @@
 #ifndef RVL_SDK_SI_HARDWARE_H
 #define RVL_SDK_SI_HARDWARE_H
 
-#include "revolution/types.h"
 #include "macros.h"
+#include "revolution/types.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -29,10 +29,10 @@ typedef enum {
     SI_SIC3OUTBUF, //!< 0xCD006424
     SI_SIC3INBUFH, //!< 0xCD006428
     SI_SIC3INBUFL, //!< 0xCD00642C
-    SI_SIPOLL,     //!< 0xCD006430
-    SI_SICOMSCR,   //!< 0xCD006434
-    SI_SISR,       //!< 0xCD006438
-    SI_SIEXILK,    //!< 0xCD00643C
+    SI_SIPOLL, //!< 0xCD006430
+    SI_SICOMSCR, //!< 0xCD006434
+    SI_SISR, //!< 0xCD006438
+    SI_SIEXILK, //!< 0xCD00643C
 
     // SI communication RAM
     SI_RAM_BASE = (0xCD006480 - 0xCD006400) / sizeof(u32) //!< 0xCD006480

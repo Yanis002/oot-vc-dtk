@@ -1,8 +1,8 @@
 #ifndef _SRAM_H
 #define _SRAM_H
 
-#include "revolution/types.h"
 #include "emulator/xlObject.h"
+#include "revolution/types.h"
 
 // __anon_0x74AB9
 typedef struct Sram {
