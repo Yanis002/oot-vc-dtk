@@ -289,13 +289,13 @@ typedef struct Frame {
     /* 0x0008C */ u32 nMode;
     /* 0x00090 */ u32 aMode[FMT_COUNT];
     /* 0x000B8 */ Viewport viewport;
-    /* 0x000C8 */ FrameBuffer aBuffer[FBT_COUNT];
     /* 0x00118 */ u32 nOffsetDepth0;
     /* 0x0011C */ u32 nOffsetDepth1;
     /* 0x00120 */ s32 nWidthLine;
     /* 0x00124 */ f32 rDepth;
     /* 0x00128 */ f32 rDelta;
     /* 0x0012C */ FrameDrawFunc aDraw[4];
+    /* 0x000C8 */ FrameBuffer aBuffer[FBT_COUNT];
     /* 0x0013C */ s32 nCountLight;
     /* 0x00140 */ Light aLight[8];
     /* 0x00320 */ LookAt lookAt;
