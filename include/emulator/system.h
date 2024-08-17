@@ -58,7 +58,7 @@ typedef enum SystemMode {
 
 // __anon_0x370F1
 typedef enum SystemRomType {
-    SRT_NONE = -1,
+    SRT_NONE = 0,
     SRT_MARIO = 0,
     SRT_WAVERACE = 1,
     SRT_MARIOKART = 2,
@@ -77,31 +77,30 @@ typedef enum SystemRomType {
 // __anon_0x370F1
 typedef enum SystemObjectType {
     SOT_NONE = -1,
-
     SOT_CPU = 0, // 0x10
     SOT_PIF = 1, // 0x14
     SOT_RAM = 2, // 0x18
     SOT_ROM = 3, // 0x1C
     SOT_RSP = 4, // 0x20
-
-    SOT_RDP = 5,
-    SOT_DISK = 6,
-    SOT_UNK7 = 7,
-    SOT_AUDIO = 8,
-
-    SOT_VIDEO = 9, // 0x34
-
-    SOT_MIPS = 10,
-    SOT_SRAM = 11,
-    SOT_SERIAL = 12,
+    SOT_RDP = 5, // 0x24
+    SOT_MIPS = 6, // 0x28
+    SOT_DISK = 7, // 0x2C
+    SOT_AI = 8, // 0x30
+    SOT_VI = 9, // 0x34
+    SOT_SI = 10, // 0x38
+    SOT_PERIPHERAL = 11, // 0x3C
+    SOT_RDB = 12, // 0x40
     SOT_EEPROM = 13, // 0x44
-    SOT_PERIPHERAL = 14,
+    SOT_SRAM = 14, // 0x48
     SOT_FLASH = 15, // 0x4C
-    SOT_RDB = 16,
-
+    SOT_CODE = 16, // 0x50
     SOT_HELP = 17, // 0x54
     SOT_LIBRARY = 18, // 0x58
-    SOT_COUNT = 19,
+    SOT_FRAME = 19, // 0x5C
+    SOT_AUDIO = 20, // 0x60
+    SOT_VIDEO = 21, // 0x64
+    SOT_CONTROLLER = 22, // 0x68
+    SOT_COUNT = 23,
 } SystemObjectType;
 
 // __anon_0x3979C
@@ -126,13 +125,26 @@ typedef enum SystemInterruptType {
     SIT_COUNT = 16,
 } SystemInterruptType;
 
+typedef struct SystemDeviceInfo {
+    /* 0x00 */ s32 nType;
+    /* 0x04 */ u32 nAddress0;
+    /* 0x08 */ u32 nAddress1;
+} SystemDeviceInfo; // size = 0xC
+
+typedef struct SystemDevice {
+    /* 0x00 */ SystemObjectType storageDevice;
+    /* 0x04 */ _XL_OBJECTTYPE* pClass;
+    /* 0x08 */ s32 nSlotUsed;
+    /* 0x0C */ SystemDeviceInfo aDeviceSlot[3];
+} SystemDevice; // size = 0x30
+
 // __anon_0x393FF
 typedef struct SystemException {
     /* 0x00 */ char* szType;
     /* 0x04 */ u32 nMask;
     /* 0x08 */ CpuExceptionCode eCode;
-    /* 0x0C */ SystemInterruptType eType;
     /* 0x10 */ MipsInterruptType eTypeMips;
+    /* 0x0C */ SystemInterruptType eType;
 } SystemException; // size = 0x14
 
 // __anon_0x37040
@@ -151,16 +163,19 @@ typedef struct System {
     /* 0x08 */ SystemObjectType storageDevice;
     /* 0x0C */ SystemRomType eTypeROM;
     /* 0x10 */ void* apObject[SOT_COUNT];
-    // /* 0x58 */ void* pSound;
-    /* 0x5C */ void* pFrame;
 
     // not ok
-    /* 0x60 */ u64 nAddressBreak;
-    s32 controllerChannel;
-    /* 0x68 */ SystemRomCopy romCopy;
-    /* 0x78 */ u8 anException[16];
-    /* 0x88 */ bool bJapaneseVersion;
-} System; // size = 0x8C
+    /* 0x6C */ s32 controllerChannel;
+    /* 0x70 */ u64 nAddressBreak;
+
+    /* 0x78 */ s32 UNKNOWN_78[19];
+    /* 0xC4 */ void* pSound;
+    /* 0xC8 ok */ u8 anException[16];
+
+    // removed?
+    /* 0xD8 */ SystemRomCopy romCopy;
+    /* 0xE8 */ bool bJapaneseVersion;
+} System; // size = 0xEC
 
 // __anon_0x3459E
 typedef struct SystemRomConfig {
@@ -172,8 +187,6 @@ typedef struct SystemRomConfig {
     /* 0x0170 */ s32 currentControllerConfig;
 } SystemRomConfig; // size = 0x174
 
-#define SYSTEM_FRAME(pSystem) ((Frame*)(((System*)(pSystem))->pFrame))
-#define SYSTEM_SOUND(pSystem) ((Sound*)(((System*)(pSystem))->pSound))
 #define SYSTEM_CPU(pSystem) ((Cpu*)(((System*)(pSystem))->apObject[SOT_CPU]))
 #define SYSTEM_PIF(pSystem) ((Pif*)(((System*)(pSystem))->apObject[SOT_PIF]))
 #define SYSTEM_RAM(pSystem) ((Ram*)(((System*)(pSystem))->apObject[SOT_RAM]))
@@ -182,18 +195,33 @@ typedef struct SystemRomConfig {
 #define SYSTEM_RDP(pSystem) ((Rdp*)(((System*)(pSystem))->apObject[SOT_RDP]))
 #define SYSTEM_MIPS(pSystem) ((Mips*)(((System*)(pSystem))->apObject[SOT_MIPS]))
 #define SYSTEM_DISK(pSystem) ((Disk*)(((System*)(pSystem))->apObject[SOT_DISK]))
-#define SYSTEM_FLASH(pSystem) ((Flash*)(((System*)(pSystem))->apObject[SOT_FLASH]))
-#define SYSTEM_SRAM(pSystem) ((Sram*)(((System*)(pSystem))->apObject[SOT_SRAM]))
-#define SYSTEM_AUDIO(pSystem) ((Audio*)(((System*)(pSystem))->apObject[SOT_AUDIO]))
-#define SYSTEM_VIDEO(pSystem) ((Video*)(((System*)(pSystem))->apObject[SOT_VIDEO]))
-#define SYSTEM_SERIAL(pSystem) ((Serial*)(((System*)(pSystem))->apObject[SOT_SERIAL]))
-#define SYSTEM_LIBRARY(pSystem) ((Library*)(((System*)(pSystem))->apObject[SOT_LIBRARY]))
+
+//! TODO: replace void* by the struct names
+#define SYSTEM_AI(pSystem) ((void*)(((System*)(pSystem))->apObject[SOT_AI]))
+#define SYSTEM_VI(pSystem) ((void*)(((System*)(pSystem))->apObject[SOT_VI]))
+#define SYSTEM_SI(pSystem) ((void*)(((System*)(pSystem))->apObject[SOT_SI]))
+
 #define SYSTEM_PERIPHERAL(pSystem) ((Peripheral*)(((System*)(pSystem))->apObject[SOT_PERIPHERAL]))
 #define SYSTEM_RDB(pSystem) ((Rdb*)(((System*)(pSystem))->apObject[SOT_RDB]))
 
-//! TODO: replace void* by the struct names
+//! TODO: replace void* by the struct name
 #define SYSTEM_EEPROM(pSystem) ((void*)(((System*)(pSystem))->apObject[SOT_EEPROM]))
+
+#define SYSTEM_SRAM(pSystem) ((Sram*)(((System*)(pSystem))->apObject[SOT_SRAM]))
+#define SYSTEM_FLASH(pSystem) ((Flash*)(((System*)(pSystem))->apObject[SOT_FLASH]))
+
+//! TODO: replace void* by the struct name
+#define SYSTEM_CODE(pSystem) ((void*)(((System*)(pSystem))->apObject[SOT_CODE]))
+
+//! TODO: replace void* by the struct name
 #define SYSTEM_HELP(pSystem) ((void*)(((System*)(pSystem))->apObject[SOT_HELP]))
+
+#define SYSTEM_LIBRARY(pSystem) ((Library*)(((System*)(pSystem))->apObject[SOT_LIBRARY]))
+#define SYSTEM_FRAME(pSystem) ((Frame*)(((System*)(pSystem))->apObject[SOT_FRAME]))
+#define SYSTEM_AUDIO(pSystem) ((Audio*)(((System*)(pSystem))->apObject[SOT_AUDIO]))
+#define SYSTEM_VIDEO(pSystem) ((Video*)(((System*)(pSystem))->apObject[SOT_VIDEO]))
+
+#define SYSTEM_SOUND(pSystem) ((Sound*)(((System*)(pSystem))->pSound))
 
 extern u32 nTickMultiplier;
 extern f32 fTickScale;

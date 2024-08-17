@@ -3155,7 +3155,7 @@ static bool cpuExecuteOpcode(Cpu* pCPU, s32 nCount0, s32 nAddressN64, s32 nAddre
         pCPU->nMode &= ~8;
     }
 
-    cpuUnknownMarioKartFrameSet(gpSystem->eTypeROM, gpSystem->pFrame, nAddressN64);
+    cpuUnknownMarioKartFrameSet(gpSystem->eTypeROM, SYSTEM_FRAME(gpSystem), nAddressN64);
 
     aiDevice = pCPU->aiDevice;
     apDevice = pCPU->apDevice;

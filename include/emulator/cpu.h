@@ -35,12 +35,12 @@
 #define TLB_PGSZ_16M 0x1FFE000
 
 typedef struct CpuBlock CpuBlock;
-typedef bool UnknownBlockCallback(CpuBlock*, s32);
+typedef bool (*UnknownBlockCallback)(CpuBlock* pBlock, bool bUnknown);
 
 struct CpuBlock {
     /* 0x00 */ struct CpuBlock* pNext;
     /* 0x04 */ u32 nSize;
-    /* 0x08 */ UnknownBlockCallback* pfUnknown; // unused?
+    /* 0x08 */ UnknownBlockCallback pfUnknown;
     /* 0x0C */ u32 nAddress0;
     /* 0x10 */ u32 nAddress1;
 }; // size = 0x14
@@ -341,7 +341,7 @@ struct Cpu {
 
     // not ok
     /* 0x12224 */ u32 nCompileFlag;
-    /* 0x12228 */ s32 nTimeRetrace;
+    s32 pad2;
 
     // /* 0x12230 */ OSAlarm alarmRetrace;
     /* 0x12230 */ s32 alarmRetrace[12];
@@ -354,6 +354,8 @@ struct Cpu {
 
     // ok
     /* 0x12270 */ CpuOptimize nOptimize;
+    /* 0x12298 */ s32 nTimeRetrace;
+    /* 0x1229C */ s32 UNKNOWN_1229C;
     u8 pad[0x38];
 }; // size = 0x122D0
 
@@ -393,6 +395,8 @@ struct Cpu {
         ->pfPut64(CPU_DEVICE(apDevice, aiDevice, nAddress)->pObject, \
                   (nAddress) + CPU_DEVICE(apDevice, aiDevice, nAddress)->nOffsetAddress, (s64*)pValue)
 
+bool cpuGetBlock(Cpu* pCPU, CpuBlock* pBlock);
+bool cpuGetXPC(Cpu* pCPU, s64* pnPC, s64* pnLo, s64* pnHi);
 bool cpuFreeCachedAddress(Cpu* pCPU, s32 nAddress0, s32 nAddress1);
 bool cpuTestInterrupt(Cpu* pCPU, s32 nMaskIP);
 bool cpuException(Cpu* pCPU, CpuExceptionCode eCode, s32 nMaskIP);

@@ -26,6 +26,21 @@ extern "C" {
 // Interpret as signed to find tick delta
 #define OS_TICKS_DELTA(x, y) ((s32)x - (s32)y)
 
+#define OSTicksToCycles(ticks) (((ticks) * ((OS_CORE_CLOCK * 2) / OS_TIME_SPEED)) / 2)
+#define OSTicksToSeconds(ticks) ((ticks) / OS_TIME_SPEED)
+#define OSTicksToMilliseconds(ticks) ((ticks) / (OS_TIME_SPEED / 1000))
+#define OSTicksToMicroseconds(ticks) (((ticks) * 8) / (OS_TIME_SPEED / 125000))
+#define OSTicksToNanoseconds(ticks) (((ticks) * 8000) / (OS_TIME_SPEED / 125000))
+#define OSSecondsToTicks(sec) ((sec) * OS_TIME_SPEED)
+#define OSMillisecondsToTicks(msec) ((msec) * (OS_TIME_SPEED / 1000))
+#define OSMicrosecondsToTicks(usec) (((usec) * (OS_TIME_SPEED / 125000)) / 8)
+#define OSNanosecondsToTicks(nsec) (((nsec) * (OS_TIME_SPEED / 125000)) / 8000)
+
+#define OSDiffTick(tick1, tick0) ((s32)(tick1) - (s32)(tick0))
+
+#define OSRoundUp32B(v) (((u32)(v) + 31) & ~31)
+#define OSRoundDown32B(x) (((u32)(x)) & ~(0x1F))
+
 typedef struct OSCalendarTime {
     s32 sec; // at 0x0
     s32 min; // at 0x4

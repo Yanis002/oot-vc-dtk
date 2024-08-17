@@ -11,6 +11,7 @@ bool xlHeapTake(void** ppHeap, s32 nByteCount);
 bool xlHeapFree(void** ppHeap);
 bool xlHeapCompact(s32 iHeap);
 bool xlHeapCopy(void* pHeapTarget, void* pHeapSource, s32 nByteCount);
+bool xlHeapFill8(void* pHeap, s32 nByteCount, u32 nData);
 bool xlHeapFill32(void* pHeap, s32 nByteCount, u32 nData);
 bool xlHeapGetFree(s32* pnFreeBytes);
 bool xlHeapSetup(void);

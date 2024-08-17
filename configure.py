@@ -215,6 +215,7 @@ config.libs = [
     EmulatorLib(
         "emulator",
         [
+            Object(NotLinked, "emulator/system.c"),
             Object(NotLinked, "emulator/cpu.c", asm_processor=True),
             Object(NotLinked, "emulator/pif.c"),
             Object(LinkedFor("vc-j"), "emulator/ram.c"),
