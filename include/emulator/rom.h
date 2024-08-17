@@ -63,10 +63,10 @@ typedef struct Rom {
     /* 0x00000 */ void* pBuffer;
     /* 0x00004 */ bool bFlip;
     /* 0x00008 */ bool bLoad;
-    /* 0x0000C */ s32 UNKNOWN_C;
+    /* 0x0000C */ s32 unk_C;
     /* 0x00010 */ char acNameFile[513];
     /* 0x00214 */ u32 nSize;
-    /* 0x00218 */ s32 UNKNOWN_218;
+    /* 0x00218 */ s32 unk_218;
     /* 0x0021C */ RomModeLoad eModeLoad;
     /* 0x00220 */ RomBlock aBlock[6144];
     /* 0x18220 */ u32 nTick;
@@ -80,7 +80,7 @@ typedef struct Rom {
     /* 0x19A74 */ u8 acHeader[64];
     /* 0x19AB4 */ u32* anOffsetBlock;
     /* 0x19AB8 */ s32 nCountOffsetBlocks;
-    /* 0x19ABC */ s32 UNKNOWN_19ABC; // game's segment `boot` checksum?
+    /* 0x19ABC */ s32 unk_19ABC; // game's segment `boot` checksum?
     /* 0x19AC0 */ DVDFileInfo fileInfo;
     /* 0x19AFC */ s32 offsetToRom;
 } Rom; // size = 0x19B00

@@ -5698,11 +5698,11 @@ bool cpuReset(Cpu* pCPU) {
     pCPU->alarmRetrace[10] = 0;
     pCPU->alarmRetrace[11] = 0;
 
-    pCPU->UNKNOWN_1225C = 0;
-    pCPU->UNKNOWN_12260 = 0;
-    pCPU->UNKNOWN_12264 = 0;
-    pCPU->UNKNOWN_12268 = 0;
-    pCPU->UNKNOWN_1226C = 0;
+    pCPU->unk_1225C = 0;
+    pCPU->unk_12260 = 0;
+    pCPU->unk_12264 = 0;
+    pCPU->unk_12268 = 0;
+    pCPU->unk_1226C = 0;
     return true;
 }
 

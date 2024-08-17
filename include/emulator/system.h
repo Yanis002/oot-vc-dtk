@@ -163,29 +163,21 @@ typedef struct System {
     /* 0x08 */ SystemObjectType storageDevice;
     /* 0x0C */ SystemRomType eTypeROM;
     /* 0x10 */ void* apObject[SOT_COUNT];
-
-    // not ok
-    /* 0x6C */ s32 controllerChannel;
+    /* 0x6C */ s32 unk_6C;
     /* 0x70 */ u64 nAddressBreak;
-
-    /* 0x78 */ s32 UNKNOWN_78[19];
+    /* 0x78 */ s32 unk_78[19];
     /* 0xC4 */ void* pSound;
-    /* 0xC8 ok */ u8 anException[16];
+    /* 0xC8 */ u8 anException[16];
+} System; // size = 0xD8
 
-    // removed?
-    /* 0xD8 */ SystemRomCopy romCopy;
-    /* 0xE8 */ bool bJapaneseVersion;
-} System; // size = 0xEC
-
-// __anon_0x3459E
+// // __anon_0x3459E
 typedef struct SystemRomConfig {
-    /* 0x0000 */ char rom[36];
-    /* 0x0024 */ s32 controllerConfiguration[4][GCN_BTN_COUNT];
-    /* 0x0164 */ s32 rumbleConfiguration;
-    /* 0x0168 */ SystemObjectType storageDevice;
-    /* 0x016C */ s32 normalControllerConfig;
-    /* 0x0170 */ s32 currentControllerConfig;
-} SystemRomConfig; // size = 0x174
+    /* 0x0000 */ s32 controllerConfiguration[4][GCN_BTN_COUNT];
+    /* 0x0140 */ s32 rumbleConfiguration;
+    /* 0x0144 */ SystemObjectType storageDevice;
+    /* 0x0148 */ s32 normalControllerConfig;
+    /* 0x014C */ s32 currentControllerConfig;
+} SystemRomConfig; // size = 0x150
 
 #define SYSTEM_CPU(pSystem) ((Cpu*)(((System*)(pSystem))->apObject[SOT_CPU]))
 #define SYSTEM_PIF(pSystem) ((Pif*)(((System*)(pSystem))->apObject[SOT_PIF]))
@@ -221,16 +213,15 @@ typedef struct SystemRomConfig {
 #define SYSTEM_AUDIO(pSystem) ((Audio*)(((System*)(pSystem))->apObject[SOT_AUDIO]))
 #define SYSTEM_VIDEO(pSystem) ((Video*)(((System*)(pSystem))->apObject[SOT_VIDEO]))
 
-#define SYSTEM_SOUND(pSystem) ((Sound*)(((System*)(pSystem))->pSound))
+//! TODO: replace void* by the struct name
+#define SYSTEM_CONTROLLER(pSystem) ((void*)(((System*)(pSystem))->apObject[SOT_CONTROLLER]))
 
-extern u32 nTickMultiplier;
-extern f32 fTickScale;
-extern u32 gnFlagZelda;
+#define SYSTEM_SOUND(pSystem) ((Sound*)(((System*)(pSystem))->pSound))
 
 bool systemCopyROM(System* pSystem, s32 nOffsetRAM, s32 nOffsetROM, s32 nSize, SystemCopyCallbackFunc pCallback);
 bool systemSetMode(System* pSystem, SystemMode eMode);
 bool systemGetMode(System* pSystem, SystemMode* peMode);
-bool systemSetStorageDevice(System* pSystem, SystemObjectType eStorageDevice);
+bool systemSetStorageDevice(System* pSystem, SystemObjectType eStorageDevice, void* pArgument);
 bool systemGetStorageDevice(System* pSystem, SystemObjectType* pStorageDevice);
 bool systemReset(System* pSystem);
 bool systemExecute(System* pSystem, s32 nCount);
@@ -239,6 +230,5 @@ bool systemExceptionPending(System* pSystem, SystemInterruptType nException);
 bool systemEvent(System* pSystem, s32 nEvent, void* pArgument);
 
 extern _XL_OBJECTTYPE gClassSystem;
-extern System* gSystem;
 
 #endif

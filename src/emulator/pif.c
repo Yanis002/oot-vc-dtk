@@ -143,7 +143,7 @@ bool pifExecuteCommand(Pif* pPIF, u8* buffer, u8* ptx, u8* prx, s32 channel) {
         case 0xFF: // ok
             break;
         case 0x01: // ok
-            if (!fn_80062E5C(gpSystem->controllerChannel, channel, buffer + 1)) {
+            if (!fn_80062E5C(SYSTEM_CONTROLLER(gpSystem), channel, buffer + 1)) {
                 return false;
             }
             break;
@@ -175,7 +175,7 @@ bool pifExecuteCommand(Pif* pPIF, u8* buffer, u8* ptx, u8* prx, s32 channel) {
             switch (pPIF->eControllerType[channel]) {
                 case CT_CONTROLLER_W_PAK:
                     if (nAddress == 0x600) {
-                        fn_80062CE4(gSystem->controllerChannel, channel, !!buffer[3]);
+                        fn_80062CE4(SYSTEM_CONTROLLER(gpSystem), channel, !!buffer[3]);
                     }
                     break;
                 case CT_CONTROLLER:
@@ -454,7 +454,7 @@ bool pifGetData(Pif* pPIF, u8* acData) {
 }
 
 bool pifSetControllerType(Pif* pPIF, s32 channel, ControllerType type) {
-    if (!simulatorDetectController(gpSystem->controllerChannel)) {
+    if (!simulatorDetectController(SYSTEM_CONTROLLER(gpSystem))) {
         type = CT_NONE;
     }
 

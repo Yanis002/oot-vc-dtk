@@ -16,6 +16,9 @@ Sections:
 emulator/system.c:
 	.text       start:0x800074CC end:0x8000B110
 	.data       start:0x8016F920 end:0x80170218
+	.bss        start:0x801A0CF0 end:0x801A0E40
+	.sdata      start:0x8025C6C8 end:0x8025C720
+	.sdata2     start:0x8025DD40 end:0x8025DD50
 
 emulator/cpu.c:
 	.text       start:0x8000CB1C end:0x80040B24

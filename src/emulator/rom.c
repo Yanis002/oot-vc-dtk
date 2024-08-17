@@ -515,8 +515,8 @@ static bool romLoadFullOrPart(Rom* pROM) {
         if (OSCreateThread(&DefaultThread, (OSThreadFunc)__ROMEntry, pROM, (void*)((u8*)pBuffer + ROM_THREAD_SIZE),
                            ROM_THREAD_SIZE, OS_PRIORITY_MAX, 1)) {
             OSResumeThread(&DefaultThread);
-            fn_80063D78(pROM->UNKNOWN_C ? 7 : 11);
-            pROM->UNKNOWN_C = 0;
+            fn_80063D78(pROM->unk_C ? 7 : 11);
+            pROM->unk_C = 0;
         }
 
         if (!xlHeapFree(&pBuffer)) {
@@ -886,10 +886,10 @@ bool romSetImage(Rom* pROM, char* szNameFile) {
         return false;
     }
 
-    pROM->UNKNOWN_19ABC = 0;
+    pROM->unk_19ABC = 0;
 
     for (i = 0; i < ARRAY_COUNT(pData); i++) {
-        pROM->UNKNOWN_19ABC += pData[i];
+        pROM->unk_19ABC += pData[i];
     }
 
     pROM->bFlip = (pROM->acHeader[0] == 0x37 && pROM->acHeader[1] == 0x80);
@@ -944,7 +944,7 @@ bool romEvent(Rom* pROM, s32 nEvent, void* pArgument) {
             pROM->bFlip = false;
             pROM->acNameFile[0] = '\0';
             pROM->eModeLoad = RLM_NONE;
-            pROM->UNKNOWN_C = 1;
+            pROM->unk_C = 1;
             pROM->pBuffer = NULL;
             pROM->offsetToRom = 0;
             pROM->anOffsetBlock = NULL;

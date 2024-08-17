@@ -346,16 +346,16 @@ struct Cpu {
     // /* 0x12230 */ OSAlarm alarmRetrace;
     /* 0x12230 */ s32 alarmRetrace[12];
 
-    /* 0x1225C */ s32 UNKNOWN_1225C;
-    /* 0x12260 */ s32 UNKNOWN_12260;
-    /* 0x12264 */ s32 UNKNOWN_12264;
-    /* 0x12268 */ s32 UNKNOWN_12268;
-    /* 0x1226C */ s32 UNKNOWN_1226C;
+    /* 0x1225C */ s32 unk_1225C;
+    /* 0x12260 */ s32 unk_12260;
+    /* 0x12264 */ s32 unk_12264;
+    /* 0x12268 */ s32 unk_12268;
+    /* 0x1226C */ s32 unk_1226C;
 
     // ok
     /* 0x12270 */ CpuOptimize nOptimize;
     /* 0x12298 */ s32 nTimeRetrace;
-    /* 0x1229C */ s32 UNKNOWN_1229C;
+    /* 0x1229C */ s32 unk_1229C;
     u8 pad[0x38];
 }; // size = 0x122D0
 

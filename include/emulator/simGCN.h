@@ -112,7 +112,7 @@ bool simulatorRumbleStart(s32 channel);
 bool simulatorRumbleStop(s32 channel);
 bool simulatorCopyControllerMap(u32* mapDataOutput, u32* mapDataInput);
 bool simulatorReadController(s32 channel, u32* anData, u8* ptx);
-bool simulatorDetectController(s32 channel);
+bool simulatorDetectController(void* pController);
 bool simulatorReadPak(s32 channel, u16 address, u8* data);
 bool simulatorWritePak(s32 channel, u16 address, u8* data);
 bool simulatorSetControllerMap(u32* mapData, s32 channel);
