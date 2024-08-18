@@ -597,7 +597,7 @@ bool xlHeapFill32(void* pHeap, s32 nByteCount, u32 nData) {
     return true;
 }
 
-bool __xlHeapGetFree(s32 iHeap, s32* pnFreeBytes) {
+static bool __xlHeapGetFree(s32 iHeap, s32* pnFreeBytes) {
     s32 nBlockSize;
     s32 nFree;
     s32 nCount;

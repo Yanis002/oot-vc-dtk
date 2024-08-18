@@ -1,9 +1,9 @@
 #ifndef RVL_SDK_FS_H
 #define RVL_SDK_FS_H
 
+#include "macros.h"
 #include "revolution/ipc.h"
 #include "revolution/types.h"
-#include "macros.h"
 
 #ifdef __cplusplus
 extern "C" {

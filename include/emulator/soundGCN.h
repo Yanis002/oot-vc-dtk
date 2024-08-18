@@ -1,9 +1,9 @@
 #ifndef _SOUNDGCN_H
 #define _SOUNDGCN_H
 
+#include "emulator/audio.h"
 #include "emulator/xlObject.h"
 #include "revolution/types.h"
-#include "emulator/audio.h"
 
 // __anon_0x221A3
 typedef enum SoundRamp {

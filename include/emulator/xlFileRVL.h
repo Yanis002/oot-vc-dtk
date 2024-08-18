@@ -1,5 +1,5 @@
-#ifndef _XL_FILE_GCN_H
-#define _XL_FILE_GCN_H
+#ifndef _XL_FILE_RVL_H
+#define _XL_FILE_RVL_H
 
 #include "emulator/xlObject.h"
 #include "revolution/cnt.h"
@@ -30,8 +30,6 @@ typedef struct tXL_FILE {
 } tXL_FILE; // size = 0x38
 
 bool xlFileSetOpen(DVDOpenCallback pfOpen);
-bool xlFileSetRead(DVDReadCallback pfRead);
-bool xlFileGetSize(s32* pnSize, char* szFileName);
 bool xlFileOpen(tXL_FILE** ppFile, XlFileType eType, char* szFileName);
 bool xlFileClose(tXL_FILE** ppFile);
 bool xlFileGet(tXL_FILE* pFile, void* pTarget, s32 nSizeBytes);

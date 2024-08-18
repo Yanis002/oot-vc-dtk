@@ -1,13 +1,13 @@
 #ifndef RVL_SDK_NWC24_MANAGE_H
 #define RVL_SDK_NWC24_MANAGE_H
 
+#include "macros.h"
 #include "revolution/nwc24/NWC24Config.h"
 #include "revolution/nwc24/NWC24Download.h"
 #include "revolution/nwc24/NWC24FriendList.h"
 #include "revolution/nwc24/NWC24SecretFList.h"
 #include "revolution/nwc24/NWC24Types.h"
 #include "revolution/types.h"
-#include "macros.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -15,7 +15,7 @@ extern "C" {
 
 #define NWC24_IO_BUFFER_SIZE 512
 
-#define ROUND_UP(x, align) (((x) + (align)-1) & (-(align)))
+#define ROUND_UP(x, align) (((x) + (align) - 1) & (-(align)))
 #define WORK_SIZE(x) (ROUND_UP(sizeof(x), 0x100))
 
 typedef struct NWC24Work {

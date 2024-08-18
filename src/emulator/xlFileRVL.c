@@ -1,4 +1,4 @@
-#include "emulator/xlFileGCN.h"
+#include "emulator/xlFileRVL.h"
 #include "emulator/xlHeap.h"
 #include "revolution/arc/arc.h"
 #include "stddef.h"
@@ -25,7 +25,7 @@ bool xlFileSetRead(DVDReadCallback pfRead) { return true; }
 
 static inline bool xlFileGetFile(tXL_FILE** ppFile, char* szFileName) {
     if (gpfOpen != NULL) {
-        return gpfOpen(szFileName, &(*ppFile)->info);
+        return gpfOpen(szFileName, (DVDFileInfo*)&(*ppFile)->info);
     } else {
         return !ARCGetFile(&lbl_801C9680, szFileName, &(*ppFile)->info);
     }
@@ -96,8 +96,8 @@ bool xlFileGet(tXL_FILE* pFile, void* pTarget, s32 nSizeBytes) {
                 !(nSizeBytes & 0x1F)) {
                 s32 temp_r0;
 
-                if (((s32(*)(CNTFileInfo*, void*, s32, s32, void (*)(s32, DVDFileInfo*)))gpfRead) != NULL) {
-                    gpfRead((CNTFileInfo*)pFile->pData, pTarget, nSizeBytes, nOffset, NULL);
+                if (gpfRead != NULL) {
+                    gpfRead((DVDFileInfo*)pFile->pData, pTarget, nSizeBytes, nOffset, NULL);
                 } else {
                     contentReadNAND((CNTFileInfo*)pFile->pData, pTarget, nSizeBytes, nOffset);
                 }
@@ -115,8 +115,8 @@ bool xlFileGet(tXL_FILE* pFile, void* pTarget, s32 nSizeBytes) {
                     nSize = (nOffsetExtra + 0x1F) & ~0x1F;
                 }
 
-                if (((s32(*)(CNTFileInfo*, void*, s32, s32, void (*)(s32, DVDFileInfo*)))gpfRead) != NULL) {
-                    gpfRead((CNTFileInfo*)pFile->pData, pFile->pBuffer, nSize, nOffset, NULL);
+                if (gpfRead != NULL) {
+                    gpfRead((DVDFileInfo*)pFile->pData, pFile->pBuffer, nSize, nOffset, NULL);
                 } else {
                     contentReadNAND((CNTFileInfo*)pFile->pData, pFile->pBuffer, nSize, nOffset);
                 }

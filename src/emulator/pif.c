@@ -1,8 +1,8 @@
 #include "emulator/pif.h"
-#include "emulator/simGCN.h"
-#include "emulator/system.h"
-#include "emulator/xlHeap.h"
 #include "emulator/flash.h"
+#include "emulator/system.h"
+#include "emulator/vc64_RVL.h"
+#include "emulator/xlHeap.h"
 
 _XL_OBJECTTYPE gClassPIF = {
     "PIF",
@@ -10,42 +10,6 @@ _XL_OBJECTTYPE gClassPIF = {
     NULL,
     (EventFunc)pifEvent,
 };
-
-// bool pifReadRumble(Pif* pPIF, s32 channel, u16 address, u8* data) {
-//     int i;
-
-//     for (i = 0; i < 0x20; i++) {
-//         data[i] = 0;
-//     }
-
-//     switch (address) {
-//         case 0x400:
-//             for (i = 0; i < 0x20; i++) {
-//                 data[i] = 0x80;
-//             }
-//             break;
-//         default:
-//             break;
-//     }
-
-//     return true;
-// }
-
-// bool pifWriteRumble(Pif* pPIF, s32 channel, u16 address, u8* data) {
-//     switch (address) {
-//         case 0x600:
-//             if (*data == 1) {
-//                 simulatorRumbleStart(channel);
-//             } else if (*data == 0) {
-//                 simulatorRumbleStop(channel);
-//             }
-//             break;
-//         default:
-//             break;
-//     }
-
-//     return true;
-// }
 
 // this function is a copy-paste of ``__osContDataCrc``
 static u8 pifContDataCrc(Pif* pPIF, u8* data) {
@@ -83,7 +47,7 @@ static u8 pifContDataCrc(Pif* pPIF, u8* data) {
     return temp;
 }
 
-bool fn_80040BF4(Pif* pPIF, u8* buffer, u8* ptx, u8* prx, s32 channel) {
+static bool fn_80040BF4(Pif* pPIF, u8* buffer, u8* ptx, u8* prx, s32 channel) {
     *prx &= 0x3F;
 
     switch (pPIF->eControllerType[channel]) {
@@ -347,7 +311,7 @@ bool pifProcessOutputData(Pif* pPIF) {
     return true;
 }
 
-bool pifPut8(Pif* pPIF, u32 nAddress, s8* pData) {
+static bool pifPut8(Pif* pPIF, u32 nAddress, s8* pData) {
     nAddress &= 0x7FF;
 
     if (nAddress >= PIF_RAM_START) {
@@ -357,7 +321,7 @@ bool pifPut8(Pif* pPIF, u32 nAddress, s8* pData) {
     return true;
 }
 
-bool pifPut16(Pif* pPIF, u32 nAddress, s16* pData) {
+static bool pifPut16(Pif* pPIF, u32 nAddress, s16* pData) {
     if ((nAddress & 0x7FF) >= PIF_RAM_START) {
         *((s16*)(pPIF->pRAM) + (((nAddress & 0x7FF) - PIF_RAM_START) >> 1)) = *pData;
     }
@@ -365,7 +329,7 @@ bool pifPut16(Pif* pPIF, u32 nAddress, s16* pData) {
     return true;
 }
 
-bool pifPut32(Pif* pPIF, u32 nAddress, s32* pData) {
+static bool pifPut32(Pif* pPIF, u32 nAddress, s32* pData) {
     if ((nAddress & 0x7FF) >= PIF_RAM_START) {
         *((s32*)(pPIF->pRAM) + (((nAddress & 0x7FF) - PIF_RAM_START) >> 2)) = *pData;
     }
@@ -373,7 +337,7 @@ bool pifPut32(Pif* pPIF, u32 nAddress, s32* pData) {
     return true;
 }
 
-bool pifPut64(Pif* pPIF, u32 nAddress, s64* pData) {
+static bool pifPut64(Pif* pPIF, u32 nAddress, s64* pData) {
     if ((nAddress & 0x7FF) >= PIF_RAM_START) {
         *((s64*)(pPIF->pRAM) + (((nAddress & 0x7FF) - PIF_RAM_START) >> 3)) = *pData;
     }
@@ -381,7 +345,7 @@ bool pifPut64(Pif* pPIF, u32 nAddress, s64* pData) {
     return true;
 }
 
-bool pifGet8(Pif* pPIF, u32 nAddress, s8* pData) {
+static bool pifGet8(Pif* pPIF, u32 nAddress, s8* pData) {
     nAddress &= 0x7FF;
 
     if (nAddress < PIF_RAM_START) {
@@ -393,10 +357,10 @@ bool pifGet8(Pif* pPIF, u32 nAddress, s8* pData) {
     return true;
 }
 
-bool pifGet16(Pif* pPIF, u32 nAddress, s16* pData) {
+static bool pifGet16(Pif* pPIF, u32 nAddress, s16* pData) {
     nAddress &= 0x7FF;
 
-    if (nAddress  < PIF_RAM_START) {
+    if (nAddress < PIF_RAM_START) {
         *pData = *((s16*)pPIF->pROM + (nAddress >> 1));
     } else {
         *pData = *((s16*)pPIF->pROM + ((nAddress - PIF_RAM_START) >> 1));
@@ -405,7 +369,7 @@ bool pifGet16(Pif* pPIF, u32 nAddress, s16* pData) {
     return true;
 }
 
-bool pifGet32(Pif* pPIF, u32 nAddress, s32* pData) {
+static bool pifGet32(Pif* pPIF, u32 nAddress, s32* pData) {
     nAddress &= 0x7FF;
 
     if (nAddress < PIF_RAM_START) {
@@ -417,7 +381,7 @@ bool pifGet32(Pif* pPIF, u32 nAddress, s32* pData) {
     return true;
 }
 
-bool pifGet64(Pif* pPIF, u32 nAddress, s64* pData) {
+static bool pifGet64(Pif* pPIF, u32 nAddress, s64* pData) {
     nAddress &= 0x7FF;
 
     if (nAddress < PIF_RAM_START) {
@@ -485,7 +449,6 @@ bool pifSetControllerType(Pif* pPIF, s32 channel, ControllerType type) {
 
     return true;
 }
-
 
 bool pifEvent(Pif* pPIF, s32 nEvent, void* pArgument) {
     s32 i;

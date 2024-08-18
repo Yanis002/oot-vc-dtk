@@ -1,5 +1,5 @@
 #include "emulator/xlFile.h"
-#include "emulator/xlFileGCN.h"
+#include "emulator/xlFileRVL.h"
 #include "emulator/xlHeap.h"
 
 bool xlFileGetSize(s32* pnSize, char* szFileName) {

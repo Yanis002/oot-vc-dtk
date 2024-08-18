@@ -19,11 +19,11 @@ typedef struct __anon_0x5062 {
     /* 0x4 */ _XL_OBJECTTYPE* pType;
 } __anon_0x5062; // size = 0x8
 
-bool xlObjectReset(void);
-bool xlObjectSetup(void);
-bool xlObjectEvent(void* pObject, s32 nEvent, void* pArgument);
-bool xlObjectTest(void* pObject, _XL_OBJECTTYPE* pType);
-bool xlObjectFree(void** ppObject);
 bool xlObjectMake(void** ppObject, void* pArgument, _XL_OBJECTTYPE* pType);
+bool xlObjectFree(void** ppObject);
+bool xlObjectTest(void* pObject, _XL_OBJECTTYPE* pType);
+bool xlObjectEvent(void* pObject, s32 nEvent, void* pArgument);
+bool xlObjectSetup(void);
+bool xlObjectReset(void);
 
 #endif

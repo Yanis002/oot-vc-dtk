@@ -5,13 +5,13 @@
 #include "emulator/ram.h"
 #include "emulator/rom.h"
 #include "emulator/rsp.h"
-#include "emulator/simGCN.h"
 #include "emulator/system.h"
+#include "emulator/vc64_RVL.h"
 #include "emulator/video.h"
 #include "emulator/xlCoreGCN.h"
 #include "emulator/xlHeap.h"
 #include "emulator/xlObject.h"
-#include "emulator/xlPostGCN.h"
+#include "emulator/xlPostRVL.h"
 #include "macros.h"
 #include "revolution/vi.h"
 
@@ -1531,12 +1531,12 @@ s32 fn_8000E81C(Cpu* pCPU, s32 arg1, s32 arg2, s32 arg3, s32 arg5, s32* arg6, s3
 static bool cpuGetPPC(Cpu* pCPU, s32* pnAddress, CpuFunction* pFunction, s32* anCode, s32* piCode, bool bSlot);
 // #pragma GLOBAL_ASM("asm/non_matchings/cpu/cpuGetPPC.s")
 
-bool fn_80031D4C(Cpu* pCPU, CpuFunction* pFunction, s32 unknown) {
+static bool fn_80031D4C(Cpu* pCPU, CpuFunction* pFunction, s32 unknown) {
     NO_INLINE();
     return false;
 }
 
-bool cpuMakeFunction(Cpu* pCPU, CpuFunction** ppFunction, s32 nAddressN64) {
+static bool cpuMakeFunction(Cpu* pCPU, CpuFunction** ppFunction, s32 nAddressN64) {
     s32 iCode;
     s32 iCode0;
     s32 pad;
@@ -1880,7 +1880,7 @@ static bool cpuNextInstruction(Cpu* pCPU, s32 addressN64, s32 opcode, s32* anCod
     return false;
 }
 
-void cpuRetraceCallback(u32 nCount) {
+static void cpuRetraceCallback(u32 nCount) {
     SYSTEM_CPU(gpSystem)->nRetrace = nCount;
 
     if (__cpuRetraceCallback != NULL) {
@@ -6034,7 +6034,7 @@ bool cpuHeapTake(void* heap, Cpu* pCPU, CpuFunction* pFunction, int memory_size)
     return true;
 }
 
-bool cpuHeapFree(Cpu* pCPU, CpuFunction* pFunction) {
+static bool cpuHeapFree(Cpu* pCPU, CpuFunction* pFunction) {
     u32* anPack;
     s32 iPack;
     u32 nMask;
@@ -6914,7 +6914,7 @@ bool fn_8003F330(Cpu* pCPU, CpuFunction* pFunction) {
     return !!treeDeleteNode(pCPU, &top, pFunction);
 }
 
-bool treeInsert(Cpu* pCPU, s32 start, s32 end) {
+static bool treeInsert(Cpu* pCPU, s32 start, s32 end) {
     CpuTreeRoot* root;
     CpuFunction* current;
     s32 flag;

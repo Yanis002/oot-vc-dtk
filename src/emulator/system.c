@@ -16,9 +16,9 @@
 #include "emulator/rom.h"
 #include "emulator/rsp.h"
 #include "emulator/serial.h"
-#include "emulator/simGCN.h"
 #include "emulator/soundGCN.h"
 #include "emulator/sram.h"
+#include "emulator/vc64_RVL.h"
 #include "emulator/video.h"
 #include "emulator/xlHeap.h"
 #include "macros.h"
@@ -157,7 +157,7 @@ static u32 contMap[][GCN_BTN_COUNT] = {
 };
 // clang-format on
 
-SystemDevice gaSystemDevice[] = {
+static SystemDevice gaSystemDevice[] = {
     {
         SOT_HELP,
         &gClassHelpMenu,
@@ -288,7 +288,7 @@ SystemDevice gaSystemDevice[] = {
 
 #include "lbl_8016FEA0.inc"
 
-SystemRomConfig gSystemRomConfigurationList[1];
+static SystemRomConfig gSystemRomConfigurationList[1];
 
 bool systemSetStorageDevice(System* pSystem, SystemObjectType eStorageDevice, void* pArgument) {
     switch (eStorageDevice) {
@@ -1384,7 +1384,7 @@ static inline bool fn_8000A504_UnknownInline(System* pSystem, CpuBlock** pBlock)
     return false;
 }
 
-bool fn_8000A504(CpuBlock* pBlock, bool bUnknown) {
+static bool fn_8000A504(CpuBlock* pBlock, bool bUnknown) {
     u32 nAddressOffset[32];
     u32 nAddress;
     u32* pnAddress;

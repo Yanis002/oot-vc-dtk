@@ -22,8 +22,6 @@
 #define N64_BTN_CRIGHT (1 << 16)
 #define N64_BTN_UNSET 0
 
-typedef bool (*SystemCopyCallbackFunc)(void);
-
 // note: each stick direction count as an input
 typedef enum GcnButton {
     GCN_BTN_A = 0,
@@ -56,7 +54,7 @@ typedef enum SystemMode {
     SM_STOPPED = 1,
 } SystemMode;
 
-// __anon_0x370F1
+//! TODO: replace with game IDs ('NSMJ', 'NSME', ...)
 typedef enum SystemRomType {
     SRT_NONE = 0,
     SRT_MARIO = 0,
@@ -77,29 +75,29 @@ typedef enum SystemRomType {
 // __anon_0x370F1
 typedef enum SystemObjectType {
     SOT_NONE = -1,
-    SOT_CPU = 0, // 0x10
-    SOT_PIF = 1, // 0x14
-    SOT_RAM = 2, // 0x18
-    SOT_ROM = 3, // 0x1C
-    SOT_RSP = 4, // 0x20
-    SOT_RDP = 5, // 0x24
-    SOT_MIPS = 6, // 0x28
-    SOT_DISK = 7, // 0x2C
-    SOT_AI = 8, // 0x30
-    SOT_VI = 9, // 0x34
-    SOT_SI = 10, // 0x38
-    SOT_PERIPHERAL = 11, // 0x3C
-    SOT_RDB = 12, // 0x40
-    SOT_EEPROM = 13, // 0x44
-    SOT_SRAM = 14, // 0x48
-    SOT_FLASH = 15, // 0x4C
-    SOT_CODE = 16, // 0x50
-    SOT_HELP = 17, // 0x54
-    SOT_LIBRARY = 18, // 0x58
-    SOT_FRAME = 19, // 0x5C
-    SOT_AUDIO = 20, // 0x60
-    SOT_VIDEO = 21, // 0x64
-    SOT_CONTROLLER = 22, // 0x68
+    SOT_CPU = 0,
+    SOT_PIF = 1,
+    SOT_RAM = 2,
+    SOT_ROM = 3,
+    SOT_RSP = 4,
+    SOT_RDP = 5,
+    SOT_MIPS = 6,
+    SOT_DISK = 7,
+    SOT_AI = 8,
+    SOT_VI = 9,
+    SOT_SI = 10,
+    SOT_PERIPHERAL = 11,
+    SOT_RDB = 12,
+    SOT_EEPROM = 13,
+    SOT_SRAM = 14,
+    SOT_FLASH = 15,
+    SOT_CODE = 16,
+    SOT_HELP = 17,
+    SOT_LIBRARY = 18,
+    SOT_FRAME = 19,
+    SOT_AUDIO = 20,
+    SOT_VIDEO = 21,
+    SOT_CONTROLLER = 22,
     SOT_COUNT = 23,
 } SystemObjectType;
 
@@ -146,14 +144,6 @@ typedef struct SystemException {
     /* 0x10 */ MipsInterruptType eTypeMips;
     /* 0x0C */ SystemInterruptType eType;
 } SystemException; // size = 0x14
-
-// __anon_0x37040
-typedef struct SystemRomCopy {
-    /* 0x00 */ s32 nSize;
-    /* 0x04 */ s32 nOffsetRAM;
-    /* 0x08 */ s32 nOffsetROM;
-    /* 0x0C */ SystemCopyCallbackFunc pCallback;
-} SystemRomCopy; // size = 0x10
 
 // __anon_0x37240
 typedef struct System {
@@ -218,11 +208,13 @@ typedef struct SystemRomConfig {
 
 #define SYSTEM_SOUND(pSystem) ((Sound*)(((System*)(pSystem))->pSound))
 
-bool systemCopyROM(System* pSystem, s32 nOffsetRAM, s32 nOffsetROM, s32 nSize, SystemCopyCallbackFunc pCallback);
+bool systemSetStorageDevice(System* pSystem, SystemObjectType eStorageDevice, void* pArgument);
+bool systemCreateStorageDevice(System* pSystem, void* pArgument);
+bool fn_8000A6A4(System* pSystem, CpuBlock* pBlock);
 bool systemSetMode(System* pSystem, SystemMode eMode);
 bool systemGetMode(System* pSystem, SystemMode* peMode);
-bool systemSetStorageDevice(System* pSystem, SystemObjectType eStorageDevice, void* pArgument);
-bool systemGetStorageDevice(System* pSystem, SystemObjectType* pStorageDevice);
+bool fn_8000A830(System* pSystem, s32 nEvent, void* pArgument);
+bool fn_8000A8A8(System* pSystem);
 bool systemReset(System* pSystem);
 bool systemExecute(System* pSystem, s32 nCount);
 bool systemCheckInterrupts(System* pSystem);

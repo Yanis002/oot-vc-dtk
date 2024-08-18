@@ -1,7 +1,7 @@
 #ifndef _ROM_H
 #define _ROM_H
 
-#include "emulator/xlFileGCN.h"
+#include "emulator/xlFileRVL.h"
 #include "emulator/xlObject.h"
 #include "revolution/types.h"
 

@@ -36,17 +36,12 @@ typedef struct Pif {
     /* 0x1C */ ControllerType eControllerType[4];
 } Pif; // size = 0x30
 
-bool pifReadRumble(Pif* pPIF, s32 channel, u16 address, u8* data);
-bool pifWriteRumble(Pif* pPIF, s32 channel, u16 address, u8* data);
-bool pifSetControllerType(Pif* pPIF, s32 channel, ControllerType type);
-bool pifGetEControllerType(Pif* pPIF, s32 channel, ControllerType* type);
-bool pifSetEEPROMType(Pif* pPIF, ControllerType type);
-bool pifGetEEPROMSize(Pif* pPIF, u32* size);
 bool pifExecuteCommand(Pif* pPIF, u8* buffer, u8* ptx, u8* prx, s32 channel);
 bool pifProcessInputData(Pif* pPIF);
 bool pifProcessOutputData(Pif* pPIF);
 bool pifSetData(Pif* pPIF, u8* acData);
 bool pifGetData(Pif* pPIF, u8* acData);
+bool pifSetControllerType(Pif* pPIF, s32 channel, ControllerType type);
 bool pifEvent(Pif* pPIF, s32 nEvent, void* pArgument);
 
 extern _XL_OBJECTTYPE gClassPIF;

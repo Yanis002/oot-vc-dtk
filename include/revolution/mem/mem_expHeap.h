@@ -58,9 +58,13 @@ void MEMFreeToExpHeap(struct MEMiHeapHead* heap, void* memBlock);
 u32 MEMGetAllocatableSizeForExpHeapEx(struct MEMiHeapHead* heap, s32 align);
 u32 MEMAdjustExpHeap(struct MEMiHeapHead* heap);
 
-static inline struct MEMiHeapHead* MEMCreateExpHeap(void* start, u32 size) { return MEMCreateExpHeapEx(start, size, 0); }
+static inline struct MEMiHeapHead* MEMCreateExpHeap(void* start, u32 size) {
+    return MEMCreateExpHeapEx(start, size, 0);
+}
 
-static inline void* MEMAllocFromExpHeap(struct MEMiHeapHead* heap, u32 size) { return MEMAllocFromExpHeapEx(heap, size, 4); }
+static inline void* MEMAllocFromExpHeap(struct MEMiHeapHead* heap, u32 size) {
+    return MEMAllocFromExpHeapEx(heap, size, 4);
+}
 
 static inline u32 MEMGetAllocatableSizeForExpHeap(struct MEMiHeapHead* heap) {
     return MEMGetAllocatableSizeForExpHeapEx(heap, 4);

@@ -1,8 +1,8 @@
 #ifndef RVL_SDK_DVD_H
 #define RVL_SDK_DVD_H
 
-#include "revolution/types.h"
 #include "revolution/os/OSAlarm.h"
+#include "revolution/types.h"
 
 #ifdef __cplusplus
 extern "C" {

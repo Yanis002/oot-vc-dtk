@@ -2,8 +2,8 @@
 #include "emulator/frame.h"
 #include "emulator/ram.h"
 #include "emulator/rsp.h"
-#include "emulator/simGCN.h"
 #include "emulator/system.h"
+#include "emulator/vc64_RVL.h"
 #include "emulator/xlCoreGCN.h"
 #include "macros.h"
 
@@ -13,16 +13,8 @@ static s32 lbl_8025D16C;
 extern s32 lbl_8025D168;
 
 static s32 sCommandCodes[] = {
-    0xE7000000,
-    0x00000000,
-    0xBA001402,
-    0x00000000,
-    0xFCFFFFFF,
-    0xFFFDF6FB,
-    0xB900031D,
-    0x00504240,
-    0xFA000000,
-    0x00000000,
+    0xE7000000, 0x00000000, 0xBA001402, 0x00000000, 0xFCFFFFFF,
+    0xFFFDF6FB, 0xB900031D, 0x00504240, 0xFA000000, 0x00000000,
 };
 
 bool rdpParseGBI(Rdp* pRDP, u64** ppnGBI, RspUCodeType eTypeUCode) {
@@ -216,7 +208,9 @@ bool rdpParseGBI(Rdp* pRDP, u64** ppnGBI, RspUCodeType eTypeUCode) {
             }
             break;
         case 0xFB: // G_SETENVCOLOR
-            if ((gpSystem->eTypeROM == 'NSMP' && nCommandLo == 0xFFFFFFF0 && *SYSTEM_RAM(gpSystem)->pBuffer == 0xFFDFB158) || *SYSTEM_RAM(gpSystem)->pBuffer == 0xFFE0E908) {
+            if ((gpSystem->eTypeROM == 'NSMP' && nCommandLo == 0xFFFFFFF0 &&
+                 *SYSTEM_RAM(gpSystem)->pBuffer == 0xFFDFB158) ||
+                *SYSTEM_RAM(gpSystem)->pBuffer == 0xFFE0E908) {
                 nCommandLo = 0;
             }
             if (!frameSetColor(pFrame, FCT_ENVIRONMENT, nCommandLo)) {
@@ -270,7 +264,9 @@ bool rdpParseGBI(Rdp* pRDP, u64** ppnGBI, RspUCodeType eTypeUCode) {
 
             if (gpSystem->eTypeROM == 'NSMJ' || gpSystem->eTypeROM == 'NSME' || gpSystem->eTypeROM == 'NSMP') {
                 nColor = ((nCommandLo >> 24) & 0x70000) | ((nCommandLo & 0xE000) << 11) | ((nCommandLo & 0x38) << 5);
-                // nColor = ((nCommandLo << 7) & 0x80) | ((nCommandLo << 5) & 0x700) | (((nCommandLo << 0xA) & 0xF800) | ((nCommandLo << 8) & 0x70000) | (((nCommandLo << 0xD) & 0xF80000) | ((nCommandLo << 0x10) & 0xF8000000) | ((nCommandLo << 0xB) & 0x07000000)));
+                // nColor = ((nCommandLo << 7) & 0x80) | ((nCommandLo << 5) & 0x700) | (((nCommandLo << 0xA) & 0xF800) |
+                // ((nCommandLo << 8) & 0x70000) | (((nCommandLo << 0xD) & 0xF80000) | ((nCommandLo << 0x10) &
+                // 0xF8000000) | ((nCommandLo << 0xB) & 0x07000000)));
             } else if (gpSystem->eTypeROM == 'NKTJ' || gpSystem->eTypeROM == 'NKTE' || gpSystem->eTypeROM == 'NKTP') {
                 if (lbl_8025D168 >= 1) {
                     nColor = 0x80;
@@ -301,10 +297,12 @@ bool rdpParseGBI(Rdp* pRDP, u64** ppnGBI, RspUCodeType eTypeUCode) {
                     if (pFrame->cBlurAlpha > 1) {
                         pFrame->cBlurAlpha++;
                         if (pFrame->cBlurAlpha > 0x76C && pFrame->cBlurAlpha < 0x898) {
-                            if (primitive.nX0 == 0 && primitive.nY0 == 0 && primitive.nX1 == 319 && primitive.nY1 == 7) {
+                            if (primitive.nX0 == 0 && primitive.nY0 == 0 && primitive.nX1 == 319 &&
+                                primitive.nY1 == 7) {
                                 primitive.nY1 = 0x1E;
                             }
-                            if (primitive.nX0 == 0 && primitive.nY0 == 232 && primitive.nX1 == 319 && primitive.nY1 == 239) {
+                            if (primitive.nX0 == 0 && primitive.nY0 == 232 && primitive.nX1 == 319 &&
+                                primitive.nY1 == 239) {
                                 primitive.nY0 = 0x1E;
                             }
                         }
@@ -312,7 +310,8 @@ bool rdpParseGBI(Rdp* pRDP, u64** ppnGBI, RspUCodeType eTypeUCode) {
                     break;
                 case 'NSMP':
                     //! TODO: confirm the pFrame stuff
-                    if (!pFrame->bHackPause && primitive.nX0 == 0 && primitive.nY0 == 1 && primitive.nX1 == 319 && primitive.nY1 == 238) {
+                    if (!pFrame->bHackPause && primitive.nX0 == 0 && primitive.nY0 == 1 && primitive.nX1 == 319 &&
+                        primitive.nY1 == 238) {
                         pFrame->bHackPause = 1;
                         primitive.nX0 = 0;
                         primitive.nX1 = 1;
@@ -328,7 +327,8 @@ bool rdpParseGBI(Rdp* pRDP, u64** ppnGBI, RspUCodeType eTypeUCode) {
                     if (pFrame->cBlurAlpha > 1) {
                         pFrame->cBlurAlpha++;
                         if (pFrame->cBlurAlpha > 1900 && pFrame->cBlurAlpha < 2200) {
-                            if (primitive.nX0 == 1 && primitive.nY0 == 31 && primitive.nX1 == 318 && primitive.nY1 == 208) {
+                            if (primitive.nX0 == 1 && primitive.nY0 == 31 && primitive.nX1 == 318 &&
+                                primitive.nY1 == 208) {
                                 primitive.nX1 = 317;
                                 primitive.nY1 = 207;
                             }
@@ -343,7 +343,8 @@ bool rdpParseGBI(Rdp* pRDP, u64** ppnGBI, RspUCodeType eTypeUCode) {
                             primitive.nX1 = 0;
                             primitive.nX0 = 0;
                         }
-                    } else if (gpSystem->eTypeROM == 'NFXJ' || gpSystem->eTypeROM == 'NFXE' || gpSystem->eTypeROM == 'NFXP') {
+                    } else if (gpSystem->eTypeROM == 'NFXJ' || gpSystem->eTypeROM == 'NFXE' ||
+                               gpSystem->eTypeROM == 'NFXP') {
                         if (primitive.nX0 == 0 && primitive.nY0 == 0 && primitive.nX1 == 319 && primitive.nY1 == 239) {
                             if ((*pFrame->nCameraBuffer & 0xFFFFFF00) && *pFrame->nCameraBuffer > 0x7F) {
                                 *pFrame->nCameraBuffer = 0x32323280;

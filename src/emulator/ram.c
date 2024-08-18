@@ -1,7 +1,7 @@
 #include "emulator/ram.h"
 #include "emulator/cpu.h"
-#include "emulator/simGCN.h"
 #include "emulator/system.h"
+#include "emulator/vc64_RVL.h"
 #include "emulator/xlHeap.h"
 
 static bool ramPutControl8(Ram* pRAM, u32 nAddress, s8* pData) { return false; }

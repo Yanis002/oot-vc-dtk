@@ -1,4 +1,4 @@
-#include "revolution/types.h"
+#include "emulator/xlText.h"
 
 s32 xlTextGetLength(char* szTextSource) {
     s32 nCount = 0;
