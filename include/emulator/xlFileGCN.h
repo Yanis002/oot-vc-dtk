@@ -6,8 +6,8 @@
 #include "revolution/dvd.h"
 #include "revolution/types.h"
 
-typedef bool (*CNTOpenCallback)(char*, CNTFileInfo*);
-typedef bool (*CNTReadCallback)(CNTFileInfo*, void*, s32, s32, DVDCallback);
+typedef bool (*DVDOpenCallback)(char*, DVDFileInfo*);
+typedef bool (*DVDReadCallback)(DVDFileInfo*, void*, s32, s32, DVDCallback);
 
 // __anon_0x2757
 typedef enum XlFileType {
@@ -29,8 +29,8 @@ typedef struct tXL_FILE {
     /* 0x28 */ CNTFileInfo info;
 } tXL_FILE; // size = 0x38
 
-bool xlFileSetOpen(CNTOpenCallback pfOpen);
-bool xlFileSetRead(CNTReadCallback pfRead);
+bool xlFileSetOpen(DVDOpenCallback pfOpen);
+bool xlFileSetRead(DVDReadCallback pfRead);
 bool xlFileGetSize(s32* pnSize, char* szFileName);
 bool xlFileOpen(tXL_FILE** ppFile, XlFileType eType, char* szFileName);
 bool xlFileClose(tXL_FILE** ppFile);

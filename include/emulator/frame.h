@@ -348,7 +348,7 @@ typedef struct Frame {
     /* 0x3D140 */ u16* nCopyBuffer;
     /* 0x3D144 */ u32* nLensBuffer;
     /* 0x3D148 */ u16* nCameraBuffer;
-    u8 pad[0x20E0]; // temp
+    u8 pad[0x20E8]; // temp
     s32 unk_3F230;
 } Frame; // size = 0x3D150
 

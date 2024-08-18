@@ -1,27 +1,20 @@
-#include "emulator/simGCN.h"
-#include "emulator/THPPlayer.h"
-#include "emulator/THPRead.h"
-#include "emulator/codeGCN.h"
 #include "emulator/frame.h"
-#include "emulator/mcardGCN.h"
-#include "emulator/movie.h"
-#include "emulator/pif.h"
 #include "emulator/rom.h"
-#include "emulator/soundGCN.h"
+#include "emulator/simGCN.h"
 #include "emulator/system.h"
-#include "emulator/xlCoreGCN.h"
+#include "emulator/xlFileGCN.h"
 #include "emulator/xlHeap.h"
-#include "emulator/xlPostGCN.h"
-#include "revolution/gx.h"
+#include "emulator/xlObject.h"
 #include "macros.h"
+#include "revolution/demo.h"
+#include "revolution/gx.h"
+#include "revolution/vi.h"
 #include "string.h"
-
 
 static char* gaszArgument[12];
 System* gpSystem;
 
 static void fn_80007020(void) {
-
     SYSTEM_FRAME(gpSystem)->aMode[FMT_COMBINE_ALPHA1] = 0;
     SYSTEM_FRAME(gpSystem)->unk_3F230 = -1;
     frameDrawReset(SYSTEM_FRAME(gpSystem), 0x5FFED);
@@ -41,13 +34,9 @@ static void fn_80007020(void) {
     }
 }
 
-bool simulatorDVDShowError(s32 nStatus, void* anData, s32 nSizeRead, u32 nOffset) {
-    return true;
-}
+bool simulatorDVDShowError(s32 nStatus, void* anData, s32 nSizeRead, u32 nOffset) { return true; }
 
-bool simulatorDVDOpen(char* szNameFile, DVDFileInfo* pFileInfo) {
-    return false;
-}
+bool simulatorDVDOpen(char* szNameFile, DVDFileInfo* pFileInfo) { return false; }
 
 bool simulatorDVDRead(DVDFileInfo* pFileInfo, void* anData, s32 nSizeRead, s32 nOffset, DVDCallback callback) {
     return false;
@@ -63,16 +52,16 @@ static bool simulatorParseArguments(void) {
     gaszArgument[SAT_NAME] = NULL;
     gaszArgument[SAT_PROGRESSIVE] = NULL;
     gaszArgument[SAT_VIBRATION] = NULL;
+    gaszArgument[SAT_RESET] = NULL;
     gaszArgument[SAT_CONTROLLER] = NULL;
     gaszArgument[SAT_XTRA] = NULL;
     gaszArgument[SAT_MEMORYCARD] = NULL;
     gaszArgument[SAT_MOVIE] = NULL;
-    gaszArgument[SAT_RESET] = NULL;
     gaszArgument[SAT_UNK8] = NULL;
     gaszArgument[SAT_UNK9] = NULL;
     gaszArgument[SAT_UNK10] = NULL;
 
-    iArgument = 0;
+    iArgument = 1;
     while (iArgument < xlCoreGetArgumentCount()) {
         xlCoreGetArgument(iArgument, &szText);
         iArgument += 1;
@@ -85,41 +74,41 @@ static bool simulatorParseArguments(void) {
             }
 
             switch (szText[1]) {
-                case 0x4C:
-                case 0x6C:
+                case 'L':
+                case 'l':
                     gaszArgument[SAT_UNK9] = szValue;
                     break;
-                case 0x48:
-                case 0x68:
+                case 'H':
+                case 'h':
                     gaszArgument[SAT_UNK10] = szValue;
                     break;
-                case 0x56:
-                case 0x76:
+                case 'V':
+                case 'v':
                     gaszArgument[SAT_VIBRATION] = szValue;
                     break;
-                case 0x52:
-                case 0x72:
-                    gaszArgument[SAT_CONTROLLER] = szValue;
-                    break;
-                case 0x50:
-                case 0x70:
-                    gaszArgument[SAT_PROGRESSIVE] = szValue;
-                    break;
-                case 0x47:
-                case 0x67:
-                    gaszArgument[SAT_XTRA] = szValue;
-                    break;
-                case 0x43:
-                case 0x63:
-                    gaszArgument[SAT_MOVIE] = szValue;
-                    break;
-                case 0x4D:
-                case 0x6D:
+                case 'R':
+                case 'r':
                     gaszArgument[SAT_RESET] = szValue;
                     break;
-                case 0x58:
-                case 0x78:
+                case 'P':
+                case 'p':
+                    gaszArgument[SAT_PROGRESSIVE] = szValue;
+                    break;
+                case 'G':
+                case 'g':
+                    gaszArgument[SAT_CONTROLLER] = szValue;
+                    break;
+                case 'C':
+                case 'c':
                     gaszArgument[SAT_MEMORYCARD] = szValue;
+                    break;
+                case 'M':
+                case 'm':
+                    gaszArgument[SAT_MOVIE] = szValue;
+                    break;
+                case 'X':
+                case 'x':
+                    gaszArgument[SAT_XTRA] = szValue;
                     break;
             }
         } else {
@@ -198,11 +187,11 @@ bool xlMain(void) {
         return false;
     }
 
-    if (!xlFileSetOpen((CNTOpenCallback)simulatorDVDOpen)) {
+    if (!xlFileSetOpen((DVDOpenCallback)simulatorDVDOpen)) {
         return false;
     }
 
-    if (!xlFileSetRead((CNTReadCallback)simulatorDVDRead)) {
+    if (!xlFileSetRead((DVDReadCallback)simulatorDVDRead)) {
         return false;
     }
 

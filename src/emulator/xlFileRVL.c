@@ -16,12 +16,12 @@ _XL_OBJECTTYPE gTypeFile = {
     (EventFunc)xlFileEvent,
 };
 
-static CNTReadCallback gpfRead;
-static CNTOpenCallback gpfOpen;
+static DVDReadCallback gpfRead;
+static DVDOpenCallback gpfOpen;
 
-bool xlFileSetOpen(CNTOpenCallback pfOpen) { return true; }
+bool xlFileSetOpen(DVDOpenCallback pfOpen) { return true; }
 
-bool xlFileSetRead(CNTReadCallback pfRead) { return true; }
+bool xlFileSetRead(DVDReadCallback pfRead) { return true; }
 
 static inline bool xlFileGetFile(tXL_FILE** ppFile, char* szFileName) {
     if (gpfOpen != NULL) {
