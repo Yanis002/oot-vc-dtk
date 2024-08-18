@@ -1,7 +1,6 @@
 #ifndef _SOUNDGCN_H
 #define _SOUNDGCN_H
 
-#include "emulator/audio.h"
 #include "emulator/xlObject.h"
 #include "revolution/types.h"
 
@@ -59,7 +58,7 @@ bool soundSetLength(Sound* pSound, s32 nSize);
 bool soundSetDACRate(Sound* pSound, s32 nDacRate);
 bool soundSetAddress(Sound* pSound, void* pData);
 bool soundGetDMABuffer(Sound* pSound, u32* pnSize);
-bool soundSetBufferSize(Audio* pSound, s32 nSize);
+bool soundSetBufferSize(Sound* pSound, s32 nSize);
 bool soundLoadBeep(Sound* pSound, SoundBeep iBeep, char* szNameFile);
 bool soundPlayBeep(Sound* pSound, SoundBeep iBeep);
 bool soundEvent(Sound* pSound, s32 nEvent, void* pArgument);

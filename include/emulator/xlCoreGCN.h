@@ -6,6 +6,7 @@
 
 bool xlCoreBeforeRender(void);
 bool xlCoreHiResolution(void);
+bool fn_8007FC84(void);
 bool xlCoreGetArgument(s32 iArgument, char** pszArgument);
 s32 xlCoreGetArgumentCount(void);
 bool xlCoreReset(void);

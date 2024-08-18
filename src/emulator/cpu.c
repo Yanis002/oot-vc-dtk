@@ -7,7 +7,7 @@
 #include "emulator/rsp.h"
 #include "emulator/system.h"
 #include "emulator/vc64_RVL.h"
-#include "emulator/video.h"
+#include "emulator/vi.h"
 #include "emulator/xlCoreGCN.h"
 #include "emulator/xlHeap.h"
 #include "emulator/xlObject.h"
@@ -581,7 +581,7 @@ static inline bool cpuCheckInterrupts(Cpu* pCPU) {
             return false;
         }
     } else {
-        videoForceRetrace(SYSTEM_VI(pSystem));
+        viForceRetrace(SYSTEM_VI(pSystem));
     }
 
     return true;
@@ -1949,7 +1949,7 @@ static bool cpuExecuteUpdate(Cpu* pCPU, s32* pnAddressGCN, u32 nCount) {
     }
 
     if ((pCPU->nMode & 0x40) && pCPU->nRetraceUsed != pCPU->nRetrace) {
-        if (videoForceRetrace(SYSTEM_VI(gpSystem))) {
+        if (viForceRetrace(SYSTEM_VI(gpSystem))) {
             nDelta = pCPU->nRetrace - pCPU->nRetraceUsed;
             if (nDelta < 0) {
                 nDelta = -nDelta;
@@ -4607,7 +4607,7 @@ static bool cpuExecuteIdle(Cpu* pCPU, s32 nCount, s32 nAddressN64, s32 nAddressG
     pCPU->nMode |= 0x80;
     pCPU->nPC = nAddressN64;
     if (!(pCPU->nMode & 0x40) && pROM->copy.nSize == 0) {
-        videoForceRetrace(SYSTEM_VI(gpSystem));
+        viForceRetrace(SYSTEM_VI(gpSystem));
     }
 
     if (!cpuExecuteUpdate(pCPU, &nAddressGCN, nCount)) {

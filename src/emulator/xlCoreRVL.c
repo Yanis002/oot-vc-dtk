@@ -4,9 +4,8 @@
 #include "emulator/xlList.h"
 #include "emulator/xlPostRVL.h"
 #include "macros.h"
-#include "revolution/gx.h"
-// #include "revolution/vi.h"
 #include "revolution/demo.h"
+#include "revolution/gx.h"
 #include "revolution/sc.h"
 
 static GXRenderModeObj rmodeobj;

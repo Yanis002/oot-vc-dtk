@@ -2,7 +2,7 @@
 #define _SYSTEM_H
 
 #include "emulator/cpu.h"
-#include "emulator/mips.h"
+#include "emulator/mi.h"
 #include "emulator/xlObject.h"
 #include "revolution/types.h"
 
@@ -141,7 +141,7 @@ typedef struct SystemException {
     /* 0x00 */ char* szType;
     /* 0x04 */ u32 nMask;
     /* 0x08 */ CpuExceptionCode eCode;
-    /* 0x10 */ MipsInterruptType eTypeMips;
+    /* 0x10 */ MIInterruptType eTypeMips;
     /* 0x0C */ SystemInterruptType eType;
 } SystemException; // size = 0x14
 
@@ -175,15 +175,15 @@ typedef struct SystemRomConfig {
 #define SYSTEM_ROM(pSystem) ((Rom*)(((System*)(pSystem))->apObject[SOT_ROM]))
 #define SYSTEM_RSP(pSystem) ((Rsp*)(((System*)(pSystem))->apObject[SOT_RSP]))
 #define SYSTEM_RDP(pSystem) ((Rdp*)(((System*)(pSystem))->apObject[SOT_RDP]))
-#define SYSTEM_MIPS(pSystem) ((Mips*)(((System*)(pSystem))->apObject[SOT_MIPS]))
+#define SYSTEM_MI(pSystem) ((MI*)(((System*)(pSystem))->apObject[SOT_MIPS]))
 #define SYSTEM_DISK(pSystem) ((Disk*)(((System*)(pSystem))->apObject[SOT_DISK]))
+#define SYSTEM_AI(pSystem) ((AI*)(((System*)(pSystem))->apObject[SOT_AI]))
 
 //! TODO: replace void* by the struct names
-#define SYSTEM_AI(pSystem) ((void*)(((System*)(pSystem))->apObject[SOT_AI]))
 #define SYSTEM_VI(pSystem) ((void*)(((System*)(pSystem))->apObject[SOT_VI]))
 #define SYSTEM_SI(pSystem) ((void*)(((System*)(pSystem))->apObject[SOT_SI]))
 
-#define SYSTEM_PERIPHERAL(pSystem) ((Peripheral*)(((System*)(pSystem))->apObject[SOT_PERIPHERAL]))
+#define SYSTEM_PI(pSystem) ((PI*)(((System*)(pSystem))->apObject[SOT_PERIPHERAL]))
 #define SYSTEM_RDB(pSystem) ((Rdb*)(((System*)(pSystem))->apObject[SOT_RDB]))
 
 //! TODO: replace void* by the struct name
@@ -200,7 +200,7 @@ typedef struct SystemRomConfig {
 
 #define SYSTEM_LIBRARY(pSystem) ((Library*)(((System*)(pSystem))->apObject[SOT_LIBRARY]))
 #define SYSTEM_FRAME(pSystem) ((Frame*)(((System*)(pSystem))->apObject[SOT_FRAME]))
-#define SYSTEM_AUDIO(pSystem) ((Audio*)(((System*)(pSystem))->apObject[SOT_AUDIO]))
+#define SYSTEM_AUDIO(pSystem) ((Sound*)(((System*)(pSystem))->apObject[SOT_AUDIO])) // not `Audio*`?
 #define SYSTEM_VIDEO(pSystem) ((Video*)(((System*)(pSystem))->apObject[SOT_VIDEO]))
 
 //! TODO: replace void* by the struct name

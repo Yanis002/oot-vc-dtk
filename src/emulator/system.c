@@ -1,5 +1,5 @@
 #include "emulator/system.h"
-#include "emulator/audio.h"
+#include "emulator/ai.h"
 #include "emulator/codeGCN.h"
 #include "emulator/cpu.h"
 #include "emulator/disk.h"
@@ -7,19 +7,19 @@
 #include "emulator/frame.h"
 #include "emulator/library.h"
 #include "emulator/mcardGCN.h"
-#include "emulator/mips.h"
-#include "emulator/peripheral.h"
+#include "emulator/mi.h"
+#include "emulator/pi.h"
 #include "emulator/pif.h"
 #include "emulator/ram.h"
 #include "emulator/rdb.h"
 #include "emulator/rdp.h"
 #include "emulator/rom.h"
 #include "emulator/rsp.h"
-#include "emulator/serial.h"
+#include "emulator/si.h"
 #include "emulator/soundGCN.h"
 #include "emulator/sram.h"
 #include "emulator/vc64_RVL.h"
-#include "emulator/video.h"
+#include "emulator/vi.h"
 #include "emulator/xlHeap.h"
 #include "macros.h"
 #include "revolution/vi.h"
@@ -29,9 +29,8 @@
 //! TODO: document
 extern _XL_OBJECTTYPE gClassHelpMenu;
 extern _XL_OBJECTTYPE gClassController;
-extern _XL_OBJECTTYPE gClassVI;
-extern _XL_OBJECTTYPE gClassAI;
-extern _XL_OBJECTTYPE gClassSI;
+extern _XL_OBJECTTYPE gClassAudio;
+extern _XL_OBJECTTYPE gClassVideo;
 extern _XL_OBJECTTYPE gClassEEPROM;
 bool fn_8007D688(Rsp* pRSP, void** pBuffer, s32 unk1, s32 unk2);
 
@@ -226,7 +225,7 @@ static SystemDevice gaSystemDevice[] = {
     },
     {
         SOT_MIPS,
-        &gClassMips,
+        &gClassMI,
         1,
         {{0, 0x04300000, 0x043FFFFF}, {0, 0x00000000, 0x00000000}, {0, 0x00000000, 0x00000000}},
     },
@@ -244,7 +243,7 @@ static SystemDevice gaSystemDevice[] = {
     },
     {
         SOT_PERIPHERAL,
-        &gClassPeripheral,
+        &gClassPI,
         1,
         {{0, 0x04600000, 0x046FFFFF}, {0, 0x00000000, 0x00000000}, {0, 0x00000000, 0x00000000}},
     },
@@ -1497,7 +1496,7 @@ bool fn_8000A830(System* pSystem, s32 nEvent, void* pArgument) {
 
 bool fn_8000A8A8(System* pSystem) {
     fn_8000A830(pSystem, 0x1004, NULL);
-    fn_8009A5B8(1);
+    VISetBlack(true);
     VIFlush();
     VIWaitForRetrace();
     fn_8008B764();
@@ -1637,7 +1636,7 @@ bool systemCheckInterrupts(System* pSystem) {
                 if (exception.eCode == CEC_INTERRUPT) {
                     if (cpuTestInterrupt(SYSTEM_CPU(gpSystem), exception.nMask) &&
                         ((exception.eTypeMips == MIT_NONE) ||
-                         mipsSetInterrupt(SYSTEM_MIPS(gpSystem), exception.eTypeMips))) {
+                         miSetInterrupt(SYSTEM_MI(gpSystem), exception.eTypeMips))) {
                         bUsed = true;
                     }
                 } else {
@@ -1733,7 +1732,7 @@ bool systemEvent(System* pSystem, s32 nEvent, void* pArgument) {
                 return false;
             }
             if (exception.eTypeMips != MIT_NONE) {
-                mipsResetInterrupt(SYSTEM_MIPS(gpSystem), exception.eTypeMips);
+                miResetInterrupt(SYSTEM_MI(gpSystem), exception.eTypeMips);
             }
             break;
         case 0x1000:
