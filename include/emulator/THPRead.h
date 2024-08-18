@@ -1,7 +1,7 @@
 #ifndef _THPREAD_H
 #define _THPREAD_H
 
-#include "revolution.h"
+#include "revolution/types.h"
 
 typedef enum MovieMessage {
     M_M_NONE = -1,
@@ -24,7 +24,7 @@ bool movieDVDRead(DVDFileInfo* pFileInfo, void* anData, s32 nSizeRead, s32 nOffs
 bool movieTestReset(bool IPL, bool forceMenu);
 void movieReset(bool IPL, bool forceMenu);
 
-bool CreateReadThread(OSPriority priority);
+// bool CreateReadThread(OSPriority priority);
 void ReadThreadStart(void);
 void ReadThreadCancel(void);
 void* PopReadedBuffer(void);

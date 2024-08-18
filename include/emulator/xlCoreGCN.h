@@ -4,13 +4,13 @@
 #include "revolution/gx.h"
 #include "revolution/types.h"
 
-extern GXRenderModeObj* rmode;
-
 bool xlCoreBeforeRender(void);
 bool xlCoreHiResolution(void);
 bool xlCoreGetArgument(s32 iArgument, char** pszArgument);
 s32 xlCoreGetArgumentCount(void);
 bool xlCoreReset(void);
 void xlExit(void);
+
+extern GXRenderModeObj* rmode;
 
 #endif

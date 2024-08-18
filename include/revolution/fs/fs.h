@@ -3,6 +3,7 @@
 
 #include "revolution/ipc.h"
 #include "revolution/types.h"
+#include "macros.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -20,7 +21,7 @@ typedef struct FSStats {
 typedef struct FSFileStats {
     u32 length; // at 0x0
     u32 position; // at 0x4
-} FSFileStats ALIGN(32);
+} FSFileStats ATTRIBUTE_ALIGN(32);
 
 s32 ISFS_OpenLib(void);
 s32 ISFS_CreateDir(const char* path, u32 attr, u32 ownerPerm, u32 groupPerm, u32 otherPerm);

@@ -68,7 +68,10 @@ typedef enum SimulatorArgumentType {
     SAT_MEMORYCARD = 5,
     SAT_MOVIE = 6,
     SAT_RESET = 7,
-    SAT_COUNT = 8
+    SAT_UNK8 = 8,
+    SAT_UNK9 = 9,
+    SAT_UNK10 = 10,
+    SAT_COUNT = 11
 } SimulatorArgumentType;
 
 extern bool gDVDResetToggle;
