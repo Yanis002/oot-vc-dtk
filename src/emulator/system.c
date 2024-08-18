@@ -33,6 +33,9 @@ extern _XL_OBJECTTYPE gClassVI;
 extern _XL_OBJECTTYPE gClassAI;
 extern _XL_OBJECTTYPE gClassSI;
 extern _XL_OBJECTTYPE gClassEEPROM;
+bool fn_8007D688(Rsp* pRSP, void** pBuffer, s32 unk1, s32 unk2);
+
+#define BUFFER_GET(pBuffer, n) (*((s32*)pBuffer + n))
 
 // clang-format off
 static u32 contMap[][GCN_BTN_COUNT] = {
@@ -283,7 +286,6 @@ SystemDevice gaSystemDevice[] = {
     },
 };
 
-// big chunk of unused data, just in case we incbin it
 #include "lbl_8016FEA0.inc"
 
 SystemRomConfig gSystemRomConfigurationList[1];
@@ -325,7 +327,7 @@ bool systemSetStorageDevice(System* pSystem, SystemObjectType eStorageDevice, vo
     return true;
 }
 
-bool systemMakeDevices(System* pSystem, void* pArgument) {
+bool systemCreateStorageDevice(System* pSystem, void* pArgument) {
     SystemDevice* pDevice;
     SystemDeviceInfo* pInfo;
     s32 i;
@@ -446,89 +448,64 @@ static bool systemSetupGameRAM(System* pSystem) {
     return !!ramWipe(SYSTEM_RAM(gpSystem));
 }
 
-static inline void systemSetControllerConfiguration(SystemRomConfig* pRomConfig, s32 controllerConfig, s32 index) {
+static inline void systemSetControllerConfiguration(SystemRomConfig* pRomConfig, s32 controllerConfig,
+                                                    bool bSetControllerConfig) {
     s32 iConfigList;
 
-    gSystemRomConfigurationList->controllerConfiguration[index][0xB] = 0;
+    pRomConfig->rumbleConfiguration = 0;
 
     for (iConfigList = 0; iConfigList < 4; iConfigList++) {
         fn_80062DB4(SYSTEM_CONTROLLER(gpSystem), (u32*)pRomConfig->controllerConfiguration[iConfigList],
                     contMap[((controllerConfig >> (iConfigList * 8)) & 0x7F)]);
-        gSystemRomConfigurationList->controllerConfiguration[index][0xB] |=
-            (1 << (iConfigList * 8)) & (controllerConfig >> 7);
+        pRomConfig->rumbleConfiguration |= (1 << (iConfigList * 8)) & (controllerConfig >> 7);
     }
 
-    gSystemRomConfigurationList->controllerConfiguration[index][0xD] = controllerConfig;
-    gSystemRomConfigurationList->controllerConfiguration[index][0xE] = controllerConfig;
-}
-
-static inline bool systemGetInitialConfiguration(System* pSystem, Rom* pROM, s32 index) {
-    char* szText;
-
-    // fake match
-    (void)contMap;
-    (void)contMap;
-
-    // systemSetControllerConfiguration(&gSystemRomConfigurationList[index], 0, false);
-    // gSystemRomConfigurationList[index].storageDevice = SOT_CPU;
-
-    if (!romGetCode(pROM, (s32*)&pSystem->eTypeROM)) {
-        return false;
+    if (bSetControllerConfig) {
+        pRomConfig->normalControllerConfig = controllerConfig;
+        pRomConfig->currentControllerConfig = controllerConfig;
     }
-
-    return true;
 }
 
 static bool systemSetupGameALL(System* pSystem) {
-    s32 nSizeSound;
-    s32 iController;
-    s32 nSize;
-    u32* anMode;
+    void* pBuffer;
+    char szArgument[5];
     s32 i;
-    u64 nTimeRetrace;
-    char acCode[5];
-    DVDFileInfo fileInfo;
-    Cpu* pCPU;
-    Rom* pROM;
-    Pif* pPIF;
-    s32 defaultConfiguration;
-
-    SystemObjectType storageDevice;
-    SystemRomType eTypeROM;
+    s32 iController;
     s32 iConfigList;
-    s8* pBuffer;
-    char* szArgument;
+    s32 nSizeSound;
     s32 var_r26;
-    s32 var_r27;
+    s64 var_r27;
     s32 var_r28;
+    SystemObjectType storageDevice;
+    Rom* pROM;
+    Cpu* pCPU;
+    Pif* pPIF;
 
     pCPU = SYSTEM_CPU(gpSystem);
-    pROM = SYSTEM_ROM(pSystem);
-    pPIF = SYSTEM_PIF(pSystem);
+    pROM = SYSTEM_ROM(gpSystem);
+    pPIF = SYSTEM_PIF(gpSystem);
 
     storageDevice = SOT_NONE;
     var_r26 = 0xFF;
     var_r27 = 0xFF;
     var_r28 = 0xFF;
-    gSystemRomConfigurationList->controllerConfiguration[3][0xB] = 0;
+    gSystemRomConfigurationList[0].rumbleConfiguration = 0;
     nSizeSound = 0x2000;
 
     for (iConfigList = 0; iConfigList < 4; iConfigList++) {
-        fn_80062DB4(SYSTEM_CONTROLLER(gpSystem), &gSystemRomConfigurationList, &contMap);
+        fn_80062DB4(SYSTEM_CONTROLLER(gpSystem), iConfigList, &contMap);
     }
 
     if (!romGetCode(pROM, (s32*)&pSystem->eTypeROM)) {
         return false;
     }
 
-    eTypeROM = pSystem->eTypeROM;
-
-    switch (eTypeROM) {
+    switch (pSystem->eTypeROM) {
         case 'NSMJ':
         case 'NSME':
         case 'NSMP':
-            gSystemRomConfigurationList->controllerConfiguration[3][0xC] = 4;
-            nSizeSound = 0x2000;
+            gSystemRomConfigurationList[0].storageDevice = SOT_RSP;
+            nSizeSound = 0x1000;
             storageDevice = SOT_FLASH;
             var_r28 = 0xBE;
             var_r27 = 0xBE;
@@ -536,25 +513,26 @@ static bool systemSetupGameALL(System* pSystem) {
             if (!cpuSetCodeHack(pCPU, 0x80317938, 0x5420FFFE, 0)) {
                 return false;
             }
-            if (eTypeROM == 'NSMP') {
-                systemSetControllerConfiguration(&gSystemRomConfigurationList[0], 0x81818181, 3);
+            if (pSystem->eTypeROM == 'NSMJ') {
+                systemSetControllerConfiguration(&gSystemRomConfigurationList[0], 0x81818181, true);
                 if (!cpuSetCodeHack(pCPU, 0x802F2458, 0x83250002, -1)) {
                     return false;
                 }
             } else {
-                systemSetControllerConfiguration(&gSystemRomConfigurationList[0], 0x01010101, 3);
+                systemSetControllerConfiguration(&gSystemRomConfigurationList[0], 0x01010101, true);
             }
             break;
         case 'NKTJ':
         case 'NKTE':
         case 'NKTP':
-            gSystemRomConfigurationList->controllerConfiguration[3][0xC] = 4;
+            gSystemRomConfigurationList[0].storageDevice = SOT_RSP;
             var_r28 = 0xBE;
             var_r27 = 0xBE;
             var_r26 = 0xBE;
+            nSizeSound = 0x1000;
             storageDevice = SOT_FLASH;
-            systemSetControllerConfiguration(&gSystemRomConfigurationList[0], 0x83838383, 3);
-            if (eTypeROM == 'NKTP') {
+            systemSetControllerConfiguration(&gSystemRomConfigurationList[0], 0x83838383, true);
+            if (pSystem->eTypeROM == 'NKTJ') {
                 if (!cpuSetCodeHack(pCPU, 0x802A4118, 0x3C068015, -1)) {
                     return false;
                 }
@@ -579,7 +557,7 @@ static bool systemSetupGameALL(System* pSystem) {
                 if (!cpuSetCodeHack(pCPU, 0x80098888, 0x3C00E700, -1)) {
                     return false;
                 }
-            } else if (eTypeROM == 'NKTE') {
+            } else if (pSystem->eTypeROM == 'NKTP') {
                 if (!cpuSetCodeHack(pCPU, 0x802A4160, 0x3C068015, -1)) {
                     return false;
                 }
@@ -604,7 +582,7 @@ static bool systemSetupGameALL(System* pSystem) {
                 if (!cpuSetCodeHack(pCPU, 0x80098FA4, 0x3C0DE700, -1)) {
                     return false;
                 }
-            } else if (eTypeROM == 'NKTJ') {
+            } else if (pSystem->eTypeROM == 'NKTE') {
                 if (!cpuSetCodeHack(pCPU, 0x802A4160, 0x3C068015, -1)) {
                     return false;
                 }
@@ -639,17 +617,17 @@ static bool systemSetupGameALL(System* pSystem) {
             if (!ramGetBuffer(SYSTEM_RAM(gpSystem), (void**)&pBuffer, 0x300, NULL)) {
                 return false;
             }
-            pBuffer[0x10] = 0x17D9;
+            BUFFER_GET(pBuffer, 4) = 0x17D9;
             if (!ramGetBuffer(SYSTEM_RAM(gpSystem), (void**)&pBuffer, 0, NULL)) {
                 return false;
             }
-            pBuffer[0x2E8] = 0xC86E2000;
-            pBuffer[0x2FB1F4] = 0xAD090010;
-            pBuffer[0x2FE1C0] = 0xAD170014;
+            BUFFER_GET(pBuffer, 0x2E8) = 0xC86E2000;
+            BUFFER_GET(pBuffer, 0x2FB1F4) = 0xAD090010;
+            BUFFER_GET(pBuffer, 0x2FE1C0) = 0xAD170014;
             storageDevice = SOT_SRAM;
-            gSystemRomConfigurationList->controllerConfiguration[3][0xC] = 1;
-            systemSetControllerConfiguration(&gSystemRomConfigurationList[0], 0x02020202, 3);
-            if (eTypeROM == 'CZLE') {
+            gSystemRomConfigurationList[0].storageDevice = SOT_PIF;
+            systemSetControllerConfiguration(&gSystemRomConfigurationList[0], 0x02020202, true);
+            if (pSystem->eTypeROM == 'CZLE') {
                 if (!cpuSetCodeHack(pCPU, 0x80062D64, 0x94639680, -1)) {
                     return false;
                 }
@@ -662,7 +640,7 @@ static bool systemSetupGameALL(System* pSystem) {
                 if (!cpuSetCodeHack(pCPU, 0x80066638, 0x97040000, -1)) {
                     return false;
                 }
-            } else if (eTypeROM == 'CZLJ') {
+            } else if (pSystem->eTypeROM == 'CZLJ') {
                 if (!cpuSetCodeHack(pCPU, 0x80062D64, 0x94639680, -1)) {
                     return false;
                 }
@@ -675,7 +653,7 @@ static bool systemSetupGameALL(System* pSystem) {
                 if (!cpuSetCodeHack(pCPU, 0x80066658, 0x97040000, -1)) {
                     return false;
                 }
-            } else if (eTypeROM == 'NZLP') {
+            } else if (pSystem->eTypeROM == 'NZLP') {
                 if (!cpuSetCodeHack(pCPU, 0x80062D64, 0x94639680, -1)) {
                     return false;
                 }
@@ -696,26 +674,32 @@ static bool systemSetupGameALL(System* pSystem) {
         case 'NZSJ':
             nSizeSound = 0x1000;
             storageDevice = SOT_FLASH;
-            gSystemRomConfigurationList->controllerConfiguration[3][0xC] = 2;
-            if (!simultorGetArgument(SAT_CONTROLLER, &szArgument) || *szArgument == '1') {
-                if (!simulatorGetArgument(SAT_XTRA, &szArgument) || *szArgument == '0') {
-                    systemSetControllerConfiguration(&gSystemRomConfigurationList[0], 0x82828282, 3);
+            if (!ramGetBuffer(SYSTEM_RAM(gpSystem), (void**)&pBuffer, 0x300, NULL)) {
+                return false;
+            }
+            BUFFER_GET(pBuffer, 4) = 0x17D9;
+            gSystemRomConfigurationList[0].storageDevice = SOT_RAM;
+            if (!simulatorGetArgument(SAT_CONTROLLER, (char**)&szArgument) || *szArgument == '1') {
+                if (!simulatorGetArgument(SAT_XTRA, (char**)&szArgument) || *szArgument == '0') {
+                    systemSetControllerConfiguration(&gSystemRomConfigurationList[0], 0x82828282, true);
                 } else {
-                    systemSetControllerConfiguration(&gSystemRomConfigurationList[0], 0x80808080, 3);
+                    systemSetControllerConfiguration(&gSystemRomConfigurationList[0], 0x80808080, true);
                 }
-            } else if (!simulatorGetArgument(SAT_XTRA, &szArgument) || *szArgument == '0') {
-                systemSetControllerConfiguration(&gSystemRomConfigurationList[0], 0x02020202, 3);
             } else {
-                systemSetControllerConfiguration(&gSystemRomConfigurationList[0], 0, 3);
+                if (!simulatorGetArgument(SAT_XTRA, (char**)&szArgument) || *szArgument == '0') {
+                    systemSetControllerConfiguration(&gSystemRomConfigurationList[0], 0x02020202, true);
+                } else {
+                    systemSetControllerConfiguration(&gSystemRomConfigurationList[0], 0, true);
+                }
             }
             if (!cpuSetCodeHack(pCPU, 0x801C6FC0, 0x95630000, -1)) {
                 return false;
             }
-            if (eTypeROM == 'NZSJ') {
+            if (pSystem->eTypeROM == 'NZSJ') {
                 if (!cpuSetCodeHack(pCPU, 0x80177CF4, 0x95630000, -1)) {
                     return false;
                 }
-            } else if (eTypeROM == 'NZSE') {
+            } else if (pSystem->eTypeROM == 'NZSE') {
                 if (!cpuSetCodeHack(pCPU, 0x80177D34, 0x95630000, -1)) {
                     return false;
                 }
@@ -729,41 +713,45 @@ static bool systemSetupGameALL(System* pSystem) {
         case 'NFXJ':
         case 'NFXP':
         case 'NFXE':
-            gSystemRomConfigurationList->controllerConfiguration[3][0xC] = 4;
+            gSystemRomConfigurationList[0].storageDevice = SOT_RSP;
+            nSizeSound = 0x1000;
             storageDevice = SOT_FLASH;
-            systemSetControllerConfiguration(&gSystemRomConfigurationList[0], 0x84848484, 3);
-            if (eTypeROM == 'NFXJ') {
+            systemSetControllerConfiguration(&gSystemRomConfigurationList[0], 0x84848484, true);
+            if (pSystem->eTypeROM == 'NFXJ') {
                 if (!cpuSetCodeHack(pCPU, 0x8019F548, 0xA2000000, 0)) {
                     return false;
                 }
-            } else if (eTypeROM == 'NFXE') {
+            } else if (pSystem->eTypeROM == 'NFXE') {
                 if (!cpuSetCodeHack(pCPU, 0x801989D0, 0xA2000000, 0)) {
                     return false;
                 }
             }
-            GXSetDipBufferopyGamma(GX_GM_1_7);
+            GXSetDispCopyGamma(GX_GM_1_7);
+            pCPU->nCompileFlag |= 0x110;
             break;
         case 'NPWE':
         case 'NPWP':
         case 'NPWJ':
-            gSystemRomConfigurationList->controllerConfiguration[3][0xC] = 4;
+            gSystemRomConfigurationList[0].storageDevice = SOT_RSP;
+            nSizeSound = 0x1000;
             storageDevice = SOT_FLASH;
             break;
         case 'NAFE':
         case 'NAFP':
         case 'NAFJ':
             storageDevice = SOT_FLASH;
-            gSystemRomConfigurationList->controllerConfiguration[3][0xC] = 2;
+            gSystemRomConfigurationList[0].storageDevice = SOT_RAM;
             break;
         case 'NBCJ':
         case 'NBCP':
         case 'NBCE':
-            gSystemRomConfigurationList->controllerConfiguration[3][0xC] = 4;
+            gSystemRomConfigurationList[0].storageDevice = SOT_RSP;
+            nSizeSound = 0x1000;
             storageDevice = SOT_FLASH;
             if (!ramGetBuffer(SYSTEM_RAM(gpSystem), (void**)&pBuffer, 0x300, NULL)) {
                 return false;
             }
-            pBuffer[0x10] = 0x17D6;
+            BUFFER_GET(pBuffer, 4) = 0x17D6;
             if (!cpuSetCodeHack(pCPU, 0x80244CFC, 0x1420FFFA, 0)) {
                 return false;
             }
@@ -778,12 +766,13 @@ static bool systemSetupGameALL(System* pSystem) {
         case 'NCUJ':
         case 'NCUP':
         case 'NCUE':
-            gSystemRomConfigurationList->controllerConfiguration[3][0xC] = 4;
+            gSystemRomConfigurationList[0].storageDevice = SOT_RSP;
+            nSizeSound = 0x1000;
             storageDevice = SOT_FLASH;
             if (!ramGetBuffer(SYSTEM_RAM(gpSystem), (void**)&pBuffer, 0x300, NULL)) {
                 return false;
             }
-            pBuffer[0x10] = 0x17D6;
+            BUFFER_GET(pBuffer, 4) = 0x17D6;
             if (!cpuSetCodeHack(pCPU, 0x80103E0C, 0x1616FFF2, 0)) {
                 return false;
             }
@@ -797,12 +786,13 @@ static bool systemSetupGameALL(System* pSystem) {
         case 'NDYE':
         case 'NDYP':
         case 'NDYJ':
-            gSystemRomConfigurationList->controllerConfiguration[3][0xC] = 2;
+            gSystemRomConfigurationList[0].storageDevice = SOT_RAM;
             storageDevice = SOT_FLASH;
+            nSizeSound = 0x4000;
             if (!ramGetBuffer(SYSTEM_RAM(gpSystem), (void**)&pBuffer, 0x300, NULL)) {
                 return false;
             }
-            pBuffer[0x10] = 0x17D7;
+            BUFFER_GET(pBuffer, 4) = 0x17D7;
             if (!ramGetBuffer(SYSTEM_RAM(gpSystem), (void**)&pBuffer, 0, NULL)) {
                 return false;
             }
@@ -812,11 +802,11 @@ static bool systemSetupGameALL(System* pSystem) {
             if (!fn_8007D6A0(SYSTEM_RSP(gpSystem), &pBuffer, 0, 4)) {
                 return false;
             }
-            pBuffer[0] = 0x17D7;
-            if (!fn_8007D688(SYSTEM_RSP(gpSystem), &pBuffer, 0, 4)) {
+            BUFFER_GET(pBuffer, 0) = 0x17D7;
+            if (!fn_8007D688(SYSTEM_RSP(gpSystem), (void**)&pBuffer, 0, 4)) {
                 return false;
             }
-            pBuffer[0] = 0xFF;
+            BUFFER_GET(pBuffer, 0) = -1;
             break;
         case 'NDOE':
         case 'NDOP':
@@ -831,7 +821,7 @@ static bool systemSetupGameALL(System* pSystem) {
             if (!cpuSetCodeHack(pCPU, 0x800005EC, 0x3C028001, -1)) {
                 return false;
             }
-            if (eTypeROM == 'NN6J') {
+            if (pSystem->eTypeROM == 'NN6J') {
                 if (!cpuSetCodeHack(pCPU, 0x8006D458, 0x0C0189E9, 0x0C0189A3)) {
                     return false;
                 }
@@ -852,19 +842,20 @@ static bool systemSetupGameALL(System* pSystem) {
                     return false;
                 }
             }
-            gSystemRomConfigurationList->controllerConfiguration[3][0xC] = 4;
+            gSystemRomConfigurationList[0].storageDevice = SOT_RSP;
+            nSizeSound = 0x1000;
             storageDevice = SOT_FLASH;
             pCPU->nCompileFlag |= 0x10;
             break;
         case 'NSIJ':
-            gSystemRomConfigurationList->controllerConfiguration[3][0xC] = 1;
+            gSystemRomConfigurationList[0].storageDevice = SOT_PIF;
             storageDevice = SOT_SRAM;
             break;
         case 'NFZP':
         case 'NFZJ':
         case 'CFZE':
             nSizeSound = 0x8000;
-            gSystemRomConfigurationList->controllerConfiguration[3][0xC] = 1;
+            gSystemRomConfigurationList[0].storageDevice = SOT_PIF;
             storageDevice = SOT_SRAM;
             break;
         case 'NLRJ':
@@ -883,7 +874,8 @@ static bool systemSetupGameALL(System* pSystem) {
         case 'NMFJ':
         case 'NMFP':
         case 'NMFE':
-            gSystemRomConfigurationList->controllerConfiguration[3][0xC] = 4;
+            gSystemRomConfigurationList[0].storageDevice = SOT_RSP;
+            nSizeSound = 0x1000;
             storageDevice = SOT_FLASH;
             if (!cpuSetCodeHack(pCPU, 0x800B2DCC, 0x8C430004, -1)) {
                 return false;
@@ -907,42 +899,48 @@ static bool systemSetupGameALL(System* pSystem) {
             if (!cpuSetCodeHack(pCPU, 0x80020EBC, 0x8DEFF330, -1)) {
                 return false;
             }
-            gSystemRomConfigurationList->controllerConfiguration[3][0xC] = 8;
+            gSystemRomConfigurationList[0].storageDevice = SOT_AI;
+            nSizeSound = 0x4000;
             storageDevice = SOT_FLASH;
             pCPU->nCompileFlag |= 0x110;
             break;
         case 'CLBP':
         case 'CLBE':
         case 'CLBJ':
+            nSizeSound = 0x1000;
             storageDevice = SOT_FLASH;
             break;
         case 'NMWP':
         case 'NMWE':
         case 'NMWJ':
-            gSystemRomConfigurationList->controllerConfiguration[3][0xC] = 4;
+            gSystemRomConfigurationList[0].storageDevice = SOT_RSP;
+            nSizeSound = 0x1000;
             storageDevice = SOT_FLASH;
             if (!ramGetBuffer(SYSTEM_RAM(gpSystem), (void**)&pBuffer, 0x300, NULL)) {
                 return false;
             }
-            pBuffer[0x10] = 0x17D6;
+            BUFFER_GET(pBuffer, 4) = 0x17D6;
             break;
         case 'NMVJ':
         case 'NMVP':
         case 'NMVE':
-            gSystemRomConfigurationList->controllerConfiguration[3][0xC] = 8;
+            gSystemRomConfigurationList[0].storageDevice = SOT_AI;
+            nSizeSound = 0x4000;
             storageDevice = SOT_FLASH;
             break;
         case 'NRIP':
         case 'NRIE':
         case 'NRIJ':
-            gSystemRomConfigurationList->controllerConfiguration[3][0xC] = 8;
+            gSystemRomConfigurationList[0].storageDevice = SOT_AI;
+            nSizeSound = 0x4000;
             storageDevice = SOT_FLASH;
             break;
         case 'NMQJ':
         case 'NMQP':
         case 'NMQE':
-            gSystemRomConfigurationList->controllerConfiguration[3][0xC] = 2;
+            gSystemRomConfigurationList[0].storageDevice = SOT_RAM;
             storageDevice = SOT_FLASH;
+            nSizeSound = 0x20000;
             if (!ramGetBuffer(SYSTEM_RAM(gpSystem), (void**)&pBuffer, 0, NULL)) {
                 return false;
             }
@@ -952,19 +950,19 @@ static bool systemSetupGameALL(System* pSystem) {
             if (!fn_8007D6A0(SYSTEM_RSP(gpSystem), &pBuffer, 0, 4)) {
                 return false;
             }
-            pBuffer[0] = 0x17D7;
-            if (!fn_8007D688(SYSTEM_RSP(gpSystem), &pBuffer, 0, 4)) {
+            BUFFER_GET(pBuffer, 0) = 0x17D7;
+            if (!fn_8007D688(SYSTEM_RSP(gpSystem), (void**)&pBuffer, 0, 4)) {
                 return false;
             }
-            pBuffer[0] = 0xFF;
-            if (eTypeROM == 'NMQE') {
+            BUFFER_GET(pBuffer, 0) = -1;
+            if (pSystem->eTypeROM == 'NMQE') {
                 if (!cpuSetCodeHack(pCPU, 0x8005E98C, 0x1040FFFF, -1)) {
                     return false;
                 }
                 if (!cpuSetCodeHack(pCPU, 0x8005F2D8, 0x1440FFFD, -1)) {
                     return false;
                 }
-            } else if (eTypeROM == 'NMQJ') {
+            } else if (pSystem->eTypeROM == 'NMQJ') {
                 if (!cpuSetCodeHack(pCPU, 0x8005E63C, 0x1040FFFF, -1)) {
                     return false;
                 }
@@ -977,7 +975,7 @@ static bool systemSetupGameALL(System* pSystem) {
         case 'NPOP':
         case 'NPOJ':
             storageDevice = SOT_FLASH;
-            gSystemRomConfigurationList->controllerConfiguration[3][0xC] = 2;
+            gSystemRomConfigurationList[0].storageDevice = SOT_RAM;
             break;
         case 'NQKJ':
         case 'NQKP':
@@ -1001,12 +999,13 @@ static bool systemSetupGameALL(System* pSystem) {
         case 'NGUJ':
         case 'NGUP':
         case 'NGUE':
-            gSystemRomConfigurationList->controllerConfiguration[3][0xC] = 4;
+            gSystemRomConfigurationList[0].storageDevice = SOT_RSP;
+            nSizeSound = 0x1000;
             storageDevice = SOT_FLASH;
             if (!ramGetBuffer(SYSTEM_RAM(gpSystem), (void**)&pBuffer, 0x300, NULL)) {
                 return false;
             }
-            pBuffer[0x10] = 0x17D6;
+            BUFFER_GET(pBuffer, 4) = 0x17D6;
             if (!cpuSetCodeHack(pCPU, 0x80025D30, 0x3C018006, -1)) {
                 return false;
             }
@@ -1017,17 +1016,17 @@ static bool systemSetupGameALL(System* pSystem) {
             if (!ramGetBuffer(SYSTEM_RAM(gpSystem), (void**)&pBuffer, 0x300, NULL)) {
                 return false;
             }
-            pBuffer[0x10] = 0x17D6;
+            BUFFER_GET(pBuffer, 4) = 0x17D6;
             break;
         case 'NOBJ':
         case 'NOBP':
         case 'NOBE':
-            gSystemRomConfigurationList->controllerConfiguration[3][0xC] = 1;
+            gSystemRomConfigurationList[0].storageDevice = SOT_PIF;
             storageDevice = SOT_SRAM;
             if (!ramGetBuffer(SYSTEM_RAM(gpSystem), (void**)&pBuffer, 0x300, NULL)) {
                 return false;
             }
-            pBuffer[0x10] = 0x17D6;
+            BUFFER_GET(pBuffer, 4) = 0x17D6;
             break;
         case 'NRXP':
         case 'NRXJ':
@@ -1035,12 +1034,13 @@ static bool systemSetupGameALL(System* pSystem) {
             if (!ramGetBuffer(SYSTEM_RAM(gpSystem), (void**)&pBuffer, 0x300, NULL)) {
                 return false;
             }
-            pBuffer[0x10] = 0x17D6;
+            BUFFER_GET(pBuffer, 4) = 0x17D6;
             break;
         case 'NALJ':
         case 'NALP':
         case 'NALE':
-            gSystemRomConfigurationList->controllerConfiguration[3][0xC] = 8;
+            gSystemRomConfigurationList[0].storageDevice = SOT_AI;
+            nSizeSound = 0x4000;
             storageDevice = SOT_FLASH;
             if (!cpuSetCodeHack(pCPU, 0x8000092C, 0x3C028004, -1)) {
                 return false;
@@ -1062,25 +1062,26 @@ static bool systemSetupGameALL(System* pSystem) {
         case 'NTEJ':
         case 'NTEP':
         case 'NTEA':
-            gSystemRomConfigurationList->controllerConfiguration[3][0xC] = 1;
+            gSystemRomConfigurationList[0].storageDevice = SOT_PIF;
             storageDevice = SOT_SRAM;
             if (!ramGetBuffer(SYSTEM_RAM(gpSystem), (void**)&pBuffer, 0x300, NULL)) {
                 return false;
             }
-            pBuffer[0x10] = 0x17D7;
+            BUFFER_GET(pBuffer, 4) = 0x17D7;
             if (!ramGetBuffer(SYSTEM_RAM(gpSystem), (void**)&pBuffer, 0, NULL)) {
                 return false;
             }
-            pBuffer[0x200] = 0xAC290000;
-            pBuffer[0x284] = 0x240B17D7;
+            BUFFER_GET(pBuffer, 0x200) = 0xAC290000;
+            BUFFER_GET(pBuffer, 0x284) = 0x240B17D7;
             if (!fn_8007D6A0(SYSTEM_RSP(gpSystem), &pBuffer, 0, 4)) {
                 return false;
             }
-            pBuffer[0] = 0x17D7;
-            if (!fn_8007D688(SYSTEM_RSP(gpSystem), &pBuffer, 0, 4)) {
+            BUFFER_GET(pBuffer, 0) = 0x17D7;
+
+            if (!fn_8007D688(SYSTEM_RSP(gpSystem), (void**)&pBuffer, 0, 4)) {
                 return false;
             }
-            pBuffer[0] = 0xFF;
+            BUFFER_GET(pBuffer, 0) = -1;
             if (!cpuSetCodeHack(pCPU, 0x8000017C, 0x14E80006, 0)) {
                 return false;
             }
@@ -1094,7 +1095,7 @@ static bool systemSetupGameALL(System* pSystem) {
         case 'NYLJ':
         case 'NYLP':
         case 'NYLE':
-            gSystemRomConfigurationList->controllerConfiguration[3][0xC] = 1;
+            gSystemRomConfigurationList[0].storageDevice = SOT_PIF;
             storageDevice = SOT_SRAM;
             if (!cpuSetCodeHack(pCPU, 0x800A58F8, 0x8C62FF8C, -1)) {
                 return false;
@@ -1122,30 +1123,32 @@ static bool systemSetupGameALL(System* pSystem) {
         case 'NYSJ':
         case 'NYSP':
         case 'NYSE':
-            gSystemRomConfigurationList->controllerConfiguration[3][0xC] = 8;
+            gSystemRomConfigurationList[0].storageDevice = SOT_AI;
+            nSizeSound = 0x4000;
             storageDevice = SOT_FLASH;
             if (!ramGetBuffer(SYSTEM_RAM(gpSystem), (void**)&pBuffer, 0x300, NULL)) {
                 return false;
             }
-            pBuffer[0x10] = 0x17D8;
-            if (!ramGetBuffer(SYSTEM_RAM(gpSystem), (void**)&pBuffer, 0U, NULL)) {
+            BUFFER_GET(pBuffer, 4) = 0x17D8;
+            if (!ramGetBuffer(SYSTEM_RAM(gpSystem), (void**)&pBuffer, 0, NULL)) {
                 return false;
             }
-            pBuffer[0x164] = 0x01EC6021;
-            pBuffer[0x2B8] = 0x8941680C;
+            BUFFER_GET(pBuffer, 0x164) = 0x01EC6021;
+            BUFFER_GET(pBuffer, 0x2B8) = 0x8941680C;
             if (!fn_8007D6A0(SYSTEM_RSP(gpSystem), &pBuffer, 0, 4)) {
                 return false;
             }
-            pBuffer[0] = 0x17D8;
-            if (!fn_8007D688(SYSTEM_RSP(gpSystem), &pBuffer, 0, 4)) {
+            BUFFER_GET(pBuffer, 0) = 0x17D8;
+            if (!fn_8007D688(SYSTEM_RSP(gpSystem), (void**)&pBuffer, 0, 4)) {
                 return false;
             }
-            pBuffer[0] = 0xFF;
+            BUFFER_GET(pBuffer, 0) = -1;
             break;
         case 'NBNP':
         case 'NBNE':
         case 'NBNJ':
-            gSystemRomConfigurationList->controllerConfiguration[3][0xC] = 8;
+            gSystemRomConfigurationList[0].storageDevice = SOT_AI;
+            nSizeSound = 0x4000;
             storageDevice = SOT_FLASH;
             if (!cpuSetCodeHack(pCPU, 0x80000548, 0x08000156, 0x1000FFFF)) {
                 return false;
@@ -1157,9 +1160,10 @@ static bool systemSetupGameALL(System* pSystem) {
         case 'NRBJ':
         case 'NRBP':
         case 'NRBE':
-            gSystemRomConfigurationList->controllerConfiguration[3][0xC] = 8;
+            gSystemRomConfigurationList[0].storageDevice = SOT_AI;
+            nSizeSound = 0x4000;
             storageDevice = SOT_FLASH;
-            if (!cpuSetCodeHack(pCPU, 0x80066884, 0x8C62FF8C, -1)) {
+            if (!cpuSetCodeHack(pCPU, 0x80066884, 0x8C62FF8C, 0xFFFFFFFF)) {
                 return false;
             }
             pCPU->nCompileFlag |= 0x110;
@@ -1174,34 +1178,30 @@ static bool systemSetupGameALL(System* pSystem) {
         return false;
     }
 
-    if (!fn_800612F0(SYSTEM_AUDIO(gpSystem), nSizeSound)) {
+    if (!soundSetBufferSize(SYSTEM_AUDIO(gpSystem), nSizeSound)) {
         return false;
     }
 
-    // pCPU->nTimeRetrace = nTimeRetrace;
     systemSetControllerConfiguration(&gSystemRomConfigurationList[0],
-                                     gSystemRomConfigurationList->controllerConfiguration[3][0xE], 3);
+                                     gSystemRomConfigurationList[0].currentControllerConfig, false);
 
     for (iController = 0; iController < 4; iController++) {
-        simulatorSetControllerMap((u32*)gSystemRomConfigurationList[i].controllerConfiguration[iController],
-                                  iController);
+        simulatorSetControllerMap(SYSTEM_CONTROLLER(gpSystem), iController, &gSystemRomConfigurationList[iController]);
 
-        if (gSystemRomConfigurationList[i].storageDevice & 0x10) {
-            if (!pifSetControllerType(pPIF, iController, 2)) {
+        if (gSystemRomConfigurationList[iController].storageDevice & 0x10) {
+            if (!pifSetControllerType(pPIF, iController, CT_CONTROLLER_W_RPAK)) {
                 return false;
             }
-        } else if ((1 << (iController << 3)) & gSystemRomConfigurationList[0].rumbleConfiguration) {
-            if (!pifSetControllerType(pPIF, iController, 3)) {
+        } else if ((1 << (iController << 3)) & gSystemRomConfigurationList[iController].rumbleConfiguration) {
+            if (!pifSetControllerType(pPIF, iController, CT_CONTROLLER_W_RPAK)) {
                 return false;
             }
-        } else if (!pifSetControllerType(pPIF, iController, 1)) {
-            return false;
+        } else {
+            if (!pifSetControllerType(pPIF, iController, CT_CONTROLLER)) {
+                return false;
+            }
         }
     }
-
-    // if (mCard.saveToggle == 1) {
-    //     systemSetControllerConfiguration(&gSystemRomConfigurationList[0], mCard.file.game.configuration, false);
-    // }
 
     return true;
 }
@@ -1508,8 +1508,6 @@ bool fn_8000A8A8(System* pSystem) {
 static inline bool systemSetRamMode(System* pSystem) {
     s32 nSize;
     u32* anMode;
-    Cpu* pCPU;
-    s32 nTimeRetrace;
 
     if (!ramGetBuffer(SYSTEM_RAM(gpSystem), (void**)&anMode, 0x300, NULL)) {
         return false;
@@ -1528,10 +1526,7 @@ static inline bool systemSetRamMode(System* pSystem) {
 
     anMode[6] = nSize;
 
-    nTimeRetrace = OSSecondsToTicks(1.0f / 60.0f);
-    pCPU = SYSTEM_CPU(gpSystem);
-    pCPU->unk_1229C = nTimeRetrace;
-    pCPU->nTimeRetrace = nTimeRetrace;
+    SYSTEM_CPU(gpSystem)->nTimeRetrace = OSSecondsToTicks(1.0f / 60.0f);
 
     return true;
 }
@@ -1539,24 +1534,24 @@ static inline bool systemSetRamMode(System* pSystem) {
 bool systemReset(System* pSystem) {
     s64 nPC;
     s32 nOffsetRAM;
-    SystemObjectType eObject;
+    int eObject; // SystemObjectType
     CpuBlock block;
 
     pSystem->nAddressBreak = -1;
 
-    if (romGetImage(SYSTEM_ROM(pSystem), NULL)) {
+    if (romGetImage(SYSTEM_ROM(gpSystem), NULL)) {
         if (!systemSetupGameRAM(pSystem)) {
             return false;
         }
 
-        if (!romGetPC(SYSTEM_ROM(pSystem), (u64*)&nPC)) {
+        if (!romGetPC(SYSTEM_ROM(gpSystem), (u64*)&nPC)) {
             return false;
         }
 
         block.nSize = 0x100000;
         block.pfUnknown = NULL;
         block.nAddress0 = 0x10001000;
-        block.nAddress1 = 0x10001000 & 0xFFFFFF;
+        block.nAddress1 = nPC & 0x00FFFFFF;
 
         if (!fn_8000A6A4(pSystem, &block)) {
             return false;
@@ -1724,7 +1719,7 @@ bool systemEvent(System* pSystem, s32 nEvent, void* pArgument) {
             pSystem->eTypeROM = SRT_NONE;
             pSystem->nAddressBreak = -1;
             systemClearExceptions(pSystem);
-            if (!systemMakeDevices(pSystem, pArgument)) {
+            if (!systemCreateStorageDevice(pSystem, pArgument)) {
                 return false;
             }
             break;

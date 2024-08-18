@@ -581,7 +581,7 @@ static inline bool cpuCheckInterrupts(Cpu* pCPU) {
             return false;
         }
     } else {
-        videoForceRetrace(SYSTEM_VIDEO(pSystem));
+        videoForceRetrace(SYSTEM_VI(pSystem));
     }
 
     return true;
@@ -1949,7 +1949,7 @@ static bool cpuExecuteUpdate(Cpu* pCPU, s32* pnAddressGCN, u32 nCount) {
     }
 
     if ((pCPU->nMode & 0x40) && pCPU->nRetraceUsed != pCPU->nRetrace) {
-        if (videoForceRetrace(SYSTEM_VIDEO(gpSystem))) {
+        if (videoForceRetrace(SYSTEM_VI(gpSystem))) {
             nDelta = pCPU->nRetrace - pCPU->nRetraceUsed;
             if (nDelta < 0) {
                 nDelta = -nDelta;
@@ -4607,7 +4607,7 @@ static bool cpuExecuteIdle(Cpu* pCPU, s32 nCount, s32 nAddressN64, s32 nAddressG
     pCPU->nMode |= 0x80;
     pCPU->nPC = nAddressN64;
     if (!(pCPU->nMode & 0x40) && pROM->copy.nSize == 0) {
-        videoForceRetrace(SYSTEM_VIDEO(gpSystem));
+        videoForceRetrace(SYSTEM_VI(gpSystem));
     }
 
     if (!cpuExecuteUpdate(pCPU, &nAddressGCN, nCount)) {
@@ -5674,7 +5674,7 @@ bool cpuReset(Cpu* pCPU) {
     }
 
     pCPU->nCompileFlag = 1;
-    pCPU->nTimeRetrace = 0;
+    pCPU->unk_12228 = 0;
 
     //! TODO: make this struct match
     // pCPU->alarmRetrace.handler = NULL;

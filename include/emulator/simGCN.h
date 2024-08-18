@@ -115,7 +115,7 @@ bool simulatorReadController(s32 channel, u32* anData, u8* ptx);
 bool simulatorDetectController(void* pController);
 bool simulatorReadPak(s32 channel, u16 address, u8* data);
 bool simulatorWritePak(s32 channel, u16 address, u8* data);
-bool simulatorSetControllerMap(u32* mapData, s32 channel);
+bool simulatorSetControllerMap(void* pController, s32 channel, SystemRomConfig* mapData);
 void simulatorResetAndPlayMovie(void);
 bool simulatorDrawErrorMessage(SimulatorMessage simulatorErrorMessage, bool drawBar, s32 percent);
 bool simulatorDVDShowError(s32 nStatus, void*, s32, u32);

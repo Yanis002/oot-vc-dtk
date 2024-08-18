@@ -5,7 +5,7 @@ def apply(config, args):
     version = args.version
     config["make_command"] = ["ninja"]
     config["mapfile"] = f"build/{version}/oot-vc.elf.MAP"
-    config["source_directories"] = ["src", "include"]
+    config["source_directories"] = ["src", "include", "libc", f"build/{version}/include"]
     config["arch"] = "ppc"
     config["map_format"] = "mw" # gnu, mw, ms
     config["build_dir"] = f"build/{version}/src" # only needed for mw and ms map formats

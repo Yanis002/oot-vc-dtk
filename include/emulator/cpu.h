@@ -338,10 +338,8 @@ struct Cpu {
     /* 0x1209C */ CpuCodeHack aCodeHack[32];
     /* 0x1221C */ u32 nFlagRAM;
     /* 0x12220 */ u32 nFlagCODE;
-
-    // not ok
     /* 0x12224 */ u32 nCompileFlag;
-    s32 pad2;
+    /* 0x12228 */ s32 unk_12228;
 
     // /* 0x12230 */ OSAlarm alarmRetrace;
     /* 0x12230 */ s32 alarmRetrace[12];
@@ -351,12 +349,9 @@ struct Cpu {
     /* 0x12264 */ s32 unk_12264;
     /* 0x12268 */ s32 unk_12268;
     /* 0x1226C */ s32 unk_1226C;
-
-    // ok
     /* 0x12270 */ CpuOptimize nOptimize;
-    /* 0x12298 */ s32 nTimeRetrace;
-    /* 0x1229C */ s32 unk_1229C;
-    u8 pad[0x38];
+    /* 0x12298 */ s64 nTimeRetrace;
+    u8 pad[0x30];
 }; // size = 0x122D0
 
 #define CPU_DEVICE(apDevice, aiDevice, nAddress) (apDevice[aiDevice[(u32)(nAddress) >> 16]])
