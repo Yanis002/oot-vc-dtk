@@ -1177,7 +1177,7 @@ static bool systemSetupGameALL(System* pSystem) {
         return false;
     }
 
-    if (!soundSetBufferSize(SYSTEM_AUDIO(gpSystem), nSizeSound)) {
+    if (!soundSetBufferSize(SYSTEM_SOUND(gpSystem), nSizeSound)) {
         return false;
     }
 

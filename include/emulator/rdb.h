@@ -10,8 +10,7 @@ typedef struct Rdb {
     /* 0x004 */ char szString[256];
     /* 0x104 */ s32 nIndexString;
     /* 0x108 */ s32 nAddress;
-    /* 0x10C */ void* pHost;
-} Rdb; // size = 0x110
+} Rdb; // size = 0x10C
 
 bool rdbEvent(Rdb* pRDB, s32 nEvent, void* pArgument);
 

@@ -83,6 +83,7 @@ emulator/rom.c:
 emulator/rdb.c:
 	.text       start:0x800440A8 end:0x8004467C
 	.data       start:0x801722A0 end:0x80172310
+	.sdata      start:0x8025C770 end:0x8025C778
 
 emulator/eeprom.c:
 	.text       start:0x8004467C end:0x800449B8
@@ -131,6 +132,7 @@ emulator/soundGCN.c:
 emulator/video.c:
 	.text       start:0x800616C0 end:0x800616F4
 	.data       start:0x801744E8 end:0x801744F8
+	.sdata      start:0x8025C870 end:0x8025C878
 
 emulator/store.c:
 	.text       start:0x800616F4 end:0x80061FB0

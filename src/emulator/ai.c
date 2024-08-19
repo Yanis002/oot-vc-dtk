@@ -22,7 +22,7 @@ bool aiPut32(AI* pAI, u32 nAddress, s32* pData) {
                     return false;
                 }
                 if (pAI->bEnable) {
-                    soundSetAddress(SYSTEM_AUDIO(gpSystem), pBuffer);
+                    soundSetAddress(SYSTEM_SOUND(gpSystem), pBuffer);
                 }
                 break;
             }
@@ -30,7 +30,7 @@ bool aiPut32(AI* pAI, u32 nAddress, s32* pData) {
         case 0x4:
             pAI->nSize = *pData & 0x3FFF8;
             if ((pAI->nControl != 0) && pAI->bEnable) {
-                soundSetLength(SYSTEM_AUDIO(gpSystem), pAI->nSize);
+                soundSetLength(SYSTEM_SOUND(gpSystem), pAI->nSize);
             }
             break;
         case 0x8:
@@ -42,7 +42,7 @@ bool aiPut32(AI* pAI, u32 nAddress, s32* pData) {
         case 0x10:
             pAI->nRateDAC = *pData & 0x3FFF;
             if (pAI->bEnable) {
-                soundSetDACRate(SYSTEM_AUDIO(gpSystem), pAI->nRateDAC);
+                soundSetDACRate(SYSTEM_SOUND(gpSystem), pAI->nRateDAC);
             }
             break;
         case 0x14:
@@ -69,7 +69,7 @@ bool aiGet32(AI* pAI, u32 nAddress, s32* pData) {
             *pData = pAI->nAddress;
             break;
         case 4:
-            if (!soundGetDMABuffer(SYSTEM_AUDIO(gpSystem), (u32*)pData)) {
+            if (!soundGetDMABuffer(SYSTEM_SOUND(gpSystem), (u32*)pData)) {
                 *pData = pAI->nSize;
             }
             break;
@@ -77,7 +77,7 @@ bool aiGet32(AI* pAI, u32 nAddress, s32* pData) {
             *pData = pAI->nControl;
             break;
         case 12:
-            if (!soundGetDMABuffer(SYSTEM_AUDIO(gpSystem), (u32*)&sp8)) {
+            if (!soundGetDMABuffer(SYSTEM_SOUND(gpSystem), (u32*)&sp8)) {
                 return false;
             }
             *pData = sp8 ? 0x40000000 : 0;

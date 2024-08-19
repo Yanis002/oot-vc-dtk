@@ -28,30 +28,27 @@ typedef enum SoundPlayMode {
 
 // __anon_0x208BA
 typedef struct Sound {
-    /* 0x00 */ void* pSrcData;
-    /* 0x04 */ s32 nFrequency;
-    /* 0x08 */ s32 nDacrate;
-    /* 0x0C */ s32 nSndLen;
-    /* 0x10 */ void* apBuffer[16];
-    /* 0x50 */ s32 anSizeBuffer[16];
-    /* 0x90 */ s32 nCountBeep;
-    /* 0x94 */ s32 anSizeBeep[SOUND_BEEP_COUNT];
-    /* 0xA0 */ void* apDataBeep[SOUND_BEEP_COUNT];
-    /* 0xAC */ s32 iBufferPlay;
-    /* 0xB0 */ s32 iBufferMake;
-    /* 0xB4 */ SoundPlayMode eMode;
-    /* 0xB8 */ void* pBufferZero;
-    /* 0xBC */ void* pBufferHold;
-    /* 0xC0 */ void* pBufferRampUp;
-    /* 0xC4 */ void* pBufferRampDown;
-    /* 0xC8 */ s32 nSizePlay;
-    /* 0xCC */ s32 nSizeZero;
-    /* 0xD0 */ s32 nSizeHold;
-    /* 0xD4 */ s32 nSizeRamp;
-#if VERSION == MQ_J
-    /* 0xD8 */ char pad[12];
-#endif
-} Sound; // size = 0xD8
+    /* 0x000 */ s32 unk_00;
+    /* 0x004 */ void* pSrcData;
+    /* 0x008 */ s32 nFrequency;
+    /* 0x00C */ s32 nDacrate;
+    /* 0x010 */ s32 nSndLen;
+    /* 0x014 */ void* apBuffer[16];
+    /* 0x01C */ s32 anSizeBuffer[16];
+    /* 0x094 */ s32 unk_94;
+    /* 0x098 */ s32 nVolumeCurve[257];
+    /* 0x49C */ s32 iBufferPlay;
+    /* 0x4A0 */ s32 iBufferMake;
+    /* 0x4A4 */ SoundPlayMode eMode;
+    /* 0x4A8 */ void* pBufferZero;
+    /* 0x4AC */ void* pBufferHold;
+    /* 0x4B0 */ void* pBufferRampUp;
+    /* 0x4B4 */ void* pBufferRampDown;
+    /* 0x4B8 */ s32 nSizePlay;
+    /* 0x4BC */ s32 nSizeZero;
+    /* 0x4C0 */ s32 nSizeHold;
+    /* 0x4C4 */ s32 nSizeRamp;
+} Sound; // size = 0x4C8
 
 bool soundWipeBuffers(Sound* pSound);
 bool soundSetLength(Sound* pSound, s32 nSize);

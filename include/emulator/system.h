@@ -200,13 +200,11 @@ typedef struct SystemRomConfig {
 
 #define SYSTEM_LIBRARY(pSystem) ((Library*)(((System*)(pSystem))->apObject[SOT_LIBRARY]))
 #define SYSTEM_FRAME(pSystem) ((Frame*)(((System*)(pSystem))->apObject[SOT_FRAME]))
-#define SYSTEM_AUDIO(pSystem) ((Sound*)(((System*)(pSystem))->apObject[SOT_AUDIO])) // not `Audio*`?
+#define SYSTEM_SOUND(pSystem) ((Sound*)(((System*)(pSystem))->apObject[SOT_AUDIO])) // not `Audio*`?
 #define SYSTEM_VIDEO(pSystem) ((Video*)(((System*)(pSystem))->apObject[SOT_VIDEO]))
 
 //! TODO: replace void* by the struct name
 #define SYSTEM_CONTROLLER(pSystem) ((void*)(((System*)(pSystem))->apObject[SOT_CONTROLLER]))
-
-#define SYSTEM_SOUND(pSystem) ((Sound*)(((System*)(pSystem))->pSound))
 
 bool systemSetStorageDevice(System* pSystem, SystemObjectType eStorageDevice, void* pArgument);
 bool systemCreateStorageDevice(System* pSystem, void* pArgument);
