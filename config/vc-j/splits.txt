@@ -80,19 +80,69 @@ emulator/rom.c:
 	.sdata      start:0x8025C768 end:0x8025C770
 	.sdata2     start:0x8025DD78 end:0x8025DD80
 
+emulator/rdb.c:
+	.text       start:0x800440A8 end:0x8004467C
+	.data       start:0x801722A0 end:0x80172310
+
 emulator/eeprom.c:
 	.text       start:0x8004467C end:0x800449B8
+	.data       start:0x80172310 end:0x80172330
+	.sdata      start:0x8025C778 end:0x8025C780
 
 emulator/sram.c:
 	.text       start:0x800449B8 end:0x80044E00
+	.data       start:0x80172330 end:0x80172340
+	.sdata      start:0x8025C780 end:0x8025C78C
 
 emulator/flash.c:
 	.text       start:0x80044E00 end:0x800454EC
+	.data       start:0x80172340 end:0x80172350
+	.sdata      start:0x8025C790 end:0x8025C79C
+
+emulator/_frameGCNcc.c:
+	.text       start:0x800454EC end:0x80045DCC
+	.data       start:0x80172350 end:0x80172544
+
+emulator/_buildtev.c:
+	.text       start:0x80045DCC end:0x80049370
+	.data       start:0x80172544 end:0x801726C0
+
+emulator/frame.c:
+	.text       start:0x80049370 end:0x80055D74
+	.data       start:0x801726C0 end:0x80172FF0
+
+emulator/library.c:
+	.text       start:0x80055D74 end:0x8005E29C
+	.data       start:0x80172FF0 end:0x801743A0
 
 emulator/codeGCN.c:
 	.text       start:0x8005E29C end:0x8005E2D0
 	.data       start:0x801743A0 end:0x801743B0
 	.sdata      start:0x8025C848 end:0x8025C850
+
+emulator/help.c:
+	.text       start:0x8005E2D0 end:0x80060A4C
+	.data       start:0x801743B0 end:0x801744D8
+
+emulator/soundGCN.c:
+	.text       start:0x80060A4C end:0x800616C0
+	.data       start:0x801744D8 end:0x801744E8
+
+emulator/video.c:
+	.text       start:0x800616C0 end:0x800616F4
+	.data       start:0x801744E8 end:0x801744F8
+
+emulator/store.c:
+	.text       start:0x800616F4 end:0x80061FB0
+	.data       start:0x801744F8 end:0x80174508
+
+emulator/controller.c:
+	.text       start:0x80061FB0 end:0x800633F8
+	.data       start:0x80174508 end:0x80174580
+
+emulator/rsp.c:
+	.text       start:0x800633F8 end:0x8007D8A0
+	.data       start:0x80174580 end:0x80174FC0
 
 emulator/rdp.c:
 	.text       start:0x8007D8A0 end:0x8007F85C

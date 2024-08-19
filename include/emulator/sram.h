@@ -6,11 +6,11 @@
 
 // __anon_0x74AB9
 typedef struct Sram {
-    void* pHost; // 0x0
-} Sram;
+    /* 0x00 */ s32 unk_00;
+    /* 0x04 */ s32 unk_04;
+    /* 0x08 */ void* unk_08;
+} Sram; // size = 0xC
 
-bool sramCopySRAM(Sram* pSRAM, s32 nOffsetRAM, s32 nOffsetSRAM, s32 nSize);
-bool sramTransferSRAM(Sram* pSRAM, s32 nOffsetRAM, s32 nOffsetSRAM, s32 nSize);
 bool sramEvent(Sram* pSram, s32 nEvent, void* pArgument);
 
 extern _XL_OBJECTTYPE gClassSram;
