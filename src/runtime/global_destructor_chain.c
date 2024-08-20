@@ -13,5 +13,3 @@ void __destroy_global_chain(void) {
         DTORCALL_COMPLETE(iter->destructor, iter->object);
     }
 }
-
-DTORS extern void* const __destroy_global_chain_reference = __destroy_global_chain;

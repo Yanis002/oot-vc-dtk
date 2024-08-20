@@ -308,10 +308,10 @@ struct Cpu {
     /* 0x00038 */ u32 nTickLast;
     /* 0x0003C */ u32 nRetrace;
     /* 0x00040 */ u32 nRetraceUsed;
-
-    // not ok?
     /* 0x00044 */ CpuGpr aGPR[32];
     /* 0x00144 */ CpuFpr aFPR[32];
+
+    // not ok?
     /* 0x00244 */ u64 aTLB[48][5];
     /* 0x009C4 */ s32 anFCR[32];
     /* 0x00A44 */ s64 anCP0[32];

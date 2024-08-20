@@ -4,7 +4,7 @@
 #include "emulator/rsp.h"
 #include "emulator/system.h"
 #include "emulator/vc64_RVL.h"
-#include "emulator/xlCoreGCN.h"
+#include "emulator/xlCoreRVL.h"
 #include "macros.h"
 
 //! TODO: document these

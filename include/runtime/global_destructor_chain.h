@@ -3,6 +3,10 @@
 
 #include "revolution/types.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 typedef struct DestructorChain {
     struct DestructorChain* next;
     void* destructor;
@@ -10,5 +14,9 @@ typedef struct DestructorChain {
 } DestructorChain;
 
 void __destroy_global_chain(void);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

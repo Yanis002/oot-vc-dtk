@@ -3,7 +3,7 @@
 #include "emulator/ram.h"
 #include "emulator/system.h"
 #include "emulator/vc64_RVL.h"
-#include "emulator/xlCoreGCN.h"
+#include "emulator/xlCoreRVL.h"
 
 // Note: this is the `vi.c` file from oot-gc
 

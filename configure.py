@@ -129,7 +129,7 @@ config.compilers_tag = "20231018"
 config.dtk_tag = "v0.9.2"
 config.sjiswrap_tag = "v1.1.1"
 config.wibo_tag = "0.6.11"
-config.linker_version = "GC/3.0a3.4"
+config.linker_version = "GC/3.0a5"
 
 ### Flags
 
@@ -193,8 +193,8 @@ def RevolutionLib(lib_name: str, objects: List[Object]) -> Dict[str, Any]:
 def GenericLib(lib_name: str, objects: List[Object]) -> Dict[str, Any]:
     return {
         "lib": lib_name,
-        "mw_version": "GC/2.7",
-        "cflags": cflags_base,
+        "mw_version": "GC/3.0a5",
+        "cflags": [*cflags_base, "-rostr", "-use_lmw_stmw on", "-lang c"],
         "host": False,
         "objects": objects,
     }
@@ -236,7 +236,7 @@ config.libs = [
             Object(NotLinked, "emulator/frame.c"),
             Object(NotLinked, "emulator/library.c"),
             Object(LinkedFor("vc-j"), "emulator/codeGCN.c"),
-            Object(NotLinked, "emulator/help.c"),
+            Object(NotLinked, "emulator/helpRVL.c"),
             Object(NotLinked, "emulator/soundGCN.c"),
             Object(LinkedFor("vc-j"), "emulator/video.c"),
             Object(NotLinked, "emulator/store.c"),
@@ -256,8 +256,8 @@ config.libs = [
     GenericLib(
         "runtime",
         [
-            Object(NotLinked, "runtime/global_destructor_chain.c"),
-            Object(NotLinked, "runtime/__init_cpp_exceptions.cpp"),
+            Object(LinkedFor("vc-j"), "runtime/global_destructor_chain.c"),
+            Object(NotLinked, "runtime/__init_cpp_exceptions.cpp"), # TODO: matched but does not build OK
         ]
     )
 ]

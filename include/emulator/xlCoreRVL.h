@@ -1,5 +1,5 @@
-#ifndef _XL_CORE_GCN_H
-#define _XL_CORE_GCN_H
+#ifndef _XL_CORE_RVL_H
+#define _XL_CORE_RVL_H
 
 #include "revolution/arc.h"
 #include "revolution/cnt.h"

@@ -130,7 +130,7 @@ emulator/codeGCN.c:
 	.data       start:0x801743A0 end:0x801743B0
 	.sdata      start:0x8025C848 end:0x8025C850
 
-emulator/help.c:
+emulator/helpRVL.c:
 	.text       start:0x8005E2D0 end:0x80060A4C
 	.rodata     start:0x8016A7C0 end:0x8016A800
 	.data       start:0x801743B0 end:0x801744D8
@@ -215,3 +215,4 @@ runtime/__init_cpp_exceptions.cpp:
 	.ctors      start:0x8016A6E0 end:0x8016A6E4 rename:.ctors$10
 	.dtors      start:0x8016A740 end:0x8016A744 rename:.dtors$10
 	.dtors      start:0x8016A744 end:0x8016A748 rename:.dtors$15
+	.sdata      start:0x8025CF98 end:0x8025CFA0

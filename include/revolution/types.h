@@ -1,6 +1,10 @@
 #ifndef REVOLUTION_TYPES_H_
 #define REVOLUTION_TYPES_H_
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 typedef signed char s8;
 typedef unsigned char u8;
 typedef signed short int s16;
@@ -26,7 +30,9 @@ typedef double f64;
 typedef volatile f32 vf32;
 typedef volatile f64 vf64;
 
+#ifndef __cplusplus
 typedef int bool;
+#endif
 
 #define false 0
 #define true 1
@@ -37,5 +43,10 @@ typedef int bool;
 
 typedef int UNKWORD;
 typedef void UNKTYPE;
+typedef void (*funcptr_t)(void);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

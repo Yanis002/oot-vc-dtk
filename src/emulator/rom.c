@@ -4,7 +4,7 @@
 #include "emulator/ram.h"
 #include "emulator/system.h"
 #include "emulator/vc64_RVL.h"
-#include "emulator/xlCoreGCN.h"
+#include "emulator/xlCoreRVL.h"
 #include "emulator/xlHeap.h"
 #include "macros.h"
 #include "revolution/os.h"

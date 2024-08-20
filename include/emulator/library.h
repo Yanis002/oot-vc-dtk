@@ -17,14 +17,13 @@ typedef struct LibraryFunc {
 // __anon_0x7AE26
 typedef struct Library {
     /* 0x00 */ s32 nFlag;
-    /* 0x04 */ void* pHost;
-    /* 0x08 */ s32 nAddStackSwap;
-    /* 0x0C */ s32 nCountFunction;
-    /* 0x10 */ s32 nAddressException;
-    /* 0x14 */ LibraryFunc* aFunction;
-    /* 0x18 */ void* apData[10];
-    /* 0x40 */ s32 anAddress[10];
-} Library; // size = 0x68
+    /* 0x04 */ s32 nAddStackSwap;
+    /* 0x08 */ s32 nCountFunction;
+    /* 0x0C */ s32 nAddressException;
+    /* 0x10 */ LibraryFunc* aFunction;
+    /* 0x14 */ void* apData[10];
+    /* 0x3C */ s32 anAddress[10];
+} Library; // size = 0x64
 
 extern _XL_OBJECTTYPE gClassLibrary;
 

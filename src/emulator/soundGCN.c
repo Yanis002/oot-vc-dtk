@@ -10,8 +10,6 @@
 //! TODO: document
 s32 fn_8015EE70(char*);
 
-#define VI_NTSC_CLOCK 48681812
-
 _XL_OBJECTTYPE gClassAudio = {
     "AUDIO",
     sizeof(Sound),

@@ -4,6 +4,8 @@
 #include "emulator/xlObject.h"
 #include "revolution/types.h"
 
+#define VI_NTSC_CLOCK 48681812
+
 // __anon_0x221A3
 typedef enum SoundRamp {
     SR_NONE = -1,
