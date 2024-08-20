@@ -14,8 +14,6 @@
 #include "emulator/xlPostRVL.h"
 #include "macros.h"
 #include "revolution/vi.h"
-
-#define DONT_INLINE_SQRT
 #include "math.h"
 
 static inline bool cpuMakeCachedAddress(Cpu* pCPU, s32 nAddressN64, s32 nAddressHost, CpuFunction* pFunction);

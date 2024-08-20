@@ -309,7 +309,13 @@ typedef enum _GXFogType {
     GX_FOG_ORTHO_EXP = 1 << 3 | GX_FOG_PERSP_EXP,
     GX_FOG_ORTHO_EXP2 = 1 << 3 | GX_FOG_PERSP_EXP2,
     GX_FOG_ORTHO_REVEXP = 1 << 3 | GX_FOG_PERSP_REVEXP,
-    GX_FOG_ORTHO_REVEXP2 = 1 << 3 | GX_FOG_PERSP_REVEXP2
+    GX_FOG_ORTHO_REVEXP2 = 1 << 3 | GX_FOG_PERSP_REVEXP2,
+
+    GX_FOG_LIN = 2,
+    GX_FOG_EXP = 4,
+    GX_FOG_EXP2 = 5,
+    GX_FOG_REVEXP = 6,
+    GX_FOG_REVEXP2 = 7,
 } GXFogType;
 
 // Access components of the fog type
@@ -943,6 +949,13 @@ typedef enum _GXAlphaReadMode {
     GX_READ_FF,
     GX_READ_NONE,
 } GXAlphaReadMode;
+
+typedef enum _GXMiscToken {
+    GX_MT_NULL,
+    GX_MT_XF_FLUSH,
+    GX_MT_DL_SAVE_CONTEXT,
+    GX_MT_ABORT_WAIT_COPYOUT,
+} GXMiscToken;
 
 #ifdef __cplusplus
 }

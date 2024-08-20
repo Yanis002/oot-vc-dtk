@@ -7,6 +7,17 @@
 extern "C" {
 #endif
 
+#define OS_GQR_F32 0x0000
+#define OS_GQR_U8 0x0004
+#define OS_GQR_U16 0x0005
+#define OS_GQR_S8 0x0006
+#define OS_GQR_S16 0x0007
+
+#define OS_FASTCAST_U8 2
+#define OS_FASTCAST_U16 3
+#define OS_FASTCAST_S8 4
+#define OS_FASTCAST_S16 5
+
 static inline void OSInitFastCast(void) {
 #ifdef __MWERKS__ // clang-format off
     asm {
@@ -110,6 +121,25 @@ static inline s16 __OSf32tos16(register f32 arg) {
 }
 
 static inline void OSf32tos16(const f32* in, s16* out) { *out = __OSf32tos16(*in); }
+
+static inline f32 __OSu8tof32(register u8* arg) {
+    register f32 ret;
+
+#ifdef __MWERKS__
+    // clang-format off
+    asm {
+        psq_l ret, 0(arg), 1, OS_FASTCAST_U8
+    }
+    // clang-format on
+#else
+    ret = (f32)*arg;
+#endif
+
+    return ret;
+}
+
+static inline void OSu8tof32(u8* in, f32* out) { *out = __OSu8tof32(in); }
+
 
 #ifdef __cplusplus
 }

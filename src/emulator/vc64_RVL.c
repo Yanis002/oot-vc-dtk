@@ -16,7 +16,7 @@ System* gpSystem;
 
 static void fn_80007020(void) {
     SYSTEM_FRAME(gpSystem)->aMode[FMT_COMBINE_ALPHA1] = 0;
-    SYSTEM_FRAME(gpSystem)->unk_3F230 = -1;
+    SYSTEM_FRAME(gpSystem)->nModeVtx = -1;
     frameDrawReset(SYSTEM_FRAME(gpSystem), 0x5FFED);
 
     GXSetZMode(GX_ENABLE, GX_LEQUAL, GX_ENABLE);

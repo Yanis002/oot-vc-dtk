@@ -12,8 +12,8 @@ s32 fn_8015EE70(char*);
 
 #define VI_NTSC_CLOCK 48681812
 
-_XL_OBJECTTYPE gClassSound = {
-    "SOUND",
+_XL_OBJECTTYPE gClassAudio = {
+    "AUDIO",
     sizeof(Sound),
     NULL,
     (EventFunc)soundEvent,
@@ -60,7 +60,7 @@ static bool soundMakeRamp(Sound* pSound, s32 iBuffer, SoundRamp eRamp) {
     s16 nLast0;
     s16 nLast1;
 
-    s32 offset;
+    int offset;
 
     if (eRamp == SR_DECREASE) {
         anData = pSound->pBufferRampDown;
@@ -342,11 +342,13 @@ static inline void InitVolumeCurve(Sound* pSound) {
     f64 value;
 
     // fixes float ordering issue
-    // (void)65536.0f;
+    (void)20.0;
+    (void)65536.0f;
+    (void)256.0;
 
     pSound->nVolumeCurve[0] = 0;
     for (i = 1; i < ARRAY_COUNT(pSound->nVolumeCurve); i++) {
-        value = pow(10.0f, (20.0f * log10f(SQ(256 - i) / 65536.0f)) / 20.0f);
+        value = pow(10, (20.0f * log10f(SQ(256 - i) / 65536.0f)) / 20.0f);
         pSound->nVolumeCurve[i] = (256.0f * (f32) - ((value * 256.0) - 256.0));
     }
 }
@@ -404,9 +406,6 @@ bool soundEvent(Sound* pSound, s32 nEvent, void* pArgument) {
             pSound->pBufferRampDown = NULL;
 
             InitVolumeCurve(pSound);
-
-            fn_800AB83C();
-            fn_800ABA60();
             break;
         case 3:
             if (!soundWipeBuffers(pSound)) {

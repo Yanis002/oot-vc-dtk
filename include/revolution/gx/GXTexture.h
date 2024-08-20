@@ -9,8 +9,13 @@
 extern "C" {
 #endif
 
-GX_DECL_PUBLIC_STRUCT(GXTexObj, 32);
-GX_DECL_PUBLIC_STRUCT(GXTlutObj, 32);
+typedef struct _GXTexObj {
+    u32 dummy[8];
+} GXTexObj;
+
+typedef struct _GXTlutObj {
+    u32 dummy[3];
+} GXTlutObj;
 
 void __GXSetSUTexRegs(void);
 

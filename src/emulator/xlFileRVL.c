@@ -1,10 +1,9 @@
 #include "emulator/xlFileRVL.h"
 #include "emulator/xlHeap.h"
-#include "revolution/arc/arc.h"
+#include "emulator/xlCoreGCN.h"
+#include "revolution/arc.h"
+#include "revolution/cnt.h"
 #include "stddef.h"
-
-extern ARCHandle lbl_801C9680;
-extern u8 lbl_801C96A8[16];
 
 //! TODO: document this
 void* fn_800B0DF0(void*, size_t, s32);
@@ -27,7 +26,7 @@ static inline bool xlFileGetFile(tXL_FILE** ppFile, char* szFileName) {
     if (gpfOpen != NULL) {
         return gpfOpen(szFileName, (DVDFileInfo*)&(*ppFile)->info);
     } else {
-        return !ARCGetFile(&lbl_801C9680, szFileName, &(*ppFile)->info);
+        return !ARCGetFile(&gUnkContent.fileInfo, szFileName, &(*ppFile)->info);
     }
 }
 
@@ -149,7 +148,7 @@ static inline bool xlFileEventInline(void) {
         return false;
     }
 
-    fn_800B165C(&lbl_801C96A8, ret, 4);
+    fn_800B165C(&gCNTFileInfo, ret, 4);
     return true;
 }
 
@@ -159,10 +158,10 @@ bool xlFileEvent(tXL_FILE* pFile, s32 nEvent, void* pArgument) {
             if (!xlFileEventInline()) {
                 return false;
             }
-            contentInitHandleNAND(5, &lbl_801C9680.header, &lbl_801C96A8);
+            contentInitHandleNAND(5, &gUnkContent.fileInfo, &gCNTFileInfo);
             break;
         case 1:
-            contentReleaseHandleNAND(&lbl_801C9680);
+            contentReleaseHandleNAND(&gUnkContent.fileInfo);
             break;
         case 2:
             pFile->nSize = 0;

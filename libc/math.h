@@ -5,6 +5,8 @@
 #include "macros.h"
 #include "revolution/types.h"
 
+#define DONT_INLINE_SQRT
+
 #define M_PI 3.1415926535897932
 #define M_SQRT3 1.7320499420166016
 

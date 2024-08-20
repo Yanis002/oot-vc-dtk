@@ -103,18 +103,27 @@ emulator/flash.c:
 emulator/_frameGCNcc.c:
 	.text       start:0x800454EC end:0x80045DCC
 	.data       start:0x80172350 end:0x80172544
+	.sdata      start:0x8025C7A0 end:0x8025C810
 
 emulator/_buildtev.c:
 	.text       start:0x80045DCC end:0x80049370
 	.data       start:0x80172544 end:0x801726C0
+	.bss        start:0x801A1158 end:0x801A14A0
+	.sdata      start:0x8025C810 end:0x8025C818
+	.sdata2     start:0x8025DD80 end:0x8025DD90
 
 emulator/frame.c:
 	.text       start:0x80049370 end:0x80055D74
+	.rodata     start:0x8016A7A0 end:0x8016A7C0
 	.data       start:0x801726C0 end:0x80172FF0
+	.sdata      start:0x8025C818 end:0x8025C838
+	.sdata2     start:0x8025DD90 end:0x8025DE68
 
 emulator/library.c:
 	.text       start:0x80055D74 end:0x8005E29C
 	.data       start:0x80172FF0 end:0x801743A0
+	.sdata      start:0x8025C838 end:0x8025C848
+	.sdata2     start:0x8025DE68 end:0x8025DEA8
 
 emulator/codeGCN.c:
 	.text       start:0x8005E29C end:0x8005E2D0
@@ -123,11 +132,16 @@ emulator/codeGCN.c:
 
 emulator/help.c:
 	.text       start:0x8005E2D0 end:0x80060A4C
+	.rodata     start:0x8016A7C0 end:0x8016A800
 	.data       start:0x801743B0 end:0x801744D8
+	.sdata      start:0x8025C850 end:0x8025C868
+	.sdata2     start:0x8025DEA8 end:0x8025DF18
 
 emulator/soundGCN.c:
 	.text       start:0x80060A4C end:0x800616C0
 	.data       start:0x801744D8 end:0x801744E8
+	.sdata      start:0x8025C868 end:0x8025C870
+	.sdata2     start:0x8025DF18 end:0x8025DF50
 
 emulator/video.c:
 	.text       start:0x800616C0 end:0x800616F4
@@ -137,24 +151,29 @@ emulator/video.c:
 emulator/store.c:
 	.text       start:0x800616F4 end:0x80061FB0
 	.data       start:0x801744F8 end:0x80174508
+	.sdata      start:0x8025C878 end:0x8025C880
 
 emulator/controller.c:
 	.text       start:0x80061FB0 end:0x800633F8
 	.data       start:0x80174508 end:0x80174580
+	.sdata2     start:0x8025DF50 end:0x8025DF78
 
 emulator/rsp.c:
 	.text       start:0x800633F8 end:0x8007D8A0
 	.data       start:0x80174580 end:0x80174FC0
+	.sdata      start:0x8025C880 end:0x8025C8C8
+	.sdata2     start:0x8025DF78 end:0x8025DFD8
 
 emulator/rdp.c:
 	.text       start:0x8007D8A0 end:0x8007F85C
 	.data       start:0x80174FC0 end:0x80175248
 	.sdata      start:0x8025C8C8 end:0x8025C8D0
+	.sdata2     start:0x8025DFD8 end:0x8025E028
 
 emulator/xlCoreRVL.c:
 	.text       start:0x8007F85C end:0x800800B4
 	.data       start:0x80175248 end:0x80175280
-	.bss        start:0x801C9640 end:0x801C9680
+	.bss        start:0x801C9640 end:0x801C96B8
 	.sdata      start:0x8025C8D0 end:0x8025C8D8
 	.sbss       start:0x8025D198 end:0x8025D1B0
 	.sdata2     start:0x8025E028 end:0x8025E038

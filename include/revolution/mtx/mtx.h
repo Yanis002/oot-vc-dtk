@@ -9,6 +9,7 @@ extern "C" {
 
 typedef f32 Mtx[3][4];
 typedef f32 Mtx44[4][4];
+typedef f32 (*Mtx44Ptr)[4];
 
 typedef struct Vec {
     f32 x, y, z;

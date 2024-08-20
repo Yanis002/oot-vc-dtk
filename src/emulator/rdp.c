@@ -345,13 +345,13 @@ bool rdpParseGBI(Rdp* pRDP, u64** ppnGBI, RspUCodeType eTypeUCode) {
                         }
                     } else if (gpSystem->eTypeROM == 'NFXJ' || gpSystem->eTypeROM == 'NFXE' ||
                                gpSystem->eTypeROM == 'NFXP') {
-                        if (primitive.nX0 == 0 && primitive.nY0 == 0 && primitive.nX1 == 319 && primitive.nY1 == 239) {
-                            if ((*pFrame->nCameraBuffer & 0xFFFFFF00) && *pFrame->nCameraBuffer > 0x7F) {
-                                *pFrame->nCameraBuffer = 0x32323280;
-                            } else if ((*pFrame->nCameraBuffer + 0x01000000) == 0) {
-                                *pFrame->nCameraBuffer |= 0x8500;
-                            }
-                        }
+                        // if (primitive.nX0 == 0 && primitive.nY0 == 0 && primitive.nX1 == 319 && primitive.nY1 == 239) {
+                        //     if ((*pFrame->nCameraBuffer & 0xFFFFFF00) && *pFrame->nCameraBuffer > 0x7F) {
+                        //         *pFrame->nCameraBuffer = 0x32323280;
+                        //     } else if ((*pFrame->nCameraBuffer + 0x01000000) == 0) {
+                        //         *pFrame->nCameraBuffer |= 0x8500;
+                        //     }
+                        // }
                     }
                     break;
             }
@@ -499,7 +499,7 @@ bool rdpParseGBI(Rdp* pRDP, u64** ppnGBI, RspUCodeType eTypeUCode) {
             primitive.iTile = (nCommandLo >> 24) & 7;
             primitive.bFlip = nCommandHi >> 24 == 0xE5 ? true : false;
 
-            if (gpSystem->eTypeROM == SRT_ZELDA2 && (pFrame->bSnapShot & 0xF) != 0 && (s32)nCommandHi == 0xE43C023C &&
+            if ((gpSystem->eTypeROM == 'NZSJ' || gpSystem->eTypeROM == 'NZSE' || gpSystem->eTypeROM == 'NZSP') && (pFrame->bSnapShot & 0xF) != 0 && (s32)nCommandHi == 0xE43C023C &&
                 nCommandLo == 0x0014021C) {
                 pFrame->bSnapShot |= 0x100;
             }

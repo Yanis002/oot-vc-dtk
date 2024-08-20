@@ -15,6 +15,10 @@ static void* DefaultFifo;
 static GXFifoObj* DefaultFifoObj;
 GXRenderModeObj* rmode;
 
+//! TODO: confirm these
+CNTFileInfo gCNTFileInfo;
+UnknownContentStruct gUnkContent;
+
 //! TODO: find these function names
 u32 fn_8009A7C4();
 u32 fn_800B6F8C();
