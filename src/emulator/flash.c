@@ -3,11 +3,8 @@
 #include "emulator/system.h"
 #include "emulator/vc64_RVL.h"
 #include "emulator/xlHeap.h"
+#include "emulator/store.h"
 #include "macros.h"
-
-//! TODO: document this
-// bool fn_80061B88(void* pBuffer, void* pHeapTarget, s32 arg2, s32 nByteCount);
-bool fn_80061BC0(void* pBuffer, void* pHeapTarget, s32 arg2, s32 nByteCount);
 
 static bool flashPut8(Flash* pFLASH, u32 nAddress, s8* pData) { return true; }
 
@@ -29,7 +26,7 @@ static bool flashPut32(Flash* pFLASH, u32 nAddress, s32* pData) {
                 if (!ramGetBuffer(SYSTEM_RAM(gpSystem), &pRAM, pFLASH->nOffsetRAM, &nSize)) {
                     return false;
                 }
-                if (!fn_80061BC0(pFLASH->flashBuffer, pRAM, pFLASH->unk_14, 0x80)) {
+                if (!fn_80061BC0(pFLASH->pStore, pRAM, pFLASH->unk_14, 0x80)) {
                     return false;
                 }
             } else if (pFLASH->unk_18 == 4) {
@@ -38,12 +35,12 @@ static bool flashPut32(Flash* pFLASH, u32 nAddress, s32* pData) {
                 }
 
                 if (pFLASH->unk_14 == 0xFFFFFFFF) {
-                    for (i = 0; i < *pFLASH->flashBuffer; i += 0x80) {
-                        if (!fn_80061BC0(pFLASH->flashBuffer, buffer, i, 0x80)) {
+                    for (i = 0; i < pFLASH->pStore->unk_00; i += 0x80) {
+                        if (!fn_80061BC0(pFLASH->pStore, buffer, i, 0x80)) {
                             return false;
                         }
                     }
-                } else if (!fn_80061BC0(pFLASH->flashBuffer, buffer, pFLASH->unk_14, 0x80)) {
+                } else if (!fn_80061BC0(pFLASH->pStore, buffer, pFLASH->unk_14, 0x80)) {
                     return false;
                 }
             }
@@ -116,7 +113,7 @@ static bool flashGetBlock(Flash* pFLASH, CpuBlock* pBlock) {
             *((u32*)pRAM + 0) = pFLASH->flashStatus;
             *((u32*)pRAM + 1) = 0xC2001D;
         } else if (pFLASH->unk_18 == 2) {
-            fn_80061B88(pFLASH->flashBuffer, pRAM, pBlock->nAddress0 - 0x08000000, pBlock->nSize);
+            fn_80061B88(pFLASH->pStore, pRAM, pBlock->nAddress0 - 0x08000000, pBlock->nSize);
         }
     } else if ((pBlock->nAddress1 & 0xFF000000) == 0x08000000) {
         pFLASH->nOffsetRAM = pBlock->nAddress1;
@@ -135,7 +132,7 @@ bool fn_80045260(Flash* pFLASH, s32 arg1, void* arg2) {
         return false;
     }
 
-    return !!fn_80061B88(pFLASH->flashBuffer, arg2, (arg1 * 8) & 0x7F8, 8);
+    return !!fn_80061B88(pFLASH->pStore, arg2, (arg1 * 8) & 0x7F8, 8);
 }
 
 bool fn_800452B0(Flash* pFLASH, s32 arg1, void* arg2) {
@@ -144,7 +141,7 @@ bool fn_800452B0(Flash* pFLASH, s32 arg1, void* arg2) {
         return false;
     }
 
-    return !!fn_80061BC0(pFLASH->flashBuffer, arg2, (arg1 * 8) & 0x7F8, 8);
+    return !!fn_80061BC0(pFLASH->pStore, arg2, (arg1 * 8) & 0x7F8, 8);
 }
 
 bool fn_80045300(Flash* pFLASH, s32* arg1) {
@@ -154,7 +151,7 @@ bool fn_80045300(Flash* pFLASH, s32* arg1) {
 }
 
 static inline bool flashEvent_UnknownInline(Flash* pFLASH, void* pArgument) {
-    if (pFLASH->flashBuffer != NULL && !fn_800618A8(&pFLASH->flashBuffer)) {
+    if (pFLASH->pStore != NULL && !storeFreeObject((void**)&pFLASH->pStore)) {
         return false;
     }
 
@@ -165,14 +162,14 @@ static inline bool flashEvent_UnknownInline(Flash* pFLASH, void* pArgument) {
     }
 
     pFLASH->unk_00 = (u32)pArgument;
-    return !!fn_80061770(&pFLASH->flashBuffer, "EEP", gpSystem->eTypeROM, pArgument);
+    return !!fn_80061770((void**)&pFLASH->pStore, "EEP", gpSystem->eTypeROM, pArgument);
 }
 
 bool flashEvent(Flash* pFLASH, s32 nEvent, void* pArgument) {
     switch (nEvent) {
         case 2:
             pFLASH->flashCommand = 0;
-            pFLASH->flashBuffer = NULL;
+            pFLASH->pStore = NULL;
 
             if (!flashEvent_UnknownInline(pFLASH, pArgument)) {
                 return false;
@@ -182,7 +179,7 @@ bool flashEvent(Flash* pFLASH, s32 nEvent, void* pArgument) {
             pFLASH->nOffsetRAM = -1;
             break;
         case 3:
-            if (pFLASH->flashBuffer != NULL && !fn_800618A8(&pFLASH->flashBuffer)) {
+            if (pFLASH->pStore != NULL && !storeFreeObject((void**)&pFLASH->pStore)) {
                 return false;
             }
             break;

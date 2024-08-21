@@ -7,7 +7,7 @@
 // __anon_0x7428F
 typedef struct Flash {
     /* 0x00 */ s32 unk_00;
-    /* 0x04 */ u32* flashBuffer;
+    /* 0x04 */ struct Store* pStore;
     /* 0x08 */ s32 flashStatus;
     /* 0x0C */ s32 flashCommand;
     /* 0x10 */ s32 nOffsetRAM;

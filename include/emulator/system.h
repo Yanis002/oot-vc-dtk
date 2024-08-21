@@ -6,6 +6,18 @@
 #include "emulator/xlObject.h"
 #include "revolution/types.h"
 
+// `C` if `eTypeROM` is `CZLJ`
+#define GET_GAME_MEDIUM(eTypeROM) ((eTypeROM >> 24) & 0xFF)
+
+// `Z` if `eTypeROM` is `CZLJ`
+#define GET_GAME_ID_1(eTypeROM) ((eTypeROM >> 16) & 0xFF)
+
+// `L` if `eTypeROM` is `CZLJ`
+#define GET_GAME_ID_2(eTypeROM) ((eTypeROM >> 8) & 0xFF)
+
+// `J` if `eTypeROM` is `CZLJ`
+#define GET_GAME_REGION(eTypeROM) (eTypeROM & 0xFF)
+
 #define N64_BTN_A (1 << 31)
 #define N64_BTN_B (1 << 30)
 #define N64_BTN_Z (1 << 29)
@@ -178,17 +190,11 @@ typedef struct SystemRomConfig {
 #define SYSTEM_MI(pSystem) ((MI*)(((System*)(pSystem))->apObject[SOT_MIPS]))
 #define SYSTEM_DISK(pSystem) ((Disk*)(((System*)(pSystem))->apObject[SOT_DISK]))
 #define SYSTEM_AI(pSystem) ((AI*)(((System*)(pSystem))->apObject[SOT_AI]))
-
-//! TODO: replace void* by the struct names
-#define SYSTEM_VI(pSystem) ((void*)(((System*)(pSystem))->apObject[SOT_VI]))
-#define SYSTEM_SI(pSystem) ((void*)(((System*)(pSystem))->apObject[SOT_SI]))
-
+#define SYSTEM_VI(pSystem) ((VI*)(((System*)(pSystem))->apObject[SOT_VI]))
+#define SYSTEM_SI(pSystem) ((SI*)(((System*)(pSystem))->apObject[SOT_SI]))
 #define SYSTEM_PI(pSystem) ((PI*)(((System*)(pSystem))->apObject[SOT_PERIPHERAL]))
 #define SYSTEM_RDB(pSystem) ((Rdb*)(((System*)(pSystem))->apObject[SOT_RDB]))
-
-//! TODO: replace void* by the struct name
-#define SYSTEM_EEPROM(pSystem) ((void*)(((System*)(pSystem))->apObject[SOT_EEPROM]))
-
+#define SYSTEM_EEPROM(pSystem) ((EEPROM*)(((System*)(pSystem))->apObject[SOT_EEPROM]))
 #define SYSTEM_SRAM(pSystem) ((Sram*)(((System*)(pSystem))->apObject[SOT_SRAM]))
 #define SYSTEM_FLASH(pSystem) ((Flash*)(((System*)(pSystem))->apObject[SOT_FLASH]))
 

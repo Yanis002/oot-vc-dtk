@@ -2,10 +2,7 @@
 #include "emulator/cpu.h"
 #include "emulator/vc64_RVL.h"
 #include "emulator/xlHeap.h"
-
-//! TODO: document this
-void fn_80061B88(void* pBuffer, void* pHeapTarget, s32 arg2, s32 nByteCount);
-void fn_80061BC0(void* pBuffer, void* pHeapTarget, s32 arg2, s32 nByteCount);
+#include "emulator/store.h"
 
 _XL_OBJECTTYPE gClassEEPROM = {
     "MEMORY-PAK",
@@ -52,7 +49,7 @@ bool fn_80044708(EEPROM* pEEPROM, s32 arg2, u32 nUnknown) {
         case 'NKTJ':
         case 'NKTE':
         case 'NKTP':
-            fn_80061B88(pEEPROM->pRAM, pBuffer, nOffset + 0x200, 0x20);
+            fn_80061B88(pEEPROM->pStore, pBuffer, nOffset + 0x200, 0x20);
             break;
         default:
             break;
@@ -77,7 +74,7 @@ bool fn_8004477C(EEPROM* pEEPROM, s32 arg2, u32 nUnknown) {
         case 'NKTJ':
         case 'NKTE':
         case 'NKTP':
-            fn_80061BC0(pEEPROM->pRAM, pBuffer, nOffset + 0x200, 0x20);
+            fn_80061BC0(pEEPROM->pStore, pBuffer, nOffset + 0x200, 0x20);
             break;
         default:
             break;
@@ -86,13 +83,10 @@ bool fn_8004477C(EEPROM* pEEPROM, s32 arg2, u32 nUnknown) {
     return true;
 }
 
-
-bool fn_80061770(void** arg0, char* arg1, u32 arg2, s32 arg3);
-
 static inline bool eepromEvent_UnknownInline(EEPROM* pEEPROM, void* pArgument) {
     s32 var_r6;
 
-    if (pEEPROM->pRAM != NULL && !fn_800618A8(&pEEPROM->pRAM)) {
+    if (pEEPROM->pStore != NULL && !storeFreeObject((void**)&pEEPROM->pStore)) {
         return false;
     } 
 
@@ -103,19 +97,19 @@ static inline bool eepromEvent_UnknownInline(EEPROM* pEEPROM, void* pArgument) {
     }
 
     pEEPROM->unk_00 = var_r6;
-    return !!fn_80061770(&pEEPROM->pRAM, "PAK", gpSystem->eTypeROM, var_r6);
+    return !!fn_80061770((void**)&pEEPROM->pStore, "PAK", gpSystem->eTypeROM, (void*)var_r6);
 }
 
 bool eepromEvent(EEPROM* pEEPROM, s32 nEvent, void* pArgument) {
     switch (nEvent) {
         case 2:
-            xlHeapTake(&pEEPROM->unk_04, 0x8000);
+            xlHeapTake((void**)&pEEPROM->pRAM, 0x8000);
             if (!eepromEvent_UnknownInline(pEEPROM, pArgument)) {
                 return false;
             }
             break;
         case 3:
-            xlHeapFree(&pEEPROM->unk_04);
+            xlHeapFree((void**)&pEEPROM->pRAM);
             break;
         case 0x1002:
             if (!cpuSetGetBlock(SYSTEM_CPU(gpSystem), (CpuDevice*)pArgument, (GetBlockFunc)eepromGetBlock)) {

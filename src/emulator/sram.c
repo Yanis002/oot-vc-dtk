@@ -3,44 +3,45 @@
 #include "emulator/ram.h"
 #include "emulator/vc64_RVL.h"
 #include "emulator/system.h"
+#include "emulator/store.h"
 
 static bool sramPut8(Sram* pSRAM, u32 nAddress, s8* pData) {
-    fn_80061BC0(pSRAM->unk_08, (u8*)pData, nAddress & 0x7FFF, sizeof(s8));
+    fn_80061BC0(pSRAM->pStore, (u8*)pData, nAddress & 0x7FFF, sizeof(s8));
     return true;
 }
 
 static bool sramPut16(Sram* pSRAM, u32 nAddress, s16* pData) {
-    fn_80061BC0(pSRAM->unk_08, (u8*)pData, nAddress & 0x7FFF, sizeof(s16));
+    fn_80061BC0(pSRAM->pStore, (u8*)pData, nAddress & 0x7FFF, sizeof(s16));
     return true;
 }
 
 static bool sramPut32(Sram* pSRAM, u32 nAddress, s32* pData) {
-    fn_80061BC0(pSRAM->unk_08, (u8*)pData, nAddress & 0x7FFF, sizeof(s32));
+    fn_80061BC0(pSRAM->pStore, (u8*)pData, nAddress & 0x7FFF, sizeof(s32));
     return true;
 }
 
 static bool sramPut64(Sram* pSRAM, u32 nAddress, s64* pData) {
-    fn_80061BC0(pSRAM->unk_08, (u8*)pData, nAddress & 0x7FFF, sizeof(s64));
+    fn_80061BC0(pSRAM->pStore, (u8*)pData, nAddress & 0x7FFF, sizeof(s64));
     return true;
 }
 
 static bool sramGet8(Sram* pSRAM, u32 nAddress, s8* pData) {
-    fn_80061B88(pSRAM->unk_08, (u8*)pData, nAddress & 0x7FFF, sizeof(s8));
+    fn_80061B88(pSRAM->pStore, (u8*)pData, nAddress & 0x7FFF, sizeof(s8));
     return true;
 }
 
 static bool sramGet16(Sram* pSRAM, u32 nAddress, s16* pData) {
-    fn_80061B88(pSRAM->unk_08, (u8*)pData, nAddress & 0x7FFF, sizeof(s16));
+    fn_80061B88(pSRAM->pStore, (u8*)pData, nAddress & 0x7FFF, sizeof(s16));
     return true;
 }
 
 static bool sramGet32(Sram* pSRAM, u32 nAddress, s32* pData) {
-    fn_80061B88(pSRAM->unk_08, (u8*)pData, nAddress & 0x7FFF, sizeof(s32));
+    fn_80061B88(pSRAM->pStore, (u8*)pData, nAddress & 0x7FFF, sizeof(s32));
     return true;
 }
 
 static bool sramGet64(Sram* pSRAM, u32 nAddress, s64* pData) {
-    fn_80061B88(pSRAM->unk_08, (u8*)pData, nAddress & 0x7FFF, sizeof(s64));
+    fn_80061B88(pSRAM->pStore, (u8*)pData, nAddress & 0x7FFF, sizeof(s64));
     return true;
 }
 
@@ -52,13 +53,13 @@ static bool sramGetBlock(Sram* pSRAM, CpuBlock* pBlock) {
             return false;
         }
 
-        fn_80061B88(pSRAM->unk_08, pRAM, pBlock->nAddress0 & 0x7FFF, pBlock->nSize);
+        fn_80061B88(pSRAM->pStore, pRAM, pBlock->nAddress0 & 0x7FFF, pBlock->nSize);
     } else {
         if (!ramGetBuffer(SYSTEM_RAM(gpSystem), &pRAM, pBlock->nAddress0, &pBlock->nSize)) {
             return false;
         }
 
-        fn_80061BC0(pSRAM->unk_08, pRAM, pBlock->nAddress1 & 0x7FFF, pBlock->nSize);
+        fn_80061BC0(pSRAM->pStore, pRAM, pBlock->nAddress1 & 0x7FFF, pBlock->nSize);
     }
 
     if (pBlock->pfUnknown != NULL && !pBlock->pfUnknown(pBlock, 1)) {
@@ -69,12 +70,12 @@ static bool sramGetBlock(Sram* pSRAM, CpuBlock* pBlock) {
 }
 
 static inline bool sramEvent_UnknownInline(Sram* pSRAM, void* pArgument) {
-    if (pSRAM->unk_08 != NULL && !fn_800618A8(&pSRAM->unk_08)) {
+    if (pSRAM->pStore != NULL && !storeFreeObject((void**)&pSRAM->pStore)) {
         return false;
     }
 
     pSRAM->unk_00 = 0x8000;
-    return !!fn_80061770(&pSRAM->unk_08, "RAM", gpSystem->eTypeROM, pArgument);
+    return !!fn_80061770((void**)&pSRAM->pStore, "RAM", gpSystem->eTypeROM, pArgument);
 }
 
 bool sramEvent(Sram* pSRAM, s32 nEvent, void* pArgument) {

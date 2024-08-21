@@ -6,8 +6,8 @@
 
 typedef struct EEPROM {
     /* 0x00 */ s32 unk_00;
-    /* 0x04 */ void* unk_04;
-    /* 0x08 */ void* pRAM;
+    /* 0x04 */ void* pRAM;
+    /* 0x08 */ struct Store* pStore;
 } EEPROM; // size = 0x0C
 
 // bool fn_80044708(EEPROM* pEEPROM, s32 arg2, s32 arg3);
