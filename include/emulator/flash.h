@@ -15,8 +15,9 @@ typedef struct Flash {
     /* 0x18 */ s32 unk_18;
 } Flash; // size = 0x1C
 
-bool flashCopyFLASH(Flash* pFLASH, s32 nOffsetRAM, s32 nOffsetFLASH, s32 nSize);
-bool flashTransferFLASH(Flash* pFLASH, s32 nOffsetRAM, s32 nOffsetFLASH, s32 nSize);
+bool fn_80045260(Flash* pFLASH, s32 arg1, void* arg2);
+bool fn_800452B0(Flash* pFLASH, s32 arg1, void* arg2);
+bool fn_80045300(Flash* pFLASH, s32* arg1);
 bool flashEvent(Flash* pFLASH, s32 nEvent, void* pArgument);
 
 extern _XL_OBJECTTYPE gClassFlash;
