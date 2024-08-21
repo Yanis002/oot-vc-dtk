@@ -215,7 +215,7 @@ config.libs = [
     EmulatorLib(
         "emulator",
         [
-            Object(NotLinked, "emulator/vc64_RVL.c"),
+            Object(LinkedFor("vc-j"), "emulator/vc64_RVL.c"),
             Object(NotLinked, "emulator/system.c"),
             Object(LinkedFor("vc-j"), "emulator/ai.c"),
             Object(LinkedFor("vc-j"), "emulator/vi.c"),
@@ -228,9 +228,9 @@ config.libs = [
             Object(LinkedFor("vc-j"), "emulator/ram.c"),
             Object(LinkedFor("vc-j"), "emulator/rom.c"),
             Object(LinkedFor("vc-j"), "emulator/rdb.c"),
-            Object(NotLinked, "emulator/eeprom.c"),
+            Object(LinkedFor("vc-j"), "emulator/eeprom.c"),
             Object(LinkedFor("vc-j"), "emulator/sram.c"),
-            Object(NotLinked, "emulator/flash.c"),
+            Object(LinkedFor("vc-j"), "emulator/flash.c"),
             Object(NotLinked, "emulator/_frameGCNcc.c"),
             Object(NotLinked, "emulator/_buildtev.c"),
             Object(NotLinked, "emulator/frame.c"),

@@ -116,7 +116,7 @@ static bool flashGetBlock(Flash* pFLASH, CpuBlock* pBlock) {
             fn_80061B88(pFLASH->pStore, pRAM, pBlock->nAddress0 - 0x08000000, pBlock->nSize);
         }
     } else if ((pBlock->nAddress1 & 0xFF000000) == 0x08000000) {
-        pFLASH->nOffsetRAM = pBlock->nAddress1;
+        pFLASH->nOffsetRAM = pBlock->nAddress0;
     }
 
     if (pBlock->pfUnknown != NULL && !pBlock->pfUnknown(pBlock, 1)) {

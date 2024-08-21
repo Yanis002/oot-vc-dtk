@@ -62,6 +62,6 @@ bool soundLoadBeep(Sound* pSound, SoundBeep iBeep, char* szNameFile);
 bool soundPlayBeep(Sound* pSound, SoundBeep iBeep);
 bool soundEvent(Sound* pSound, s32 nEvent, void* pArgument);
 
-extern _XL_OBJECTTYPE gClassSound;
+extern _XL_OBJECTTYPE gClassAudio;
 
 #endif

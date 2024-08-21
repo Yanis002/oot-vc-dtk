@@ -14,8 +14,10 @@
 static char* gaszArgument[12];
 System* gpSystem;
 
-static void fn_80007020(void) {
-    SYSTEM_FRAME(gpSystem)->aMode[FMT_COMBINE_ALPHA1] = 0;
+static bool simulatorParseArguments(void);
+
+void fn_80007020(void) {
+    SYSTEM_FRAME(gpSystem)->nMode = 0;
     SYSTEM_FRAME(gpSystem)->nModeVtx = -1;
     frameDrawReset(SYSTEM_FRAME(gpSystem), 0x5FFED);
 
@@ -49,17 +51,9 @@ static bool simulatorParseArguments(void) {
     char* szValue;
     s32 iArgument;
 
-    gaszArgument[SAT_NAME] = NULL;
-    gaszArgument[SAT_PROGRESSIVE] = NULL;
-    gaszArgument[SAT_VIBRATION] = NULL;
-    gaszArgument[SAT_RESET] = NULL;
-    gaszArgument[SAT_CONTROLLER] = NULL;
-    gaszArgument[SAT_XTRA] = NULL;
-    gaszArgument[SAT_MEMORYCARD] = NULL;
-    gaszArgument[SAT_MOVIE] = NULL;
-    gaszArgument[SAT_UNK8] = NULL;
-    gaszArgument[SAT_UNK9] = NULL;
-    gaszArgument[SAT_UNK10] = NULL;
+    for (iArgument = 0; iArgument < SAT_COUNT; iArgument++) {
+        gaszArgument[iArgument] = NULL;
+    }
 
     iArgument = 1;
     while (iArgument < xlCoreGetArgumentCount()) {

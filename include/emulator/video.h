@@ -9,4 +9,6 @@ typedef struct Video {
 
 bool videoEvent(Video* pVideo, s32 nEvent, void* pArgument);
 
+extern _XL_OBJECTTYPE gClassVideo;
+
 #endif

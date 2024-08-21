@@ -11,6 +11,17 @@ _XL_OBJECTTYPE gClassEEPROM = {
     (EventFunc)eepromEvent,
 };
 
+static bool eepromPut8(EEPROM* pEEPROM, u32 nAddress, s8* pData);
+static bool eepromPut16(EEPROM* pEEPROM, u32 nAddress, s16* pData);
+static bool eepromPut32(EEPROM* pEEPROM, u32 nAddress, s32* pData);
+static bool eepromPut64(EEPROM* pEEPROM, u32 nAddress, s64* pData);
+static bool eepromGet8(EEPROM* pEEPROM, u32 nAddress, s8* pData);
+static bool eepromGet16(EEPROM* pEEPROM, u32 nAddress, s16* pData);
+static bool eepromGet32(EEPROM* pEEPROM, u32 nAddress, s32* pData);
+static bool eepromGet64(EEPROM* pEEPROM, u32 nAddress, s64* pData);
+static bool eepromGetBlock(EEPROM* pEEPROM, CpuBlock* pBlock);
+static inline bool eepromEvent_UnknownInline(EEPROM* pEEPROM, void* pArgument);
+
 static bool eepromPut8(EEPROM* pEEPROM, u32 nAddress, s8* pData) { return true; }
 
 static bool eepromPut16(EEPROM* pEEPROM, u32 nAddress, s16* pData) { return true; }
@@ -37,10 +48,9 @@ static bool eepromGetBlock(EEPROM* pEEPROM, CpuBlock* pBlock) {
     return true;
 }
 
-bool fn_80044708(EEPROM* pEEPROM, s32 arg2, u32 nUnknown) {
-    s32 nOffset;
+bool fn_80044708(EEPROM* pEEPROM, s32 arg2, u32 nUnknown, void* pBuffer) {
     SystemRomType eTypeROM;
-    void* pBuffer;
+    s32 nOffset;
 
     nOffset = (nUnknown & 0xFFFF) << 5;
     eTypeROM = gpSystem->eTypeROM;
@@ -58,8 +68,7 @@ bool fn_80044708(EEPROM* pEEPROM, s32 arg2, u32 nUnknown) {
     return true;
 }
 
-bool fn_8004477C(EEPROM* pEEPROM, s32 arg2, u32 nUnknown) {
-    void* pBuffer;
+bool fn_8004477C(EEPROM* pEEPROM, s32 arg2, u32 nUnknown, void* pBuffer) {
     SystemRomType eTypeROM;
     s32 nOffset;
 

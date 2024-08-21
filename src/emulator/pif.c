@@ -125,7 +125,7 @@ bool pifExecuteCommand(Pif* pPIF, u8* buffer, u8* ptx, u8* prx, s32 channel) {
                     }
                     break;
                 case CT_CONTROLLER:
-                    fn_80044708(SYSTEM_EEPROM(gpSystem), channel, nAddress);
+                    fn_80044708(SYSTEM_EEPROM(gpSystem), channel, nAddress, pBuffer);
                     break;
                 default:
                     break;
@@ -144,7 +144,7 @@ bool pifExecuteCommand(Pif* pPIF, u8* buffer, u8* ptx, u8* prx, s32 channel) {
                     }
                     break;
                 case CT_CONTROLLER:
-                    fn_80044708(SYSTEM_EEPROM(gpSystem), channel, nAddress);
+                    fn_80044708(SYSTEM_EEPROM(gpSystem), channel, nAddress, buffer);
                     break;
                 default:
                     break;

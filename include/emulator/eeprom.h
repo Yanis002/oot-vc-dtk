@@ -10,7 +10,8 @@ typedef struct EEPROM {
     /* 0x08 */ struct Store* pStore;
 } EEPROM; // size = 0x0C
 
-// bool fn_80044708(EEPROM* pEEPROM, s32 arg2, s32 arg3);
+bool fn_80044708(EEPROM* pEEPROM, s32 arg2, u32 nUnknown, void* pBuffer);
+bool fn_8004477C(EEPROM* pEEPROM, s32 arg2, u32 nUnknown, void* pBuffer);
 bool eepromEvent(EEPROM* pEEPROM, s32 nEvent, void* pArgument);
 
 extern _XL_OBJECTTYPE gClassEEPROM;

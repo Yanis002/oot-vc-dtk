@@ -20,6 +20,7 @@ INCLUDE_DIRS = [
     Path("."),
     Path("include"),
     Path("libc"),
+    Path("build/vc-j/include"),
 ]
 COMPILER_NAME = "mwcc_42_60422"
 # We don't set -inline deferred because otherwise the reversed function order
@@ -46,6 +47,17 @@ MACROS: list[tuple[re.Pattern, str]] = [
     (re.compile(r"\bATTRIBUTE_ALIGN\b\(.*\)"), ""),
     (re.compile(r"\b_MATH_INLINE\b"), "static inline"),
     (re.compile(r"\bINIT\b"), ""),
+    (re.compile(r"\bWEAK\b"), ""),
+    (re.compile(r"\bOS_DEF_GLOBAL_VAR\b\(.*\);"), ""),
+    (re.compile(r"\bOS_DEF_GLOBAL_ARR\b\(.*\);"), ""),
+    (re.compile(r"\bOS_DEF_HW_REG\b\(.*\);"), ""),
+    (re.compile(r"\bDECL_ROM_SECTION\b\(.*\);"), ""),
+    (re.compile(r"\bDECL_BSS_SECTION\b\(.*\);"), ""),
+    (re.compile(r"\bGX_DECL_PUBLIC_STRUCT\b\(GXFifoObj.*\);"), "typedef struct _GXFifoObj { u8 dummy[(128) - sizeof(GXFifoObjImpl) + sizeof(GXFifoObjImpl)]; } GXFifoObj;"),
+    (re.compile(r"\bGX_DECL_PUBLIC_STRUCT\b\(GXLightObj.*\);"), "typedef struct _GXLightObj { u8 dummy[(64) - sizeof(GXLightObjImpl) + sizeof(GXLightObjImpl)]; } GXLightObj;"),
+    (re.compile(r"typedef __builtin_va_list va_list;"), "typedef struct { char gpr; char fpr; char reserved[2]; char* input_arg_area; char* reg_save_area;} __va_list[1]; typedef __va_list va_list;"),
+    (re.compile(r"\bDVD_ERROR_CMD_MAX\b"), "5"),
+    (re.compile(r"\b__ungetc_buffer_size\b"), "2"),
 ]
 
 # Defined preprocessor macros (for conditions)
