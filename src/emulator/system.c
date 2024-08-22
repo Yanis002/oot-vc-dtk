@@ -1,6 +1,7 @@
 #include "emulator/system.h"
 #include "emulator/ai.h"
 #include "emulator/codeGCN.h"
+#include "emulator/controller.h"
 #include "emulator/cpu.h"
 #include "emulator/disk.h"
 #include "emulator/eeprom.h"
@@ -30,7 +31,6 @@
 
 //! TODO: document
 extern _XL_OBJECTTYPE gClassHelpMenu;
-extern _XL_OBJECTTYPE gClassController;
 bool fn_8007D688(Rsp* pRSP, void** pBuffer, s32 unk1, s32 unk2);
 int fn_8005329C(Frame*, s32, s32, s32);
 
@@ -457,8 +457,8 @@ static inline void systemSetControllerConfiguration(SystemRomConfig* pRomConfig,
     }
 
     for (iConfigList = 0; iConfigList < 4; iConfigList++) {
-        fn_80062DB4(SYSTEM_CONTROLLER(gpSystem), (u32*)pRomConfig->controllerConfiguration[iConfigList],
-                    contMap[((controllerConfig1 >> (iConfigList * 8)) & 0x7F)]);
+        simulatorCopyControllerMap(SYSTEM_CONTROLLER(gpSystem), (u32*)pRomConfig->controllerConfiguration[iConfigList],
+                                   contMap[((controllerConfig1 >> (iConfigList * 8)) & 0x7F)]);
         pRomConfig->rumbleConfiguration |= (1 << (iConfigList * 8)) & (controllerConfig1 >> 7);
     }
 
@@ -472,8 +472,9 @@ static inline void systemSetupGameALL_Inline(void) {
     s32 iController;
 
     for (iController = 0; iController < 4; iController++) {
-        fn_80062DB4(SYSTEM_CONTROLLER(gpSystem), &gSystemRomConfigurationList.controllerConfiguration[iController],
-                    contMap);
+        simulatorCopyControllerMap(SYSTEM_CONTROLLER(gpSystem),
+                                   (u32*)&gSystemRomConfigurationList.controllerConfiguration[iController],
+                                   (u32*)&contMap[0]);
     }
 }
 
@@ -1206,7 +1207,7 @@ static bool systemSetupGameALL(System* pSystem) {
 
     for (iController = 0; iController < 4; iController++) {
         simulatorSetControllerMap(SYSTEM_CONTROLLER(gpSystem), iController,
-                                  &gSystemRomConfigurationList.controllerConfiguration[iController]);
+                                  (u32*)&gSystemRomConfigurationList.controllerConfiguration[iController]);
 
         if (gSystemRomConfigurationList.storageDevice & 0x10) {
             if (!pifSetControllerType(pPIF, iController, CT_CONTROLLER_W_PAK)) {

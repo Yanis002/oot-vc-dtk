@@ -4,6 +4,9 @@
 #include "emulator/vc64_RVL.h"
 #include "emulator/xlHeap.h"
 #include "emulator/eeprom.h"
+#include "emulator/flash.h"
+#include "emulator/store.h"
+#include "emulator/controller.h"
 
 _XL_OBJECTTYPE gClassPIF = {
     "PIF",
@@ -13,7 +16,7 @@ _XL_OBJECTTYPE gClassPIF = {
 };
 
 // this function is a copy-paste of ``__osContDataCrc``
-static u8 pifContDataCrc(Pif* pPIF, u8* data) {
+static u8 pifContDataCrc(u8* data) {
     u32 i;
     u32 j;
     u32 temp = 0;
@@ -100,81 +103,92 @@ static inline bool pifReadController(Pif* pPIF, u8* buffer, u8* ptx, u8* prx, s3
 
 bool pifExecuteCommand(Pif* pPIF, u8* buffer, u8* ptx, u8* prx, s32 channel) {
     switch (*buffer) {
-        case 0x00: // ok
+        case 0x00:
             if (!fn_80040BF4(pPIF, buffer, ptx, prx, channel)) {
-                *prx |= 0x80;
-            }
-            break;
-        case 0xFF: // ok
-            break;
-        case 0x01: // ok
-            if (!fn_80062E5C(SYSTEM_CONTROLLER(gpSystem), channel, buffer + 1)) {
                 return false;
             }
             break;
-        case 0x02: { // ok
-            s32 nAddress = (buffer[1] << 3) | (buffer[2] >> 5);
+        case 0xFF:
+            if (!fn_80040BF4(pPIF, buffer, ptx, prx, channel)) {
+                return false;
+            }
+            break;
+        case 0x01:
+            if (!!fn_80062E5C(SYSTEM_CONTROLLER(gpSystem), (channel << 2), (s32*)&buffer[1])) {
+                return false;
+            }
+            break;
+        case 0x02: {
+            u16 nAddress = (buffer[1] << 3) | (buffer[2] >> 5);
             u8* pBuffer = buffer + 3;
-            s32 i;
+            int i;
+            char test = 0x200;
 
             switch (pPIF->eControllerType[channel]) {
-                case CT_CONTROLLER_W_PAK:
-                    for (i = 0; i < 8; i++) {
-                        nAddress -= 0x200;
+                case CT_CONTROLLER_W_RPAK:
+                    for (i = 0; (u32)i < 8; i++) {
+                        nAddress -= test;
                         pBuffer[i] = (~(nAddress | (0x400 - nAddress)) >> 31) & 0x80;
                     }
                     break;
-                case CT_CONTROLLER:
-                    fn_80044708(SYSTEM_EEPROM(gpSystem), channel, nAddress, pBuffer);
+                case CT_CONTROLLER_W_PAK:
+                    fn_80044708(SYSTEM_EEPROM(gpSystem), channel, nAddress, (void*)pBuffer);
                     break;
                 default:
                     break;
             }
 
-            buffer[0x23] = pifContDataCrc(pPIF, buffer + 3);
+            buffer[0x23] = pifContDataCrc(buffer + 3);
             break;
         }
         case 0x03: {
-            s32 nAddress = (buffer[1] << 3) | (buffer[2] >> 5);
+            u16 nAddress = (buffer[1] << 3) | (buffer[2] >> 5);
+            u8* pBuffer = buffer + 3;
 
             switch (pPIF->eControllerType[channel]) {
-                case CT_CONTROLLER_W_PAK:
+                case CT_CONTROLLER_W_RPAK:
                     if (nAddress == 0x600) {
-                        fn_80062CE4(SYSTEM_CONTROLLER(gpSystem), channel, !!buffer[3]);
+                        fn_80062CE4(SYSTEM_CONTROLLER(gpSystem), !!*pBuffer);
                     }
                     break;
-                case CT_CONTROLLER:
-                    fn_80044708(SYSTEM_EEPROM(gpSystem), channel, nAddress, buffer);
+                case CT_CONTROLLER_W_PAK:
+                    fn_8004477C(SYSTEM_EEPROM(gpSystem), channel, nAddress, (void*)pBuffer);
                     break;
                 default:
                     break;
             }
 
-            buffer[0x23] = pifContDataCrc(pPIF, buffer + 3);
+            buffer[0x23] = pifContDataCrc(buffer + 3);
             break;
         }
-        case 0x04: // ok
-            if (!fn_80045260(SYSTEM_FLASH(gpSystem), buffer[1], buffer[2])) {
+        case 0x04:
+            if (!fn_80045260(SYSTEM_FLASH(gpSystem), buffer[1], (void*)&buffer[2])) {
                 return false;
             }
             break;
-        case 0x05: // ok
-            if (!fn_80045260(SYSTEM_FLASH(gpSystem), buffer[1], buffer[2])) {
+        case 0x05:
+            if (!fn_800452B0(SYSTEM_FLASH(gpSystem), buffer[1], (void*)&buffer[2])) {
                 return false;
             }
             break;
-        case 0x06: // ok
+        case 0x06:
             buffer[1] = 0;
             buffer[2] = 0x10;
             buffer[3] = 0x80;
             break;
-        case 0x07: // ok
+        case 0x07:
             buffer[3] = 2;
             buffer[6] = 0x59;
             buffer[7] = 0x23;
             break;
-        case 0x08: // ok
+        case 0x08:
             buffer[0xA] = 0;
+            break;
+        case 0x09:
+        case 0x0A:
+        case 0x0B:
+        case 0x0C:
+        case 0x0D:
             break;
         default:
             return false;
@@ -419,7 +433,7 @@ bool pifGetData(Pif* pPIF, u8* acData) {
 }
 
 bool pifSetControllerType(Pif* pPIF, s32 channel, ControllerType type) {
-    if (!simulatorDetectController(SYSTEM_CONTROLLER(gpSystem))) {
+    if (!simulatorDetectController(SYSTEM_CONTROLLER(gpSystem), channel)) {
         type = CT_NONE;
     }
 

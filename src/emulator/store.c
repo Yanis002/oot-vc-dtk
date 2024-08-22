@@ -113,14 +113,14 @@ static bool fn_800618D4(Store* pStore, void* arg1, s32 arg2, s32 arg3) {
             if (arg2 == 0) {
                 DCInvalidateRange(arg1, arg3);
 
-                if (fn_800B2B34(&pStore->nandFileInfo, arg1, arg3) >= 0) {
+                if (NANDRead(&pStore->nandFileInfo, arg1, arg3) >= 0) {
                     break;
                 }
 
                 fn_80064600(&pStore->nandFileInfo, 1);
                 var_r28 = (arg2 / 32) << 5;
 
-                if (fn_800B2CF4(&pStore->nandFileInfo, var_r28, 0) < 0) {
+                if (NANDSeek(&pStore->nandFileInfo, var_r28, NAND_SEEK_BEG) < 0) {
                     break;
                 }
 
@@ -130,7 +130,7 @@ static bool fn_800618D4(Store* pStore, void* arg1, s32 arg2, s32 arg3) {
         var_r27 = arg2;
         DCInvalidateRange(pStore->unk_9C, 0x20);
 
-        if (fn_800B2B34(&pStore->nandFileInfo, pStore->unk_9C, 0x20) < 0) {
+        if (NANDRead(&pStore->nandFileInfo, pStore->unk_9C, 0x20) < 0) {
             fn_80064600(&pStore->nandFileInfo, 1);
         }
 

@@ -251,7 +251,8 @@ typedef struct Rsp {
     /* 0x391C */ s32 nCountVertex;
     /* 0x3920 */ RspUCodeType eTypeUCode;
     /* 0x3924 */ u32 nVersionUCode;
-    /* 0x3928 */ s32 anBaseSegment[16];
+    u8 pad[0x2004];
+    /* 0x3928 */ s32 anBaseSegment[16]; // 0x592C
     /* 0x3968 */ u64* apDL[16];
     /* 0x39A8 */ s32* Coeff;
     /* 0x39AC */ s16* QTable;

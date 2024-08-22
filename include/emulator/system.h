@@ -210,7 +210,7 @@ typedef struct SystemRomConfig {
 #define SYSTEM_VIDEO(pSystem) ((Video*)(((System*)(pSystem))->apObject[SOT_VIDEO]))
 
 //! TODO: replace void* by the struct name
-#define SYSTEM_CONTROLLER(pSystem) ((void*)(((System*)(pSystem))->apObject[SOT_CONTROLLER]))
+#define SYSTEM_CONTROLLER(pSystem) ((Controller*)(((System*)(pSystem))->apObject[SOT_CONTROLLER]))
 
 bool systemSetStorageDevice(System* pSystem, SystemObjectType eStorageDevice, void* pArgument);
 bool systemCreateStorageDevice(System* pSystem, void* pArgument);

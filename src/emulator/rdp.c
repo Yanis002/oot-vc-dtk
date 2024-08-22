@@ -11,8 +11,17 @@
 void fn_8004BB60(Frame* pFrame, FrameBuffer* pBuffer, s32* unknown);
 static s32 lbl_8025D16C;
 extern s32 lbl_8025D168;
+extern s32 lbl_8025D170;
+extern s32 lbl_8025D174;
+extern s32 lbl_8025D178;
+extern s32 lbl_8025D17C;
+extern s32 lbl_8025D180;
+extern s32 lbl_8025D184;
+extern s32 lbl_8025D188;
+extern s32 lbl_8025D18C;
+extern s32 lbl_8025D190;
 
-static s32 sCommandCodes[] = {
+static u32 sCommandCodes[] = {
     0xE7000000, 0x00000000, 0xBA001402, 0x00000000, 0xFCFFFFFF,
     0xFFFDF6FB, 0xB900031D, 0x00504240, 0xFA000000, 0x00000000,
 };
@@ -208,9 +217,9 @@ bool rdpParseGBI(Rdp* pRDP, u64** ppnGBI, RspUCodeType eTypeUCode) {
             }
             break;
         case 0xFB: // G_SETENVCOLOR
-            if ((gpSystem->eTypeROM == 'NSMP' && nCommandLo == 0xFFFFFFF0 &&
-                 *SYSTEM_RAM(gpSystem)->pBuffer == 0xFFDFB158) ||
-                *SYSTEM_RAM(gpSystem)->pBuffer == 0xFFE0E908) {
+            if (gpSystem->eTypeROM == 'NSMP' && nCommandLo == 0xFFFFFFF0 &&
+                (*((u32*)SYSTEM_RAM(gpSystem)->pBuffer) == 0xFFDFB158 ||
+                 *((u32*)SYSTEM_RAM(gpSystem)->pBuffer) == 0xFFE0E908)) {
                 nCommandLo = 0;
             }
             if (!frameSetColor(pFrame, FCT_ENVIRONMENT, nCommandLo)) {
@@ -219,20 +228,20 @@ bool rdpParseGBI(Rdp* pRDP, u64** ppnGBI, RspUCodeType eTypeUCode) {
             break;
         case 0xFA: // G_SETPRIMCOLOR
             if (gpSystem->eTypeROM == 'NFXJ' || gpSystem->eTypeROM == 'NFXE' || gpSystem->eTypeROM == 'NFXP') {
-                if (((nCommandLo & 0xFFFFFF00) + 0x01000000) == 0) {
+                if ((nCommandLo & 0xFFFFFF00) == 0xFF000000) {
                     nCommandLo |= 0x8500;
                 } else {
                     s32 i;
+                    u32* pGBI = (u32*)pnGBI;
 
                     for (i = 0; i < 8; i++) {
-                        if ((u32)pnGBI[i] != sCommandCodes[i]) {
+                        if (pGBI[i] != sCommandCodes[i]) {
                             break;
                         }
                     }
 
-                    if (i == 8 && (nCommandLo & 0xFF) < 0xFF) {
-                        //! TODO: confirm these
-                        pFrame->bBlurOn = 1;
+                    if (i == 8 && ((nCommandLo & 0xFF) < 0xFF)) {
+                        pFrame->bBlurOn = true;
                         fn_8004B198(pFrame, pFrame->nTempBuffer);
                     }
                 }
@@ -286,74 +295,66 @@ bool rdpParseGBI(Rdp* pRDP, u64** ppnGBI, RspUCodeType eTypeUCode) {
             primitive.nX0 = (nCommandLo >> 14) & 0x3FF;
             primitive.nY0 = (nCommandLo >> 2) & 0x3FF;
 
-            switch (gpSystem->eTypeROM) {
-                case 'NSMJ':
-                case 'NSME':
-                    if (primitive.nX0 == 0 && primitive.nY0 == 8 && primitive.nX1 == 319 && primitive.nY1 == 231) {
-                        primitive.nY1--;
-                    }
+            if (gpSystem->eTypeROM == 'NSMJ' || gpSystem->eTypeROM == 'NSME') {
+                if (primitive.nX0 == 0 && primitive.nY0 == 8 && primitive.nX1 == 319 && primitive.nY1 == 231) {
+                    primitive.nY1--;
+                }
 
-                    //! TODO: confirm these
-                    if (pFrame->cBlurAlpha > 1) {
-                        pFrame->cBlurAlpha++;
-                        if (pFrame->cBlurAlpha > 0x76C && pFrame->cBlurAlpha < 0x898) {
-                            if (primitive.nX0 == 0 && primitive.nY0 == 0 && primitive.nX1 == 319 &&
-                                primitive.nY1 == 7) {
-                                primitive.nY1 = 0x1E;
-                            }
-                            if (primitive.nX0 == 0 && primitive.nY0 == 232 && primitive.nX1 == 319 &&
-                                primitive.nY1 == 239) {
-                                primitive.nY0 = 0x1E;
-                            }
+                if (pFrame->cBlurAlpha > 1) {
+                    pFrame->cBlurAlpha++;
+                    if (pFrame->cBlurAlpha > 1900 && pFrame->cBlurAlpha < 2200) {
+                        if (primitive.nX0 == 0 && primitive.nY0 == 0 && primitive.nX1 == 319 && primitive.nY1 == 7) {
+                            primitive.nY1 = 0x1E;
+                        }
+                        if (primitive.nX0 == 0 && primitive.nY0 == 232 && primitive.nX1 == 319 &&
+                            primitive.nY1 == 239) {
+                            primitive.nY0 = 0x1E;
                         }
                     }
-                    break;
-                case 'NSMP':
-                    //! TODO: confirm the pFrame stuff
-                    if (!pFrame->bHackPause && primitive.nX0 == 0 && primitive.nY0 == 1 && primitive.nX1 == 319 &&
-                        primitive.nY1 == 238) {
-                        pFrame->bHackPause = 1;
+                }
+            } else if (gpSystem->eTypeROM == 'NSMP') {
+                if (!pFrame->bHackPause && primitive.nX0 == 0 && primitive.nY0 == 1 && primitive.nX1 == 319 &&
+                    primitive.nY1 == 238) {
+                    pFrame->bHackPause = 1;
+                    primitive.nX0 = 0;
+                    primitive.nX1 = 1;
+                    primitive.nY0 = 0;
+                    primitive.nY1 = 1;
+                }
+                if (primitive.nX0 == 0 && primitive.nY0 == 0 && primitive.nX1 == 319 && primitive.nY1 == 0) {
+                    primitive.nX0 = 318;
+                    primitive.nX1 = 319;
+                    primitive.nY0 = 0;
+                    primitive.nY1 = 240;
+                }
+                if (pFrame->cBlurAlpha > 1) {
+                    pFrame->cBlurAlpha++;
+                    if (pFrame->cBlurAlpha > 1900 && pFrame->cBlurAlpha < 2200) {
+                        if (primitive.nX0 == 1 && primitive.nY0 == 31 && primitive.nX1 == 318 && primitive.nY1 == 208) {
+                            primitive.nX1 = 317;
+                            primitive.nY1 = 207;
+                        }
+                    }
+                }
+            } else {
+                if (gpSystem->eTypeROM == 'NKTJ' || gpSystem->eTypeROM == 'NKTE' || gpSystem->eTypeROM == 'NKTP') {
+                    if (pFrame->bPauseThisFrame & 0xFF) {
+                        primitive.nY1 = 0;
+                        primitive.nY0 = 0;
+                        primitive.nX1 = 0;
                         primitive.nX0 = 0;
-                        primitive.nX1 = 1;
-                        primitive.nY0 = 0;
-                        primitive.nY1 = 1;
                     }
-                    if (primitive.nX0 == 0 && primitive.nY0 == 0 && primitive.nX1 == 319 && primitive.nY1 == 0) {
-                        primitive.nX0 = 318;
-                        primitive.nX1 = 319;
-                        primitive.nY0 = 0;
-                        primitive.nY1 = 240;
-                    }
-                    if (pFrame->cBlurAlpha > 1) {
-                        pFrame->cBlurAlpha++;
-                        if (pFrame->cBlurAlpha > 1900 && pFrame->cBlurAlpha < 2200) {
-                            if (primitive.nX0 == 1 && primitive.nY0 == 31 && primitive.nX1 == 318 &&
-                                primitive.nY1 == 208) {
-                                primitive.nX1 = 317;
-                                primitive.nY1 = 207;
-                            }
+                } else if (gpSystem->eTypeROM == 'NFXJ' || gpSystem->eTypeROM == 'NFXE' ||
+                           gpSystem->eTypeROM == 'NFXP') {
+                    if (primitive.nX0 == 0 && primitive.nY0 == 0 && primitive.nX1 == 319 && primitive.nY1 == 239) {
+                        //! TODO: figure this out
+                        if ((*pFrame->nCopyBuffer & 0xFFFFFF00) && *pFrame->nCopyBuffer > 0x7F) {
+                            *pFrame->nCopyBuffer = 0x32323280;
+                        } else if ((*pFrame->nCopyBuffer + 0x01000000) == 0) {
+                            *pFrame->nCopyBuffer |= 0x8500;
                         }
                     }
-                    break;
-                default:
-                    if (gpSystem->eTypeROM == 'NKTJ' || gpSystem->eTypeROM == 'NKTE' || gpSystem->eTypeROM == 'NKTP') {
-                        if (pFrame->bPauseThisFrame) {
-                            primitive.nY1 = 0;
-                            primitive.nY0 = 0;
-                            primitive.nX1 = 0;
-                            primitive.nX0 = 0;
-                        }
-                    } else if (gpSystem->eTypeROM == 'NFXJ' || gpSystem->eTypeROM == 'NFXE' ||
-                               gpSystem->eTypeROM == 'NFXP') {
-                        // if (primitive.nX0 == 0 && primitive.nY0 == 0 && primitive.nX1 == 319 && primitive.nY1 == 239) {
-                        //     if ((*pFrame->nCameraBuffer & 0xFFFFFF00) && *pFrame->nCameraBuffer > 0x7F) {
-                        //         *pFrame->nCameraBuffer = 0x32323280;
-                        //     } else if ((*pFrame->nCameraBuffer + 0x01000000) == 0) {
-                        //         *pFrame->nCameraBuffer |= 0x8500;
-                        //     }
-                        // }
-                    }
-                    break;
+                }
             }
 
             if (!pFrame->aDraw[2](pFrame, &primitive)) {
@@ -405,15 +406,19 @@ bool rdpParseGBI(Rdp* pRDP, u64** ppnGBI, RspUCodeType eTypeUCode) {
         }
         case 0xF3: { // G_LOADBLOCK
             s32 iTile = (nCommandLo >> 24) & 7;
+            Tile* pTile = &pFrame->aTile[iTile];
 
-            pFrame->aTile[iTile].nX0 = (nCommandHi >> 12) & 0xFFF;
-            pFrame->aTile[iTile].nY0 = nCommandHi & 0xFFF;
-            pFrame->aTile[iTile].nX1 = (nCommandLo >> 12) & 0xFFF;
-            pFrame->aTile[iTile].nY1 = nCommandLo & 0xFFF;
+            pTile->nX0 = (nCommandHi >> 12) & 0xFFF;
+            pTile->nY0 = nCommandHi & 0xFFF;
+            pTile->nX1 = (nCommandLo >> 12) & 0xFFF;
+            pTile->nY1 = nCommandLo & 0xFFF;
             pFrame->n2dLoadTexType = 0x1033;
+
             if (!frameLoadTMEM(pFrame, FLT_BLOCK, iTile)) {
                 return false;
             }
+
+            pTile->nCodePixel = pFrame->nCodePixel + pFrame->lastTile * 0x2C;
             break;
         }
         case 0xF2: { // G_SETTILESIZE
@@ -424,6 +429,11 @@ bool rdpParseGBI(Rdp* pRDP, u64** ppnGBI, RspUCodeType eTypeUCode) {
             pTile->nY0 = nCommandHi & 0xFFF;
             pTile->nX1 = (nCommandLo >> 12) & 0xFFF;
             pTile->nY1 = nCommandLo & 0xFFF;
+
+            if (gpSystem->eTypeROM == 'NSMJ' && pTile->nFormat == 3) {
+                pFrame->bBlurOn = true;
+            }
+
             if (!frameDrawReset(pFrame, 1)) {
                 return false;
             }
@@ -459,10 +469,80 @@ bool rdpParseGBI(Rdp* pRDP, u64** ppnGBI, RspUCodeType eTypeUCode) {
             Rectangle rectangle;
             s32 pad;
 
-            rectangle.nX0 = (nCommandHi >> 12) & 0xFFF;
-            rectangle.nY0 = nCommandHi & 0xFFF;
-            rectangle.nX1 = (nCommandLo >> 12) & 0xFFF;
-            rectangle.nY1 = nCommandLo & 0xFFF;
+            rectangle.nX0 = (nCommandHi >> 12) & 0xFFF; // sp48
+            rectangle.nY0 = nCommandHi & 0xFFF; // sp4C
+            rectangle.nX1 = (nCommandLo >> 12) & 0xFFF; // sp50
+            rectangle.nY1 = nCommandLo & 0xFFF; // sp54
+
+            if (gpSystem->eTypeROM == 'NSMP') {
+                rectangle.nX1 = 1275;
+            } else if (gpSystem->eTypeROM == 'NKTJ' || gpSystem->eTypeROM == 'NKTE' || gpSystem->eTypeROM == 'NKTP') {
+                s32 var_r4_5;
+                s32 var_r5_8;
+
+                if (pFrame->bHackPause == 0) {
+                    lbl_8025D170 = 0;
+                    lbl_8025D174 = 0;
+                    lbl_8025D17C = 0;
+                    lbl_8025D180 = 0;
+                    pFrame->nHackCount = 0;
+                    lbl_8025D190 = 0;
+                    lbl_8025D18C = 0;
+                    lbl_8025D188 = 0;
+                    lbl_8025D184 = 0;
+                }
+
+                var_r4_5 = 0;
+
+                if ((pFrame->bHackPause + 1) == 2 && rectangle.nX0 == 0 && rectangle.nY0 == 0 &&
+                    rectangle.nY0 != 1280 && rectangle.nY1 != 960) {
+                    var_r5_8 = 1;
+                    rectangle.nX0 = 1280 - rectangle.nX1;
+                    rectangle.nY0 = 960 - rectangle.nY1;
+                    lbl_8025D170 = 1;
+                    lbl_8025D184 = rectangle.nX0;
+                    lbl_8025D188 = rectangle.nX1;
+                    lbl_8025D18C = rectangle.nY0;
+                    lbl_8025D190 = rectangle.nY1;
+                    lbl_8025D174 = pFrame->bHackPause + 9;
+                    pFrame->nHackCount = 9;
+                }
+
+                if (lbl_8025D170 == 0) {
+                    if (rectangle.nX0 == 640 && rectangle.nY0 == 480 && rectangle.nX1 == 1280 && rectangle.nY1 == 960) {
+                        var_r5_8 = 1;
+                        lbl_8025D170 = 1;
+                        lbl_8025D184 = rectangle.nX0;
+                        lbl_8025D188 = rectangle.nX1;
+                        lbl_8025D18C = rectangle.nY0;
+                        lbl_8025D190 = rectangle.nY1;
+                        lbl_8025D174 = pFrame->bHackPause + 7;
+                        pFrame->nHackCount = 8;
+                    } else if (rectangle.nX1 != 1280 || rectangle.nY1 != 960 || ((rectangle.nX0 != 0 || rectangle.nY0 != 0) && rectangle.nY1 == 960)) {
+                        lbl_8025D170 = 1;
+                        lbl_8025D174 = pFrame->bHackPause;
+                    }
+                }
+
+                switch (lbl_8025D168) {
+                    case 2:
+                        if (pFrame->bHackPause == 0xB && lbl_8025D174 == 0 && lbl_8025D178 != 0) {
+                            lbl_8025D170 = 1;
+                            lbl_8025D174 = pFrame->bHackPause + 1;
+                        } else if (pFrame->bHackPause == 12 && lbl_8025D178 != 0 && rectangle.nX0 == 0 && rectangle.nY0 == 0 && rectangle.nX1 == 640 && rectangle.nY1 == 480) {
+                            lbl_8025D170 = 1;
+                            lbl_8025D174 = pFrame->bHackPause;
+                        }
+                        break;
+                    case 3:
+                        if (pFrame->bHackPause == 11 && lbl_8025D174 == 0 && lbl_8025D178 != 0) {
+                            lbl_8025D170 = 1;
+                            lbl_8025D174 = pFrame->bHackPause + 1;
+                        }
+                        break;
+                }
+            }
+
             if (!frameSetScissor(pFrame, &rectangle)) {
                 return false;
             }
@@ -499,8 +579,8 @@ bool rdpParseGBI(Rdp* pRDP, u64** ppnGBI, RspUCodeType eTypeUCode) {
             primitive.iTile = (nCommandLo >> 24) & 7;
             primitive.bFlip = nCommandHi >> 24 == 0xE5 ? true : false;
 
-            if ((gpSystem->eTypeROM == 'NZSJ' || gpSystem->eTypeROM == 'NZSE' || gpSystem->eTypeROM == 'NZSP') && (pFrame->bSnapShot & 0xF) != 0 && (s32)nCommandHi == 0xE43C023C &&
-                nCommandLo == 0x0014021C) {
+            if ((gpSystem->eTypeROM == 'NZSJ' || gpSystem->eTypeROM == 'NZSE' || gpSystem->eTypeROM == 'NZSP') &&
+                (pFrame->bSnapShot & 0xF) != 0 && (s32)nCommandHi == 0xE43C023C && nCommandLo == 0x0014021C) {
                 pFrame->bSnapShot |= 0x100;
             }
 

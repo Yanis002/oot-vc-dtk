@@ -70,7 +70,7 @@ typedef struct PADStatus {
     /* 0x08 */ u8 analogA;
     /* 0x09 */ u8 analogB;
     /* 0x0A */ s8 err;
-} PADStatus;
+} PADStatus; // size = 0xC
 
 extern u32 __PADFixBits;
 extern u32 __PADSpec;

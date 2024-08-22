@@ -6,9 +6,7 @@
 #include "revolution/ai.h"
 #include "macros.h"
 #include "math.h"
-
-//! TODO: document
-s32 fn_8015EE70(char*);
+#include "stdlib.h"
 
 _XL_OBJECTTYPE gClassAudio = {
     "AUDIO",
@@ -373,7 +371,7 @@ bool soundEvent(Sound* pSound, s32 nEvent, void* pArgument) {
             pSound->unk_00 = 0;
 
             if (simulatorGetArgument(SAT_VIBRATION, &sp8)) {
-                var_r0 = fn_8015EE70(sp8) << 8;
+                var_r0 = atoi(sp8) << 8;
             } else {
                 var_r0 = 0x10000;
             }
