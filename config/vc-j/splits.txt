@@ -193,6 +193,12 @@ emulator/xlFileRVL.c:
 	.sdata      start:0x8025C8D8 end:0x8025C8E0
 	.sbss       start:0x8025D1B0 end:0x8025D1B8
 
+revolution/ax/AXComp.c:
+	.data       start:0x80186820 end:0x801877E0
+
+revolution/ax/DSPCode.c:
+	.data       start:0x801877E0 end:0x801897E0
+
 emulator/xlText.c:
 	.text       start:0x80080534 end:0x800805F0
 
@@ -368,6 +374,57 @@ revolution/gx/GXTransform.c:
 
 revolution/gx/GXPerf.c:
 	.text       start:0x800A3668 end:0x800A3EA4
+
+revolution/dvd/dvdfs.c:
+	.text       start:0x800A3EA4 end:0x800A498C
+
+revolution/dvd/dvd.c:
+	.text       start:0x800A498C end:0x800A8E38
+
+revolution/dvd/dvdqueue.c:
+	.text       start:0x800A8E38 end:0x800A9094
+
+revolution/dvd/dvderror.c:
+	.text       start:0x800A9094 end:0x800A939C
+
+revolution/dvd/dvdidutils.c:
+	.text       start:0x800A939C end:0x800A948C
+
+revolution/dvd/dvdFatal.c:
+	.text       start:0x800A948C end:0x800A95B4
+
+revolution/dvd/dvd_broadway.c:
+	.text       start:0x800A95B4 end:0x800AAFA0
+
+revolution/demo/DEMOPuts.c:
+	.text       start:0x800AAFA0 end:0x800AB758
+
+revolution/ai/ai.c:
+	.text       start:0x800AB758 end:0x800ABD3C
+
+revolution/ax/AX.c:
+	.text       start:0x800ABD3C end:0x800ABDB0
+
+revolution/ax/AXAlloc.c:
+	.text       start:0x800ABDB0 end:0x800AC318
+
+revolution/ax/AXAux.c:
+	.text       start:0x800AC318 end:0x800AC92C
+
+revolution/ax/AXCL.c:
+	.text       start:0x800AC92C end:0x800AD388
+
+revolution/ax/AXOut.c:
+	.text       start:0x800AD388 end:0x800ADBA8
+
+revolution/ax/AXSPB.c:
+	.text       start:0x800ADBA8 end:0x800ADFCC
+
+revolution/ax/AXVPB.c:
+	.text       start:0x800ADFCC end:0x800AF598
+
+revolution/ax/AXProf.c:
+	.text       start:0x800AF598 end:0x800AF5D8
 
 runtime/__va_arg.c:
 	.text       start:0x80152514 end:0x801525DC

@@ -344,6 +344,44 @@ config.libs = [
             Object(NotLinked, "revolution/gx/GXPerf.c"),
         ]
     ),
+    RevolutionLib(
+        "dvd",
+        [    
+            Object(NotLinked, "revolution/dvd/dvdfs.c"),
+            Object(NotLinked, "revolution/dvd/dvd.c"),
+            Object(NotLinked, "revolution/dvd/dvdqueue.c"),
+            Object(NotLinked, "revolution/dvd/dvderror.c"),
+            Object(NotLinked, "revolution/dvd/dvdidutils.c"),
+            Object(NotLinked, "revolution/dvd/dvdFatal.c"),
+            Object(NotLinked, "revolution/dvd/dvd_broadway.c"),
+        ]
+    ),
+    RevolutionLib(
+        "demo",
+        [
+            Object(NotLinked, "revolution/demo/DEMOPuts.c"),
+        ]
+    ),
+    RevolutionLib(
+        "ai",
+        [
+            Object(NotLinked, "revolution/ai/ai.c"),
+        ]
+    ),
+    RevolutionLib(
+        "ax",
+        [
+            Object(NotLinked, "revolution/ax/AX.c"),
+            Object(NotLinked, "revolution/ax/AXAlloc.c"),
+            Object(NotLinked, "revolution/ax/AXAux.c"),
+            Object(NotLinked, "revolution/ax/AXCL.c"),
+            Object(NotLinked, "revolution/ax/AXOut.c"),
+            Object(NotLinked, "revolution/ax/AXSPB.c"),
+            Object(NotLinked, "revolution/ax/AXVPB.c"),
+            Object(NotLinked, "revolution/ax/AXComp.c"),
+            Object(NotLinked, "revolution/ax/DSPCode.c"),
+        ]
+    ),
     GenericLib(
         "runtime",
         [
