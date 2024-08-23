@@ -248,7 +248,7 @@ config.libs = [
             Object(LinkedFor("vc-j"), "emulator/xlList.c"),
             Object(NotLinked, "emulator/xlHeap.c"),
             Object(LinkedFor("vc-j"), "emulator/xlFile.c"),
-            Object(LinkedFor("vc-j"), "emulator/xlObject.c", asm_processor=True),
+            Object(LinkedFor("vc-j"), "emulator/xlObject.c"),
         ]
     ),
     RevolutionLib(
@@ -380,6 +380,73 @@ config.libs = [
             Object(NotLinked, "revolution/ax/AXVPB.c"),
             Object(NotLinked, "revolution/ax/AXComp.c"),
             Object(NotLinked, "revolution/ax/DSPCode.c"),
+            Object(NotLinked, "revolution/ax/AXProf.c"),
+        ]
+    ),
+    RevolutionLib(
+        "axfx",
+        [
+            Object(NotLinked, "revolution/axfx/code_800AF5D8.c"), # TODO: figure this out
+        ]
+    ),
+    RevolutionLib(
+        "dsp",
+        [
+            Object(NotLinked, "revolution/dsp/dsp.c"),
+            Object(NotLinked, "revolution/dsp/dsp_debug.c"),
+            Object(NotLinked, "revolution/dsp/dsp_task.c"),
+        ]
+    ),
+    RevolutionLib(
+        "nand",
+        [
+            Object(NotLinked, "revolution/nand/nand.c"),
+            Object(NotLinked, "revolution/nand/NANDOpenClose.c"),
+            Object(NotLinked, "revolution/nand/NANDCore.c"),
+        ]
+    ),
+    RevolutionLib(
+        "sc",
+        [
+            Object(NotLinked, "revolution/sc/scsystem.c"),
+            Object(NotLinked, "revolution/sc/scapi.c"),
+            Object(NotLinked, "revolution/sc/scapi_prdinfo.c"),
+        ]
+    ),
+    RevolutionLib(
+        "arc",
+        [
+            Object(NotLinked, "revolution/arc/arc.c"),
+        ]
+    ),
+    RevolutionLib(
+        "ipc",
+        [
+            Object(NotLinked, "revolution/ipc/ipcMain.c"),
+            Object(NotLinked, "revolution/ipc/ipcclt.c"),
+            Object(NotLinked, "revolution/ipc/memory.c"),
+            Object(NotLinked, "revolution/ipc/ipcProfile.c"),
+        ]
+    ),
+    RevolutionLib(
+        "fs",
+        [
+            Object(NotLinked, "revolution/fs/fs.c"),
+        ]
+    ),
+    RevolutionLib(
+        "pad",
+        [
+            Object(NotLinked, "revolution/pad/Pad.c"),
+        ]
+    ),
+    RevolutionLib(
+        "wpad",
+        [
+            Object(NotLinked, "revolution/wpad/WPAD.c"),
+            Object(NotLinked, "revolution/wpad/WPADHIDParser.c"),
+            Object(NotLinked, "revolution/wpad/WPADEncrypt.c"),
+            Object(NotLinked, "revolution/wpad/debug_msg.c"),
         ]
     ),
     GenericLib(

@@ -426,6 +426,69 @@ revolution/ax/AXVPB.c:
 revolution/ax/AXProf.c:
 	.text       start:0x800AF598 end:0x800AF5D8
 
+revolution/axfx/code_800AF5D8.c:
+	.text       start:0x800AF5D8 end:0x800B1BEC
+
+revolution/dsp/dsp.c:
+	.text       start:0x800B1BEC end:0x800B1D6C
+
+revolution/dsp/dsp_debug.c:
+	.text       start:0x800B1D6C end:0x800B1EB8
+
+revolution/dsp/dsp_task.c:
+	.text       start:0x800B1EB8 end:0x800B274C
+
+revolution/nand/nand.c:
+	.text       start:0x800B274C end:0x800B352C
+
+revolution/nand/NANDOpenClose.c:
+	.text       start:0x800B352C end:0x800B3D68
+
+revolution/nand/NANDCore.c:
+	.text       start:0x800B3D68 end:0x800B5570
+
+revolution/sc/scsystem.c:
+	.text       start:0x800B5570 end:0x800B6EA0
+
+revolution/sc/scapi.c:
+	.text       start:0x800B6EA0 end:0x800B7224
+
+revolution/sc/scapi_prdinfo.c:
+	.text       start:0x800B7224 end:0x800B7414
+
+revolution/arc/arc.c:
+	.text       start:0x800B7414 end:0x800B808C
+
+revolution/ipc/ipcMain.c:
+	.text       start:0x800B808C end:0x800B8110
+
+revolution/ipc/ipcclt.c:
+	.text       start:0x800B8110 end:0x800B9810
+
+revolution/ipc/memory.c:
+	.text       start:0x800B9810 end:0x800B9D34
+
+revolution/ipc/ipcProfile.c:
+	.text       start:0x800B9D34 end:0x800B9EF8
+
+revolution/fs/fs.c:
+	.text       start:0x800B9EF8 end:0x800BB4BC
+
+revolution/pad/Pad.c:
+	.text       start:0x800BB4BC end:0x800BCC9C
+
+revolution/wpad/WPAD.c:
+	.text       start:0x800BCC9C end:0x800C376C
+
+revolution/wpad/WPADHIDParser.c:
+	.text       start:0x800C376C end:0x800C8008
+
+revolution/wpad/WPADEncrypt.c:
+	.text       start:0x800C8008 end:0x800C88A0
+
+revolution/wpad/debug_msg.c:
+	.text       start:0x800C88A0 end:0x800C88F0
+
 runtime/__va_arg.c:
 	.text       start:0x80152514 end:0x801525DC
 

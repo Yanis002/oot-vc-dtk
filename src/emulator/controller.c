@@ -5,6 +5,7 @@
 #include "emulator/xlHeap.h"
 #include "math.h"
 #include "revolution/vi.h"
+#include "revolution/wpad.h"
 
 //! TODO: document
 bool fn_800607C4(void*, s32);
@@ -115,7 +116,7 @@ bool fn_800620A8(Controller* pController) {
 
     fn_800B165C(&lbl_801C7DB8, fn_800B0DF0(sp8, 0x20000, 0), 4);
     fn_800BE994(fn_80061FB0, fn_80061FF8);
-    fn_800CB3C0();
+    WPADInit();
 
     return true;
 }
