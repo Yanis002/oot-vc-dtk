@@ -163,8 +163,6 @@ cflags_base = [
     "-sym on",
     "-i include",
     "-i libc",
-    # TODO: remove and use VERSION instead
-    # "-DDOLPHIN_REV=2003",
 ]
 
 if config.non_matching:
@@ -193,7 +191,7 @@ def RevolutionLib(lib_name: str, objects: List[Object]) -> Dict[str, Any]:
 def GenericLib(lib_name: str, objects: List[Object]) -> Dict[str, Any]:
     return {
         "lib": lib_name,
-        "mw_version": "GC/3.0a5",
+        "mw_version": "GC/3.0a3",
         "cflags": [*cflags_base, "-rostr", "-use_lmw_stmw on", "-lang c"],
         "host": False,
         "objects": objects,
@@ -250,14 +248,58 @@ config.libs = [
             Object(LinkedFor("vc-j"), "emulator/xlList.c"),
             Object(NotLinked, "emulator/xlHeap.c"),
             Object(LinkedFor("vc-j"), "emulator/xlFile.c"),
-            Object(LinkedFor("vc-j"), "emulator/xlObject.c"),
+            Object(LinkedFor("vc-j"), "emulator/xlObject.c", asm_processor=True),
+        ]
+    ),
+    RevolutionLib(
+        "base",
+        [
+            Object(NotLinked, "revolution/base/PPCArch.c"),
+        ]
+    ),
+    RevolutionLib(
+        "os",
+        [
+            Object(NotLinked, "revolution/os/OS.c"),
+            Object(NotLinked, "revolution/os/OSAlarm.c"),
+            Object(NotLinked, "revolution/os/OSArena.c"),
+            Object(NotLinked, "revolution/os/OSAudioSystem.c"),
+            Object(NotLinked, "revolution/os/OSCache.c"),
+            Object(NotLinked, "revolution/os/OSContext.c"),
+            Object(NotLinked, "revolution/os/OSError.c"),
+            Object(NotLinked, "revolution/os/OSExec.c"),
+            Object(NotLinked, "revolution/os/OSFatal.c"),
+            Object(NotLinked, "revolution/os/OSFont.c"),
+            Object(NotLinked, "revolution/os/OSInterrupt.c"),
+            Object(NotLinked, "revolution/os/OSLink.c"),
+            Object(NotLinked, "revolution/os/OSMessage.c"),
+            Object(NotLinked, "revolution/os/OSMemory.c"),
+            Object(NotLinked, "revolution/os/OSMutex.c"),
+            Object(NotLinked, "revolution/os/OSReset.c"),
+            Object(NotLinked, "revolution/os/OSRtc.c"),
+            Object(NotLinked, "revolution/os/OSSync.c"),
+            Object(NotLinked, "revolution/os/OSThread.c"),
+            Object(NotLinked, "revolution/os/OSTime.c"),
+            Object(NotLinked, "revolution/os/OSUtf.c"),
+            Object(NotLinked, "revolution/os/OSIpc.c"),
+            Object(NotLinked, "revolution/os/OSStateTM.c"),
+            Object(NotLinked, "revolution/os/code_800945CC.c"), # TODO: figure this out
+            Object(NotLinked, "revolution/os/OSPlayRecord.c"),
+            Object(NotLinked, "revolution/os/__start.c"),
+            Object(NotLinked, "revolution/os/__ppc_eabi_init.c"),
         ]
     ),
     GenericLib(
         "runtime",
         [
+            Object(NotLinked, "runtime/__va_arg.c"),
             Object(LinkedFor("vc-j"), "runtime/global_destructor_chain.c"),
+            Object(NotLinked, "runtime/code_8015263C.c"),
+            Object(NotLinked, "runtime/ptmf.c"),
+            Object(NotLinked, "runtime/runtime.c"),
             Object(NotLinked, "runtime/__init_cpp_exceptions.cpp"), # TODO: matched but does not build OK
+            Object(NotLinked, "runtime/Gecko_setjmp.c"),
+            Object(NotLinked, "runtime/Gecko_ExceptionPPC.c"),
         ]
     )
 ]

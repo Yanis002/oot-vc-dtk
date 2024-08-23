@@ -7,13 +7,13 @@
 #include "revolution/vi.h"
 
 //! TODO: document
-// bool fn_800607C4(void*, s32);
+bool fn_800607C4(void*, s32);
 
 u32 lbl_80174508[] = {
-    0x80000000,
-    0x40000000,
-    0x20000000,
-    0x10000000,
+    PAD_CHAN0_BIT,
+    PAD_CHAN1_BIT,
+    PAD_CHAN2_BIT,
+    PAD_CHAN3_BIT,
 };
 
 u32 lbl_80174518[] = {
@@ -88,74 +88,20 @@ bool fn_800620A8(Controller* pController) {
     pController->unk_220 = 1;
     pController->unk_21C = -1;
 
-    //! TODO: is the struct correct? maybe this is using for loops?
-    pController->unk_220 = 1;
-    pController->unk_21C = -1;
-    pController->unk_228 = 0;
-    pController->unk_238 = 0;
-    pController->unk_270 = 0;
-    pController->unk_280 = 0;
-    pController->unk_4C[0] = 0;
-    pController->unk_CC = 0;
-    pController->unk_BC = 0;
-    pController->unk_80 = 0;
-    pController->unk_7C = 0;
-    pController->unk_A0 = 0;
-    pController->unk_9C = 0;
-    pController->unk_22C = 0;
-    pController->unk_23C = 0;
-    pController->unk_274 = 0;
-    pController->unk_284 = 0;
-    pController->unk_4C[1] = 0;
-    pController->unk_D0 = 0;
-    pController->unk_C0 = 0;
-    pController->unk_88 = 0;
-    pController->unk_84 = 0;
-    pController->unk_A8 = 0;
-    pController->unk_A4 = 0;
-    pController->unk_230 = 0;
-    pController->unk_240 = 0;
-    pController->unk_278 = 0;
-    pController->unk_288 = 0;
-    pController->unk_4C[2] = 0;
-    pController->unk_D4 = 0;
-    pController->unk_C4 = 0;
-    pController->unk_90 = 0;
-    pController->unk_8C = 0;
-    pController->unk_B0 = 0;
-    pController->unk_AC = 0;
-    pController->unk_234 = 0;
-    pController->unk_244 = 0;
-    pController->unk_27C = 0;
-    pController->unk_28C = 0;
-    pController->unk_4C[3] = 0;
-    pController->unk_D8 = 0;
-    pController->unk_C8 = 0;
-    pController->unk_98 = 0;
-    pController->unk_94 = 0;
-    pController->unk_B8 = 0;
-    pController->unk_B4 = 0;
+    for (i = 0; i < 4; i++) {
+        pController->unk_228[i] = 0;
+        pController->unk_238[i] = 0;
+        pController->unk_270[i] = 0;
+        pController->unk_280[i] = 0;
+        pController->unk_4C[i] = 0;
+        pController->unk_BC[i] = pController->unk_CC[i] = 0;
+        pController->stickLeft[i][0] = pController->stickLeft[i][1] = 0;
+        pController->stickRight[i][0] = pController->stickRight[i][1] = 0;
+    }
 
-    //! TODO: a for loop doesn't work better for some reasons
-    pController->unk_00[0] = lbl_80174518[0];
-    pController->unk_00[1] = lbl_80174518[1];
-    pController->unk_00[2] = lbl_80174518[2];
-    pController->unk_00[3] = lbl_80174518[3];
-    pController->unk_00[4] = lbl_80174518[4];
-    pController->unk_00[5] = lbl_80174518[5];
-    pController->unk_00[6] = lbl_80174518[6];
-    pController->unk_00[7] = lbl_80174518[7];
-    pController->unk_00[8] = lbl_80174518[8];
-    pController->unk_00[9] = lbl_80174518[9];
-    pController->unk_00[10] = lbl_80174518[10];
-    pController->unk_00[11] = lbl_80174518[11];
-    pController->unk_00[12] = lbl_80174518[12];
-    pController->unk_00[13] = lbl_80174518[13];
-    pController->unk_00[14] = lbl_80174518[14];
-    pController->unk_00[15] = lbl_80174518[15];
-    pController->unk_00[16] = lbl_80174518[16];
-    pController->unk_00[17] = lbl_80174518[17];
-    pController->unk_00[18] = lbl_80174518[18];
+    for (i = 0; i < 19; i++) {
+        pController->unk_00[i] = lbl_80174518[i];
+    }
 
     PADInit();
 
@@ -174,7 +120,41 @@ bool fn_800620A8(Controller* pController) {
     return true;
 }
 
-bool fn_800622B8(void) {
+static inline bool controllerValidateIndex(s32 index) {
+    bool ret;
+
+    if (index >= 0 && index < 4) {
+        ret = true;
+    } else {
+        ret = false;
+    }
+
+    return ret;
+}
+
+bool fn_800622B8(Controller* pController) {
+    s32 var_r0;
+    s32 var_r0_2;
+    s32 var_r0_3;
+    s32 var_r0_4;
+
+    s32 i;
+    bool ret;
+
+    pController->unk_220 = 1;
+
+    for (i = 0; i < 4; i++) {
+        pController->unk_BC[i] = pController->unk_CC[i] = 0;
+        pController->stickLeft[i][0] = pController->stickLeft[i][1] = 0;
+        pController->stickRight[i][1] = 0;
+        pController->unk_21C = -1; // why here
+        pController->stickRight[i][0] = 0;
+
+        if (!controllerValidateIndex(i)) {
+            return false;
+        }
+    }
+
     NO_INLINE();
     return true;
 }
@@ -189,34 +169,34 @@ bool simulatorDetectController(Controller* pController, s32 arg1) { return arg1 
 bool fn_80062C18(Controller* pController, s32 arg1, s32* arg2, s32* arg3, s32* arg4, s32* arg5, s32* arg6, s32* arg7) {
     s32 temp_r3;
 
-    // if (arg1 >= 0 && arg1 < 4) {
-    //     if (arg2 != NULL) {
-    //         *arg2 = pController->unk_BC[arg1];
-    //     }
+    if (arg1 >= 0 && arg1 < 4) {
+        if (arg2 != NULL) {
+            *arg2 = pController->unk_BC[arg1];
+        }
 
-    //     if (arg3 != NULL) {
-    //         *arg3 = pController->unk_CC[arg1];
-    //     }
+        if (arg3 != NULL) {
+            *arg3 = pController->unk_CC[arg1];
+        }
 
-    //     if (arg4 != NULL) {
-    //         *arg4 = pController->unk_7C[arg1 * 2];
-    //     }
+        if (arg4 != NULL) {
+            *arg4 = pController->stickLeft[arg1][0];
+        }
 
-    //     if (arg5 != NULL) {
-    //         *arg5 = pController->unk_80[arg1 * 2];
-    //     }
+        if (arg5 != NULL) {
+            *arg5 = pController->stickLeft[arg1][1];
+        }
 
-    //     if (arg6 != NULL) {
-    //         *arg6 = pController->unk_9C[arg1 * 2];
-    //     }
+        if (arg6 != NULL) {
+            *arg6 = pController->stickRight[arg1][0];
+        }
 
-    //     if (arg7 != NULL) {
-    //         *arg7 = pController->unk_A0[arg1 * 2];
-    //     }
+        if (arg7 != NULL) {
+            *arg7 = pController->stickRight[arg1][1];
+        }
 
-    //     pController->unk_220 = 1;
-    //     return !!pController->unk_4C[arg1];
-    // }
+        pController->unk_220 = 1;
+        return !!pController->unk_4C[arg1];
+    }
 
     return false;
 }
@@ -301,7 +281,7 @@ bool controllerEvent(Controller* pController, s32 nEvent, void* pArgument) {
             }
             break;
         case 1:
-            fn_800622B8();
+            fn_800622B8(pController);
             VISetPostRetraceCallback(NULL);
             xlHeapFree(&sControllerHeap);
             break;

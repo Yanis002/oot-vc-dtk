@@ -5,6 +5,7 @@
 #include "emulator/mi.h"
 #include "emulator/xlObject.h"
 #include "revolution/types.h"
+#include "revolution/pad.h"
 
 // `C` if `eTypeROM` is `CZLJ`
 #define GET_GAME_MEDIUM(eTypeROM) ((eTypeROM >> 24) & 0xFF)
@@ -174,7 +175,7 @@ typedef struct System {
 
 // // __anon_0x3459E
 typedef struct SystemRomConfig {
-    /* 0x0000 */ s32 controllerConfiguration[4][GCN_BTN_COUNT];
+    /* 0x0000 */ s32 controllerConfiguration[PAD_MAX_CONTROLLERS][GCN_BTN_COUNT];
     /* 0x0140 */ s32 rumbleConfiguration;
     /* 0x0144 */ SystemObjectType storageDevice;
     /* 0x0148 */ s32 normalControllerConfig;
@@ -197,9 +198,7 @@ typedef struct SystemRomConfig {
 #define SYSTEM_EEPROM(pSystem) ((EEPROM*)(((System*)(pSystem))->apObject[SOT_EEPROM]))
 #define SYSTEM_SRAM(pSystem) ((Sram*)(((System*)(pSystem))->apObject[SOT_SRAM]))
 #define SYSTEM_FLASH(pSystem) ((Flash*)(((System*)(pSystem))->apObject[SOT_FLASH]))
-
-//! TODO: replace void* by the struct name
-#define SYSTEM_CODE(pSystem) ((void*)(((System*)(pSystem))->apObject[SOT_CODE]))
+#define SYSTEM_CODE(pSystem) ((Code*)(((System*)(pSystem))->apObject[SOT_CODE]))
 
 //! TODO: replace void* by the struct name
 #define SYSTEM_HELP(pSystem) ((void*)(((System*)(pSystem))->apObject[SOT_HELP]))
@@ -208,8 +207,6 @@ typedef struct SystemRomConfig {
 #define SYSTEM_FRAME(pSystem) ((Frame*)(((System*)(pSystem))->apObject[SOT_FRAME]))
 #define SYSTEM_SOUND(pSystem) ((Sound*)(((System*)(pSystem))->apObject[SOT_AUDIO])) // not `Audio*`?
 #define SYSTEM_VIDEO(pSystem) ((Video*)(((System*)(pSystem))->apObject[SOT_VIDEO]))
-
-//! TODO: replace void* by the struct name
 #define SYSTEM_CONTROLLER(pSystem) ((Controller*)(((System*)(pSystem))->apObject[SOT_CONTROLLER]))
 
 bool systemSetStorageDevice(System* pSystem, SystemObjectType eStorageDevice, void* pArgument);
