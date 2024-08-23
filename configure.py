@@ -289,6 +289,61 @@ config.libs = [
             Object(NotLinked, "revolution/os/__ppc_eabi_init.c"),
         ]
     ),
+    RevolutionLib(
+        "exi",
+        [
+            Object(NotLinked, "revolution/exi/EXIBios.c"),
+            Object(NotLinked, "revolution/exi/EXIUart.c"),
+            Object(NotLinked, "revolution/exi/EXICommon.c"),
+        ]
+    ),
+    RevolutionLib(
+        "si",
+        [
+            Object(NotLinked, "revolution/si/SIBios.c"),
+            Object(NotLinked, "revolution/si/SISamplingRate.c"),
+        ]
+    ),
+    RevolutionLib(
+        "db",
+        [
+            Object(NotLinked, "revolution/db/db.c"),
+        ]
+    ),
+    RevolutionLib(
+        "vi",
+        [
+            Object(NotLinked, "revolution/vi/vi.c"),
+            Object(NotLinked, "revolution/vi/i2c.c"),
+            Object(NotLinked, "revolution/vi/vi3in1.c"),
+        ]
+    ),
+    RevolutionLib(
+        "mtx",
+        [
+            Object(NotLinked, "revolution/mtx/mtx.c"),
+            Object(NotLinked, "revolution/mtx/mtxvec.c"),
+            Object(NotLinked, "revolution/mtx/mtx44.c"),
+        ]
+    ),
+    RevolutionLib(
+        "gx",
+        [
+            Object(NotLinked, "revolution/gx/GXInit.c"),
+            Object(NotLinked, "revolution/gx/GXFifo.c"),
+            Object(NotLinked, "revolution/gx/GXAttr.c"),
+            Object(NotLinked, "revolution/gx/GXMisc.c"),
+            Object(NotLinked, "revolution/gx/GXGeometry.c"),
+            Object(NotLinked, "revolution/gx/GXFrameBuf.c"),
+            Object(NotLinked, "revolution/gx/GXLight.c"),
+            Object(NotLinked, "revolution/gx/GXTexture.c"),
+            Object(NotLinked, "revolution/gx/GXBump.c"),
+            Object(NotLinked, "revolution/gx/GXTev.c"),
+            Object(NotLinked, "revolution/gx/GXPixel.c"),
+            Object(NotLinked, "revolution/gx/GXTransform.c"),
+            Object(NotLinked, "revolution/gx/GXPerf.c"),
+        ]
+    ),
     GenericLib(
         "runtime",
         [

@@ -294,6 +294,81 @@ revolution/os/__ppc_eabi_init.c:
 	.init       start:0x800042E0 end:0x80004338
 	.text       start:0x80094EE8 end:0x80094F9C
 
+revolution/exi/EXIBios.c:
+	.text       start:0x80094F9C end:0x80096830
+
+revolution/exi/EXIUart.c:
+	.text       start:0x80096830 end:0x80096B64
+
+revolution/exi/EXICommon.c:
+	.text       start:0x80096B64 end:0x80096CF0
+
+revolution/si/SIBios.c:
+	.text       start:0x80096CF0 end:0x80098260
+
+revolution/si/SISamplingRate.c:
+	.text       start:0x80098260 end:0x80098340
+
+revolution/db/db.c:
+	.text       start:0x80098340 end:0x80098428
+
+revolution/vi/vi.c:
+	.text       start:0x80098428 end:0x8009AA54
+
+revolution/vi/i2c.c:
+	.text       start:0x8009AA54 end:0x8009B470
+
+revolution/vi/vi3in1.c:
+	.text       start:0x8009B470 end:0x8009CB24
+
+revolution/mtx/mtx.c:
+	.text       start:0x8009CB24 end:0x8009CF1C
+
+revolution/mtx/mtxvec.c:
+	.text       start:0x8009CF1C end:0x8009CF70
+
+revolution/mtx/mtx44.c:
+	.text       start:0x8009CF70 end:0x8009D1F8
+
+revolution/gx/GXInit.c:
+	.text       start:0x8009D1F8 end:0x8009E3C0
+
+revolution/gx/GXFifo.c:
+	.text       start:0x8009E3C0 end:0x8009ED7C
+
+revolution/gx/GXAttr.c:
+	.text       start:0x8009ED7C end:0x8009F870
+
+revolution/gx/GXMisc.c:
+	.text       start:0x8009F870 end:0x800A01A0
+
+revolution/gx/GXGeometry.c:
+	.text       start:0x800A01A0 end:0x800A0664
+
+revolution/gx/GXFrameBuf.c:
+	.text       start:0x800A0664 end:0x800A1038
+
+revolution/gx/GXLight.c:
+	.text       start:0x800A1038 end:0x800A12B0
+
+revolution/gx/GXTexture.c:
+	.text       start:0x800A12B0 end:0x800A2074
+
+revolution/gx/GXBump.c:
+	.text       start:0x800A2074 end:0x800A24C0
+
+revolution/gx/GXTev.c:
+	.text       start:0x800A24C0 end:0x800A2B40
+
+revolution/gx/GXPixel.c:
+	.text       start:0x800A2B40 end:0x800A3144
+
+revolution/gx/GXTransform.c:
+	.text       start:0x800A3144 end:0x800A3668
+
+revolution/gx/GXPerf.c:
+	.text       start:0x800A3668 end:0x800A3EA4
+
 runtime/__va_arg.c:
 	.text       start:0x80152514 end:0x801525DC
 
