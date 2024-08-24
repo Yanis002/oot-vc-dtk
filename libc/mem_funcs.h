@@ -9,6 +9,7 @@
 INIT void* memcpy(void* dst, const void* src, size_t n);
 INIT void* memset(void* dst, int val, size_t n);
 INIT void __fill_mem(void* dst, int val, size_t n);
+void* memmove(void*, const void*, size_t);
 
 void __copy_mem(void* dst, const void* src, unsigned long n);
 void __move_mem(void* dst, const void* src, unsigned long n);

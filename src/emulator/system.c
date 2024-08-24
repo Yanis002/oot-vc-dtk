@@ -1521,7 +1521,7 @@ bool fn_8000A8A8(System* pSystem) {
     VISetBlack(true);
     VIFlush();
     VIWaitForRetrace();
-    fn_8008B764();
+    LCDisable();
     fn_800914D0(0x1234);
     return true;
 }

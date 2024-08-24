@@ -311,7 +311,7 @@ bool controllerEvent(Controller* pController, s32 nEvent, void* pArgument) {
                     VISetBlack(true);
                     VIFlush();
                     VIWaitForRetrace();
-                    fn_80091568();
+                    OSReturnToMenu();
                 }
             }
             break;

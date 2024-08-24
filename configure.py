@@ -254,7 +254,7 @@ config.libs = [
     RevolutionLib(
         "base",
         [
-            Object(NotLinked, "revolution/base/PPCArch.c"),
+            Object(LinkedFor("vc-j"), "revolution/base/PPCArch.c"),
         ]
     ),
     RevolutionLib(
@@ -262,31 +262,31 @@ config.libs = [
         [
             Object(NotLinked, "revolution/os/OS.c"),
             Object(NotLinked, "revolution/os/OSAlarm.c"),
-            Object(NotLinked, "revolution/os/OSArena.c"),
-            Object(NotLinked, "revolution/os/OSAudioSystem.c"),
-            Object(NotLinked, "revolution/os/OSCache.c"),
-            Object(NotLinked, "revolution/os/OSContext.c"),
+            Object(LinkedFor("vc-j"), "revolution/os/OSArena.c"),
+            Object(LinkedFor("vc-j"), "revolution/os/OSAudioSystem.c"),
+            Object(LinkedFor("vc-j"), "revolution/os/OSCache.c"),
+            Object(LinkedFor("vc-j"), "revolution/os/OSContext.c"),
             Object(NotLinked, "revolution/os/OSError.c"),
             Object(NotLinked, "revolution/os/OSExec.c"),
             Object(NotLinked, "revolution/os/OSFatal.c"),
-            Object(NotLinked, "revolution/os/OSFont.c"),
+            Object(LinkedFor("vc-j"), "revolution/os/OSFont.c"),
             Object(NotLinked, "revolution/os/OSInterrupt.c"),
-            Object(NotLinked, "revolution/os/OSLink.c"),
-            Object(NotLinked, "revolution/os/OSMessage.c"),
-            Object(NotLinked, "revolution/os/OSMemory.c"),
+            Object(LinkedFor("vc-j"), "revolution/os/OSLink.c"),
+            Object(LinkedFor("vc-j"), "revolution/os/OSMessage.c"),
+            Object(LinkedFor("vc-j"), "revolution/os/OSMemory.c"),
             Object(NotLinked, "revolution/os/OSMutex.c"),
             Object(NotLinked, "revolution/os/OSReset.c"),
             Object(NotLinked, "revolution/os/OSRtc.c"),
-            Object(NotLinked, "revolution/os/OSSync.c"),
+            Object(LinkedFor("vc-j"), "revolution/os/OSSync.c"),
             Object(NotLinked, "revolution/os/OSThread.c"),
-            Object(NotLinked, "revolution/os/OSTime.c"),
-            Object(NotLinked, "revolution/os/OSUtf.c"),
-            Object(NotLinked, "revolution/os/OSIpc.c"),
-            Object(NotLinked, "revolution/os/OSStateTM.c"),
-            Object(NotLinked, "revolution/os/code_800945CC.c"), # TODO: figure this out
+            Object(LinkedFor("vc-j"), "revolution/os/OSTime.c"),
+            Object(LinkedFor("vc-j"), "revolution/os/OSUtf.c"),
+            Object(LinkedFor("vc-j"), "revolution/os/OSIpc.c"),
+            Object(LinkedFor("vc-j"), "revolution/os/OSStateTM.c"),
+            Object(LinkedFor("vc-j"), "revolution/os/code_800945CC.c"), # TODO: figure this out
             Object(NotLinked, "revolution/os/OSPlayRecord.c"),
-            Object(NotLinked, "revolution/os/__start.c"),
-            Object(NotLinked, "revolution/os/__ppc_eabi_init.c"),
+            Object(LinkedFor("vc-j"), "revolution/os/__start.c"),
+            Object(LinkedFor("vc-j"), "revolution/os/__ppc_eabi_init.c"),
         ]
     ),
     RevolutionLib(

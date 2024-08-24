@@ -13,9 +13,6 @@ Sections:
 	.sdata2     type:rodata align:32
 	.sbss2      type:bss align:32
 
-revolution/os/__start.c:
-	.init       start:0x80004000 end:0x800042E0
-
 emulator/vc64_RVL.c:
 	.text       start:0x80007020 end:0x800074CC
 	.data       start:0x8016F7A0 end:0x8016F920
@@ -193,12 +190,6 @@ emulator/xlFileRVL.c:
 	.sdata      start:0x8025C8D8 end:0x8025C8E0
 	.sbss       start:0x8025D1B0 end:0x8025D1B8
 
-revolution/ax/AXComp.c:
-	.data       start:0x80186820 end:0x801877E0
-
-revolution/ax/DSPCode.c:
-	.data       start:0x801877E0 end:0x801897E0
-
 emulator/xlText.c:
 	.text       start:0x80080534 end:0x800805F0
 
@@ -220,24 +211,37 @@ emulator/xlObject.c:
 
 revolution/base/PPCArch.c:
 	.text       start:0x800893A4 end:0x80089508
+	.data       start:0x801766E0 end:0x80176718
 
 revolution/os/OS.c:
 	.text       start:0x80089508 end:0x8008A804
+	.data       start:0x80176718 end:0x80176B08
+	.bss        start:0x801CC120 end:0x801CC190
+	.sdata      start:0x8025C918 end:0x8025C940
+	.sbss       start:0x8025D508 end:0x8025D550
 
 revolution/os/OSAlarm.c:
 	.text       start:0x8008A804 end:0x8008B0CC
+	.data       start:0x80176B08 end:0x80176B18
+	.sdata      start:0x8025C940 end:0x8025C948
+	.sbss       start:0x8025D550 end:0x8025D558
 
 revolution/os/OSArena.c:
 	.text       start:0x8008B0CC end:0x8008B160
+	.sdata      start:0x8025C948 end:0x8025C950
+	.sbss       start:0x8025D568 end:0x8025D570
 
 revolution/os/OSAudioSystem.c:
 	.text       start:0x8008B160 end:0x8008B614
+	.data       start:0x80176B18 end:0x80176B98
 
 revolution/os/OSCache.c:
-	.text       start:0x8008B614 end:0x8008B8D4
+	.text       start:0x8008B614 end:0x8008BA0C
+	.data       start:0x80176B98 end:0x80176DD0
 
 revolution/os/OSContext.c:
-	.text       start:0x8008B8D4 end:0x8008C294
+	.text       start:0x8008BA0C end:0x8008C294
+	.data       start:0x80176DD0 end:0x80176FB0
 
 revolution/os/OSError.c:
 	.text       start:0x8008C294 end:0x8008CB90
@@ -250,6 +254,10 @@ revolution/os/OSFatal.c:
 
 revolution/os/OSFont.c:
 	.text       start:0x8008E918 end:0x8008FC98
+	.data       start:0x80177300 end:0x80177E10
+	.sdata      start:0x8025C970 end:0x8025C978
+	.sbss       start:0x8025D590 end:0x8025D5A0
+	.sdata2     start:0x8025E320 end:0x8025E328
 
 revolution/os/OSInterrupt.c:
 	.text       start:0x8008FC98 end:0x8009041C
@@ -262,12 +270,15 @@ revolution/os/OSMessage.c:
 
 revolution/os/OSMemory.c:
 	.text       start:0x80090638 end:0x80090E4C
+	.data       start:0x80177E40 end:0x80177E50
 
 revolution/os/OSMutex.c:
 	.text       start:0x80090E4C end:0x80091108
 
 revolution/os/OSReset.c:
 	.text       start:0x80091108 end:0x80091668
+	.data       start:0x80177E50 end:0x80177EC8
+	.sbss       start:0x8025D5C8 end:0x8025D5D0
 
 revolution/os/OSRtc.c:
 	.text       start:0x80091668 end:0x800920F4
@@ -280,15 +291,32 @@ revolution/os/OSThread.c:
 
 revolution/os/OSTime.c:
 	.text       start:0x80093668 end:0x80093D1C
+	.data       start:0x80177EC8 end:0x80177F28
 
 revolution/os/OSUtf.c:
-	.text       start:0x80093D1C end:0x80093F14
+	.text       start:0x80093D1C end:0x80093F54
+	.data       start:0x80177F28 end:0x80183D68
 
 revolution/os/OSIpc.c:
-	.text       start:0x80093F14 end:0x80093F7C
+	.text       start:0x80093F54 end:0x80093F7C
+	.sdata      start:0x8025C980 end:0x8025C988
+	.sbss       start:0x8025D5E0 end:0x8025D5E8
 
 revolution/os/OSStateTM.c:
 	.text       start:0x80093F7C end:0x800945CC
+	.data       start:0x80183D68 end:0x80183E30
+	.bss        start:0x801DD6A0 end:0x801DD760
+	.sbss       start:0x8025D5E8 end:0x8025D608
+
+revolution/os/__start.c:
+	.init       start:0x80004000 end:0x800042E0
+	.sbss       start:0x8025D608 end:0x8025D610
+
+revolution/ax/AXComp.c:
+	.data       start:0x80186820 end:0x801877E0
+
+revolution/ax/DSPCode.c:
+	.data       start:0x801877E0 end:0x801897E0
 
 revolution/os/code_800945CC.c:
 	.text       start:0x800945CC end:0x80094618

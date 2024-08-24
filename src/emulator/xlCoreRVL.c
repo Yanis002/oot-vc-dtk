@@ -23,11 +23,11 @@ UnknownContentStruct gUnkContent;
 u32 fn_8009A7C4();
 u32 fn_800B6F8C();
 
-#define ROUND_UP(v, x) (((v) + ((x) - 1)) & ~((x) - 1))
+#define EMU_ROUND_UP(v, x) (((v) + ((x) - 1)) & ~((x) - 1))
 
 static inline u32 getFBTotalSize(f32 aspectRatio) {
     u16 lineCount = GXGetNumXfbLines(rmode->efbHeight, aspectRatio);
-    u16 fbWith = ROUND_UP(rmode->fbWidth, 16);
+    u16 fbWith = EMU_ROUND_UP(rmode->fbWidth, 16);
     return fbWith * lineCount;
 }
 
