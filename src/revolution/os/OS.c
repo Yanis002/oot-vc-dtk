@@ -37,7 +37,6 @@ const char* __OSVersion = "<< RVL_SDK - OS \trelease build: Sep 21 2006 14:32:13
 static void OSExceptionInit(void);
 
 void __OSDBINTSTART(void);
-void __OSDBINTEND(void);
 void __OSDBJUMPSTART(void);
 void __OSDBJUMPDEST(void);
 void __OSDBJUMPEND(void);
@@ -45,8 +44,6 @@ void __OSEVStart(void);
 void __DBVECTOR(void);
 void __OSEVSetNumber(void);
 void __OSEVEnd(void);
-
-// DECOMP_FORCEACTIVE(OS_c, __OSRebootParams);
 
 ASM void __OSFPRInit(void) {
 #ifdef __MWERKS__ // clang-format off
@@ -147,18 +144,12 @@ void __OSGetIOSRev(OSIOSRev* rev) {
     rev->idHi = (version >> 24) & 0xFF;
     rev->idLo = (version >> 16) & 0xFF;
     rev->verMajor = (version >> 8) & 0xFF;
-    rev->verMinor = version & 0xFF;
+    rev->verMinor = (u8)version & 0xFF;
 
-    rev->buildMon = (builddate >> 16) & 0xF;
-    rev->buildDay = ((builddate >> 8) & 0xF) + ((builddate >> 12) & 0xF) * 10;
-    rev->buildYear = builddate + 2000;
+    rev->buildMon = (builddate >> 16) & 0xFF;
+    rev->buildDay = ((builddate >> 8) & 15) + (((builddate >> 12) & 0xF) * 10);
+    rev->buildYear = (u8)builddate + 2000;
 }
-
-// ASM void fn_8008A608(void) {
-// #ifdef __MWERKS__ // clang-format off
-//     bl OSExceptionVector+0x38
-// #endif // clang-format on
-// }
 
 u32 OSGetConsoleType(void) {
     u32 hollywood;
@@ -353,6 +344,10 @@ static inline void CheckTargets(void) {
     }
 }
 
+inline u32 test(u32 t) {
+    return t & 0x0FFFFFFF;
+}
+
 static void ReportOSInfo(void) {
     OSConsoleType type;
     OSIOSRev rev;
@@ -408,8 +403,8 @@ static void ReportOSInfo(void) {
             }
             break;
         case OS_CONSOLE_MASK_TDEV:
-            tdev = type & 0x0FFFFFFF;
-            OSReport("TDEV-based emulation HW%d\n", tdev - 3);
+            tdev = category ;
+            OSReport("TDEV-based emulation HW%d\n", test(tdev) - 3);
             break;
         default:
             OSReport("%08x\n", type);
@@ -417,10 +412,8 @@ static void ReportOSInfo(void) {
     }
 
     __OSGetIOSRev(&rev);
-    OSReport("Firmware     : %d.%d.%d ", (rev.idLo >> 8) & 0xF, rev.verMajor, rev.verMinor);
-    OSReport("(%d/%d/%d)\n", (s8)(rev.buildMon >> 16), (s8)((((rev.buildDay >> 8) & 0xF) + ((rev.buildDay >> 12) & 0xF) * 0xA)), (s16)(rev.buildDay + 0x7D0));
-    // OSReport("(%d/%d/%d)\n", rev.buildMon, rev.buildDay, rev.buildYear);
-
+    OSReport("Firmware     : %d.%d.%d ", rev.idLo, rev.verMajor, rev.verMinor);
+    OSReport("(%d/%d/%d)\n", rev.buildMon, rev.buildDay, rev.buildYear);
     OSReport("Memory %d MB\n", OS_MEM_B_TO_MB(OSGetConsoleSimulatedMem1Size() + OSGetConsoleSimulatedMem2Size()));
     OSReport("MEM1 Arena : 0x%x - 0x%x\n", OSGetMEM1ArenaLo(), OSGetMEM1ArenaHi());
     OSReport("MEM2 Arena : 0x%x - 0x%x\n", OSGetMEM2ArenaLo(), OSGetMEM2ArenaHi());
@@ -520,7 +513,7 @@ void OSInit(void) {
 
                 // Use debugger stack if it would be wasted
                 if (BI2DebugFlag != NULL && *BI2DebugFlag < 2) {
-                    mem2lo = ROUND_UP_PTR(_db_stack_end, 32);
+                    mem2lo = ROUND_UP_PTR(_stack_addr, 32);
                 }
             }
             // First 2K of MEM2 is reserved?
@@ -574,11 +567,7 @@ void OSInit(void) {
             __OSInitSTM();
 
             SCInit();
-            while (SCCheckStatus() == SC_STATUS_BUSY) {
-                ;
-            }
-
-            __OSInitNet();
+            while (SCCheckStatus() == SC_STATUS_BUSY) {}
         }
 
         if (!__OSInIPL) {
@@ -601,8 +590,10 @@ void OSInit(void) {
 
 // Physical addresses
 // (Must be defined down here because of data pooling)
-static u32 __OSExceptionLocations[OS_EXC_MAX] = {0x0100, 0x0200, 0x0300, 0x0400, 0x0500, 0x0600, 0x0700, 0x0800,
-                                                 0x0900, 0x0C00, 0x0D00, 0x0F00, 0x1300, 0x1400, 0x1700};
+static u32 __OSExceptionLocations[OS_EXC_MAX] = {
+    0x0100, 0x0200, 0x0300, 0x0400, 0x0500, 0x0600, 0x0700, 0x0800,
+    0x0900, 0x0C00, 0x0D00, 0x0F00, 0x1300, 0x1400, 0x1700,
+};
 
 static void OSExceptionInit(void) {
     u32* dst;
@@ -626,10 +617,10 @@ static void OSExceptionInit(void) {
     // Code is empty if DB integrator has not yet been installed
     if (*dst == 0) {
         DBPrintf("Installing OSDBIntegrator\n");
-        memcpy(dst, __OSDBINTSTART, (u32)__OSDBINTEND - (u32)__OSDBINTSTART);
-        DCFlushRangeNoSync(dst, (u32)__OSDBINTEND - (u32)__OSDBINTSTART);
+        memcpy(dst, __OSDBINTSTART, (u32)__OSDBJUMPSTART - (u32)__OSDBINTSTART);
+        DCFlushRangeNoSync(dst, (u32)__OSDBJUMPSTART - (u32)__OSDBINTSTART);
         __sync();
-        ICInvalidateRange(dst, (u32)__OSDBINTEND - (u32)__OSDBINTSTART);
+        ICInvalidateRange(dst, (u32)__OSDBJUMPSTART - (u32)__OSDBINTSTART);
     }
 
     for (i = 0; i < OS_EXC_MAX; i++) {
@@ -693,8 +684,6 @@ static ASM void __OSDBIntegrator(void) {
 
     // Call exception hook
     blr
-
-    entry __OSDBINTEND
 #endif // clang-format on
 }
 

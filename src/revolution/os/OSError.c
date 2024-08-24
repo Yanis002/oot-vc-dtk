@@ -4,14 +4,17 @@
 #include "stdio.h"
 
 OSErrorHandler __OSErrorTable[OS_ERR_MAX];
-u32 __OSFpscrEnableBits =
-    (FPSCR_VE | FPSCR_OE | FPSCR_UE | FPSCR_ZE | FPSCR_XE);
+u32 __OSFpscrEnableBits = (FPSCR_VE | FPSCR_OE | FPSCR_UE | FPSCR_ZE | FPSCR_XE);
 
 void OSReport(const char* msg, ...) {
     va_list list;
     va_start(list, msg);
     vprintf(msg, list);
     va_end(list);
+}
+
+void OSVReport(const char* msg, va_list list) {
+    vprintf(msg, list);
 }
 
 void OSPanic(const char* file, int line, const char* msg, ...) {
@@ -27,8 +30,8 @@ void OSPanic(const char* file, int line, const char* msg, ...) {
     OSReport(" in \"%s\" on line %d.\n", file, line);
 
     OSReport("\nAddress:      Back Chain    LR Save\n");
-    for (depth = 0, sp = (u32*)OSGetStackPointer();
-         sp != NULL && sp != (u32*)0xFFFFFFFF && depth++ < 16; sp = (u32*)*sp) {
+    for (depth = 0, sp = (u32*)OSGetStackPointer(); sp != NULL && sp != (u32*)0xFFFFFFFF && depth++ < 16;
+         sp = (u32*)*sp) {
         OSReport("0x%08x:   0x%08x    0x%08x\n", sp, sp[0], sp[1]);
     }
 
@@ -53,8 +56,7 @@ OSErrorHandler OSSetErrorHandler(u16 error, OSErrorHandler handler) {
 
         if (handler != NULL) {
             int i;
-            for (thread = OS_THREAD_QUEUE.head; thread != NULL;
-                 thread = thread->nextActive) {
+            for (thread = OS_THREAD_QUEUE.head; thread != NULL; thread = thread->nextActive) {
                 thread->context.srr1 |= 0x900;
 
                 if (!(thread->context.state & 0x1)) {
@@ -67,37 +69,27 @@ OSErrorHandler OSSetErrorHandler(u16 error, OSErrorHandler handler) {
 
                     thread->context.fpscr = FPSCR_NI;
                 }
-                thread->context.fpscr |=
-                    __OSFpscrEnableBits &
-                    (FPSCR_VE | FPSCR_OE | FPSCR_UE | FPSCR_ZE | FPSCR_XE);
-                thread->context.fpscr &=
-                    (FPSCR_FEX | FPSCR_VX | FPSCR_FR | FPSCR_FPRF |
-                     FPSCR_UNK20 | FPSCR_VE | FPSCR_OE | FPSCR_UE | FPSCR_ZE |
-                     FPSCR_XE | FPSCR_NI | FPSCR_RN);
+                thread->context.fpscr |= __OSFpscrEnableBits & (FPSCR_VE | FPSCR_OE | FPSCR_UE | FPSCR_ZE | FPSCR_XE);
+                thread->context.fpscr &= (FPSCR_FEX | FPSCR_VX | FPSCR_FR | FPSCR_FPRF | FPSCR_UNK20 | FPSCR_VE |
+                                          FPSCR_OE | FPSCR_UE | FPSCR_ZE | FPSCR_XE | FPSCR_NI | FPSCR_RN);
             }
 
-            fpscr |= __OSFpscrEnableBits &
-                     (FPSCR_VE | FPSCR_OE | FPSCR_UE | FPSCR_ZE | FPSCR_XE);
+            fpscr |= __OSFpscrEnableBits & (FPSCR_VE | FPSCR_OE | FPSCR_UE | FPSCR_ZE | FPSCR_XE);
             msr |= (MSR_FE0 | MSR_FE1);
         } else {
-            for (thread = OS_THREAD_QUEUE.head; thread != NULL;
-                 thread = thread->nextActive) {
+            for (thread = OS_THREAD_QUEUE.head; thread != NULL; thread = thread->nextActive) {
                 thread->context.srr1 &= ~0x900;
-                thread->context.fpscr &=
-                    ~(FPSCR_VE | FPSCR_OE | FPSCR_UE | FPSCR_ZE | FPSCR_XE);
-                thread->context.fpscr &=
-                    (FPSCR_FEX | FPSCR_VX | FPSCR_FR | FPSCR_FPRF |
-                     FPSCR_UNK20 | FPSCR_VE | FPSCR_OE | FPSCR_UE | FPSCR_ZE |
-                     FPSCR_XE | FPSCR_NI | FPSCR_RN);
+                thread->context.fpscr &= ~(FPSCR_VE | FPSCR_OE | FPSCR_UE | FPSCR_ZE | FPSCR_XE);
+                thread->context.fpscr &= (FPSCR_FEX | FPSCR_VX | FPSCR_FR | FPSCR_FPRF | FPSCR_UNK20 | FPSCR_VE |
+                                          FPSCR_OE | FPSCR_UE | FPSCR_ZE | FPSCR_XE | FPSCR_NI | FPSCR_RN);
             }
 
             fpscr &= ~(FPSCR_VE | FPSCR_OE | FPSCR_UE | FPSCR_ZE | FPSCR_XE);
             msr &= ~(MSR_FE0 | MSR_FE1);
         }
 
-        PPCMtfpscr(fpscr & (FPSCR_FEX | FPSCR_VX | FPSCR_FR | FPSCR_FPRF |
-                            FPSCR_UNK20 | FPSCR_VE | FPSCR_OE | FPSCR_UE |
-                            FPSCR_ZE | FPSCR_XE | FPSCR_NI | FPSCR_RN));
+        PPCMtfpscr(fpscr & (FPSCR_FEX | FPSCR_VX | FPSCR_FR | FPSCR_FPRF | FPSCR_UNK20 | FPSCR_VE | FPSCR_OE |
+                            FPSCR_UE | FPSCR_ZE | FPSCR_XE | FPSCR_NI | FPSCR_RN));
         PPCMtmsr(msr);
     }
 
@@ -111,8 +103,7 @@ void __OSUnhandledException(u8 error, OSContext* ctx, u32 dsisr, u32 dar) {
     if (!(ctx->srr1 & 0x2)) {
         OSReport("Non-recoverable Exception %d", error);
     } else {
-        if (error == OS_ERR_PROGRAM && ctx->srr1 & 0x100000 &&
-            __OSErrorTable[OS_ERR_FP_EXCEPTION] != NULL) {
+        if (error == OS_ERR_PROGRAM && ctx->srr1 & 0x100000 && __OSErrorTable[OS_ERR_FP_EXCEPTION] != NULL) {
             u32 msr;
             u32 fpscr;
 
@@ -126,9 +117,8 @@ void __OSUnhandledException(u8 error, OSContext* ctx, u32 dsisr, u32 dar) {
             }
 
             fpscr = PPCMffpscr();
-            PPCMtfpscr(fpscr & (FPSCR_FEX | FPSCR_VX | FPSCR_FR | FPSCR_FPRF |
-                                FPSCR_UNK20 | FPSCR_VE | FPSCR_OE | FPSCR_UE |
-                                FPSCR_ZE | FPSCR_XE | FPSCR_NI | FPSCR_RN));
+            PPCMtfpscr(fpscr & (FPSCR_FEX | FPSCR_VX | FPSCR_FR | FPSCR_FPRF | FPSCR_UNK20 | FPSCR_VE | FPSCR_OE |
+                                FPSCR_UE | FPSCR_ZE | FPSCR_XE | FPSCR_NI | FPSCR_RN));
             PPCMtmsr(msr);
 
             if (OS_CURRENT_FPU_CONTEXT == ctx) {
@@ -136,9 +126,8 @@ void __OSUnhandledException(u8 error, OSContext* ctx, u32 dsisr, u32 dar) {
                 __OSErrorTable[error](error, ctx, dsisr, dar);
                 ctx->srr1 &= ~0x2000;
                 OS_CURRENT_FPU_CONTEXT = NULL;
-                ctx->fpscr &= (FPSCR_FEX | FPSCR_VX | FPSCR_FR | FPSCR_FPRF |
-                               FPSCR_UNK20 | FPSCR_VE | FPSCR_OE | FPSCR_UE |
-                               FPSCR_ZE | FPSCR_XE | FPSCR_NI | FPSCR_RN);
+                ctx->fpscr &= (FPSCR_FEX | FPSCR_VX | FPSCR_FR | FPSCR_FPRF | FPSCR_UNK20 | FPSCR_VE | FPSCR_OE |
+                               FPSCR_UE | FPSCR_ZE | FPSCR_XE | FPSCR_NI | FPSCR_RN);
                 OSEnableScheduler();
                 __OSReschedule();
             } else {
@@ -169,39 +158,37 @@ void __OSUnhandledException(u8 error, OSContext* ctx, u32 dsisr, u32 dar) {
     OSReport("\nDSISR = 0x%08x                   DAR  = 0x%08x\n", dsisr, dar);
     OSReport("TB = 0x%016llx\n", tb);
     switch (error) {
-    case OS_ERR_DSI:
-        OSReport("\nInstruction at 0x%x (read from SRR0) attempted to access "
-                 "invalid address 0x%x (read from DAR)\n",
-                 ctx->srr0, dar);
-        break;
-    case OS_ERR_ISI:
-        OSReport("\nAttempted to fetch instruction from invalid address 0x%x "
-                 "(read from SRR0)\n",
-                 ctx->srr0);
-        break;
-    case OS_ERR_ALIGNMENT:
-        OSReport("\nInstruction at 0x%x (read from SRR0) attempted to access "
-                 "unaligned address 0x%x (read from DAR)\n",
-                 ctx->srr0, dar);
-        break;
-    case OS_ERR_PROGRAM:
-        OSReport("\nProgram exception : Possible illegal instruction/operation "
-                 "at or around 0x%x (read from SRR0)\n",
-                 ctx->srr0, dar);
-        break;
-    case OS_ERR_PROTECTION:
-        OSReport("\n");
-        OSReport("AI DMA Address =   0x%04x%04x\n",
-                 DSP_HW_REGS[DSP_AI_DMA_START_H],
-                 DSP_HW_REGS[DSP_AI_DMA_START_L]);
-        OSReport("ARAM DMA Address = 0x%04x%04x\n",
-                 DSP_HW_REGS[DSP_AR_DMA_MMADDR_H],
-                 DSP_HW_REGS[DSP_AR_DMA_MMADDR_L]);
-        OSReport("DI DMA Address =   0x%08x\n", OS_DI_DMA_ADDR);
-        break;
+        case OS_ERR_DSI:
+            OSReport("\nInstruction at 0x%x (read from SRR0) attempted to access "
+                     "invalid address 0x%x (read from DAR)\n",
+                     ctx->srr0, dar);
+            break;
+        case OS_ERR_ISI:
+            OSReport("\nAttempted to fetch instruction from invalid address 0x%x "
+                     "(read from SRR0)\n",
+                     ctx->srr0);
+            break;
+        case OS_ERR_ALIGNMENT:
+            OSReport("\nInstruction at 0x%x (read from SRR0) attempted to access "
+                     "unaligned address 0x%x (read from DAR)\n",
+                     ctx->srr0, dar);
+            break;
+        case OS_ERR_PROGRAM:
+            OSReport("\nProgram exception : Possible illegal instruction/operation "
+                     "at or around 0x%x (read from SRR0)\n",
+                     ctx->srr0, dar);
+            break;
+        case OS_ERR_PROTECTION:
+            OSReport("\n");
+            OSReport("AI DMA Address =   0x%04x%04x\n", DSP_HW_REGS[DSP_AI_DMA_START_H],
+                     DSP_HW_REGS[DSP_AI_DMA_START_L]);
+            OSReport("ARAM DMA Address = 0x%04x%04x\n", DSP_HW_REGS[DSP_AR_DMA_MMADDR_H],
+                     DSP_HW_REGS[DSP_AR_DMA_MMADDR_L]);
+            OSReport("DI DMA Address =   0x%08x\n", OS_DI_DMA_ADDR);
+            break;
     }
 
-    OSReport("\nLast interrupt (%d): SRR0 = 0x%08x  TB = 0x%016llx\n",
-             __OSLastInterrupt, __OSLastInterruptSrr0, __OSLastInterruptTime);
+    OSReport("\nLast interrupt (%d): SRR0 = 0x%08x  TB = 0x%016llx\n", __OSLastInterrupt, __OSLastInterruptSrr0,
+             __OSLastInterruptTime);
     PPCHalt();
 }

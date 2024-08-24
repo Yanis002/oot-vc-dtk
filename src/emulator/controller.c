@@ -245,7 +245,7 @@ static void* controllerThread(void* pArg) {
 }
 
 void controllerVIPostRetrace(u32 retraceCount) {
-    if (SYSTEM_CONTROLLER(gpSystem)->unk_224 != 0 && fn_80092418(&gControllerThread.thread)) {
+    if (SYSTEM_CONTROLLER(gpSystem)->unk_224 != 0 && OSIsThreadSuspended(&gControllerThread.thread)) {
         OSResumeThread(&gControllerThread.thread);
     }
 

@@ -26,6 +26,7 @@
 #include "emulator/xlHeap.h"
 #include "macros.h"
 #include "revolution/vi.h"
+#include "revolution/os.h"
 #include "stdlib.h"
 #include "string.h"
 
@@ -1522,7 +1523,7 @@ bool fn_8000A8A8(System* pSystem) {
     VIFlush();
     VIWaitForRetrace();
     LCDisable();
-    fn_800914D0(0x1234);
+    OSRestart(0x1234);
     return true;
 }
 

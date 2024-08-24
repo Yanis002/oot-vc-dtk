@@ -14,8 +14,6 @@ static OSShutdownFunctionInfo ShutdownFunctionInfo = {
     NULL,
 };
 
-s32 lbl_8025C940 = 0xFFFFFFFF;
-
 static void SetTimer(const OSAlarm* alarm) {
     s64 timeLeft = alarm->end - __OSGetSystemTime();
 
@@ -248,11 +246,3 @@ static bool OnReset(bool final, u32 event) {
 void OSSetAlarmUserData(OSAlarm* alarm, void* userData) { alarm->userData = userData; }
 
 void* OSGetAlarmUserData(const OSAlarm* alarm) { return alarm->userData; }
-
-s32 fn_8008AFE0(s32 arg0) {
-    s32 temp_r0;
-
-    temp_r0 = lbl_8025C940;
-    lbl_8025C940 = arg0;
-    return temp_r0;
-}

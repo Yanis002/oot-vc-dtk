@@ -4,37 +4,10 @@
 
 static tXL_LIST gListList;
 
-static inline bool __xlListMakeItem(tXL_LIST* pList, void** ppItem) {
-    s32 nSize;
-    void* pListNode;
-    void* pNode;
-    void* pNodeNext;
-
-    nSize = pList->nItemSize + 4;
-    if (!xlHeapTake(&pListNode, nSize)) {
-        return false;
-    }
-
-    NODE_NEXT(pListNode) = NULL;
-    *ppItem = NODE_DATA(pListNode);
-    pNode = &pList->pNodeHead;
-    while (pNode != NULL) {
-        pNodeNext = NODE_NEXT(pNode);
-        if (pNodeNext == NULL) {
-            NODE_NEXT(pNode) = pListNode;
-            pList->nItemCount++;
-            return true;
-        }
-        pNode = pNodeNext;
-    }
-
-    return false;
-}
-
 bool xlListMake(tXL_LIST** ppList, s32 nItemSize) {
     nItemSize = (nItemSize + 3) & ~3;
 
-    if (__xlListMakeItem(&gListList, (void**)ppList)) {
+    if (xlListMakeItem(&gListList, (void**)ppList)) {
         (*ppList)->nItemCount = 0;
         (*ppList)->nItemSize = nItemSize;
         (*ppList)->pNodeNext = NULL;
@@ -77,8 +50,32 @@ bool xlListFree(tXL_LIST** ppList) {
     return true;
 }
 
-//! TODO: figure out what's going on with this function
-bool xlListMakeItem(tXL_LIST* pList, void** ppItem) { return __xlListMakeItem(pList, ppItem); }
+bool xlListMakeItem(tXL_LIST* pList, void** ppItem) { 
+    s32 nSize;
+    void* pListNode;
+    void* pNode;
+    void* pNodeNext;
+
+    nSize = pList->nItemSize + 4;
+    if (!xlHeapTake(&pListNode, nSize)) {
+        return false;
+    }
+
+    NODE_NEXT(pListNode) = NULL;
+    *ppItem = NODE_DATA(pListNode);
+    pNode = &pList->pNodeHead;
+    while (pNode != NULL) {
+        pNodeNext = NODE_NEXT(pNode);
+        if (pNodeNext == NULL) {
+            NODE_NEXT(pNode) = pListNode;
+            pList->nItemCount++;
+            return true;
+        }
+        pNode = pNodeNext;
+    }
+
+    return false;
+}
 
 bool xlListFreeItem(tXL_LIST* pList, void** ppItem) {
     void* pNode;

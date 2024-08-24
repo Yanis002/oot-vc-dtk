@@ -61,11 +61,12 @@ static void WriteSramCallback(EXIChannel chan, OSContext* ctx) {
 
 static bool WriteSram(const void* src, u32 pos, s32 size) {
     u32 imm;
-    bool error = false;
+    bool error;
 
     if (!EXILock(EXI_CHAN_0, EXI_DEV_INT, WriteSramCallback)) {
         return false;
     }
+
 
     if (!EXISelect(EXI_CHAN_0, EXI_DEV_INT, EXI_FREQ_8MHZ)) {
         EXIUnlock(EXI_CHAN_0);
@@ -73,6 +74,7 @@ static bool WriteSram(const void* src, u32 pos, s32 size) {
     }
 
     imm = pos * 0x40 + 0x100 | 0xA0000000;
+    error = false;
     error |= !EXIImm(EXI_CHAN_0, &imm, sizeof(imm), EXI_WRITE, NULL);
     error |= !EXISync(EXI_CHAN_0);
     error |= !EXIImmEx(EXI_CHAN_0, (void*)src, size, EXI_WRITE);
@@ -106,7 +108,7 @@ static void* LockSram(u32 pos) {
     return Scb.block + pos;
 }
 
-OSSramEx* __OSLockSramEx(void) {
+static inline OSSramEx* __OSLockSramEx(void) {
     return (OSSramEx*)LockSram(sizeof(OSSram));
 }
 
@@ -155,7 +157,7 @@ static bool UnlockSram(bool save, u32 pos) {
     return Scb.sync;
 }
 
-bool __OSUnlockSramEx(bool save) {
+static inline bool __OSUnlockSramEx(bool save) {
     return UnlockSram(save, sizeof(OSSram));
 }
 
@@ -212,7 +214,7 @@ void OSSetWirelessID(s32 pad, u16 id) {
     }
 }
 
-u16 OSGetGbsMode(void) {
+static inline u16 OSGetGbsMode(void) {
     OSSramEx* sram;
     u16 gbs;
 
@@ -223,7 +225,7 @@ u16 OSGetGbsMode(void) {
     return gbs;
 }
 
-void OSSetGbsMode(u16 gbs) {
+static inline void OSSetGbsMode(u16 gbs) {
     OSSramEx* sram;
 
     if (((u32)gbs & 0x7C00) == 0x5000 || ((u32)gbs & 0xC0) == 0xC0) {

@@ -8,12 +8,13 @@ extern "C" {
 #endif
 
 typedef struct OSExecParams {
-    UNKWORD WORD_0x0;
-    UNKWORD WORD_0x4;
-    char UNK_0x8[0x4];
+    int valid; // at 0x0
+    u32 restartCode; // at 0x4
+    u32 bootDol; // at 0x8
     void* regionStart; // at 0xC
     void* regionEnd; // at 0x10
-    char UNK_0x14[0x1C - 0x14];
+    int argsUseDefault; // at 0x14
+    void* argsAddr; // at 0x18
 } OSExecParams;
 
 extern bool __OSInReboot;

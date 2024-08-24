@@ -174,7 +174,7 @@ def EmulatorLib(lib_name: str, objects: List[Object]) -> Dict[str, Any]:
     return {
         "lib": lib_name,
         "mw_version": "GC/3.0a5",
-        "cflags": [*cflags_base, "-inline auto"],
+        "cflags": [*cflags_base, "-ipa file"],
         "host": False,
         "objects": objects,
     }
@@ -183,7 +183,7 @@ def RevolutionLib(lib_name: str, objects: List[Object]) -> Dict[str, Any]:
     return {
         "lib": lib_name,
         "mw_version": "GC/3.0a5", # from strings, note: dvd is using a different version
-        "cflags": cflags_base,
+        "cflags": [*cflags_base, "-ipa file"],
         "host": False,
         "objects": objects,
     }
@@ -246,7 +246,7 @@ config.libs = [
             Object(LinkedFor("vc-j"), "emulator/xlFileRVL.c"),
             Object(LinkedFor("vc-j"), "emulator/xlText.c"),
             Object(LinkedFor("vc-j"), "emulator/xlList.c"),
-            Object(NotLinked, "emulator/xlHeap.c"),
+            Object(NotLinked, "emulator/xlHeap.c", cflags=[*cflags_base, "-ipa off"]), # TODO: determine if we can remove this once this is matched
             Object(LinkedFor("vc-j"), "emulator/xlFile.c"),
             Object(LinkedFor("vc-j"), "emulator/xlObject.c"),
         ]
@@ -261,30 +261,33 @@ config.libs = [
         "os",
         [
             Object(NotLinked, "revolution/os/OS.c"),
-            Object(NotLinked, "revolution/os/OSAlarm.c"),
+            Object(LinkedFor("vc-j"), "revolution/os/OSAlarm.c"),
+            Object(LinkedFor("vc-j"), "revolution/os/OSAlloc.c"),
             Object(LinkedFor("vc-j"), "revolution/os/OSArena.c"),
             Object(LinkedFor("vc-j"), "revolution/os/OSAudioSystem.c"),
             Object(LinkedFor("vc-j"), "revolution/os/OSCache.c"),
             Object(LinkedFor("vc-j"), "revolution/os/OSContext.c"),
-            Object(NotLinked, "revolution/os/OSError.c"),
-            Object(NotLinked, "revolution/os/OSExec.c"),
+            Object(LinkedFor("vc-j"), "revolution/os/OSError.c"),
+            Object(NotLinked, "revolution/os/OSExec.c", cflags=[*cflags_base]),
             Object(NotLinked, "revolution/os/OSFatal.c"),
             Object(LinkedFor("vc-j"), "revolution/os/OSFont.c"),
-            Object(NotLinked, "revolution/os/OSInterrupt.c"),
+            Object(LinkedFor("vc-j"), "revolution/os/OSInterrupt.c"),
             Object(LinkedFor("vc-j"), "revolution/os/OSLink.c"),
             Object(LinkedFor("vc-j"), "revolution/os/OSMessage.c"),
             Object(LinkedFor("vc-j"), "revolution/os/OSMemory.c"),
-            Object(NotLinked, "revolution/os/OSMutex.c"),
-            Object(NotLinked, "revolution/os/OSReset.c"),
-            Object(NotLinked, "revolution/os/OSRtc.c"),
+            Object(LinkedFor("vc-j"), "revolution/os/OSMutex.c"),
+            Object(LinkedFor("vc-j"), "revolution/os/OSReboot.c"),
+            Object(LinkedFor("vc-j"), "revolution/os/OSReset.c"),
+            Object(LinkedFor("vc-j"), "revolution/os/OSRtc.c"),
             Object(LinkedFor("vc-j"), "revolution/os/OSSync.c"),
-            Object(NotLinked, "revolution/os/OSThread.c"),
+            Object(LinkedFor("vc-j"), "revolution/os/OSThread.c"),
             Object(LinkedFor("vc-j"), "revolution/os/OSTime.c"),
             Object(LinkedFor("vc-j"), "revolution/os/OSUtf.c"),
             Object(LinkedFor("vc-j"), "revolution/os/OSIpc.c"),
             Object(LinkedFor("vc-j"), "revolution/os/OSStateTM.c"),
-            Object(LinkedFor("vc-j"), "revolution/os/code_800945CC.c"), # TODO: figure this out
+            Object(LinkedFor("vc-j"), "revolution/os/time.dolphin.c"),
             Object(NotLinked, "revolution/os/OSPlayRecord.c"),
+            Object(LinkedFor("vc-j"), "revolution/os/OSStateFlags.c"),
             Object(LinkedFor("vc-j"), "revolution/os/__start.c"),
             Object(LinkedFor("vc-j"), "revolution/os/__ppc_eabi_init.c"),
         ]

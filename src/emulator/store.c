@@ -184,7 +184,7 @@ static void fn_80061C4C(s32 nResult, void* pArg) {
     bool bSuccess;
 
     pStore->unk_BC = nResult;
-    bSuccess = fn_800B38E0(&pStore->nandFileInfo, fn_80061C08, &pStore->nandCmdBlock);
+    bSuccess = NANDCloseAsync(&pStore->nandFileInfo, fn_80061C08, &pStore->nandCmdBlock);
 
     if (bSuccess) {
         pStore->unk_BC = bSuccess;

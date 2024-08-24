@@ -6,6 +6,7 @@
 #include "string.h"
 
 static OSShutdownFunctionQueue ShutdownFunctionQueue;
+static u32 bootThisDol = 0;
 
 static inline void KillThreads(void) {
     OSThread* iter;
@@ -129,24 +130,18 @@ void __OSShutdownDevices(u32 event) {
     KillThreads();
 }
 
-// TODO: There must be a better way....
 static inline void __OSGetDiscState(u8* out) {
     u32 flags;
 
     if (__DVDGetCoverStatus() != DVD_COVER_CLOSED) {
         *out = 3;
-    } else if (*out == 1) {
-        if (!__OSGetRTCFlags(&flags) || flags == 0) {
-            goto status_1;
-        }
-
-    status_2:
-        *out = 2;
     } else {
-        goto status_2;
-
-    status_1:
-        *out = 1;
+        __OSGetRTCFlags(&flags);
+        if (flags != 0) {
+            *out = 2;
+        } else {
+            *out = 1;
+        }
     }
 }
 
@@ -188,6 +183,30 @@ void OSShutdownSystem(void) {
         __OSShutdownDevices(OS_SD_EVENT_SHUTDOWN);
         __OSShutdownToSBY();
     }
+}
+
+void OSRestart(u32 resetCode) {
+    u8 type = OSGetAppType();
+
+    __OSStopPlayRecord();
+    __OSUnRegisterStateEvent();
+
+    if (type == 0x81) {
+        OSDisableScheduler();
+        __OSShutdownDevices(4);
+        OSEnableScheduler();
+        __OSRelaunchTitle();
+    }
+    else if (type == 0x80) {
+        OSDisableScheduler();
+        __OSShutdownDevices(4);
+        OSEnableScheduler();
+        __OSReboot(resetCode, bootThisDol);
+    }
+
+    OSDisableScheduler();
+    __OSShutdownDevices(1);
+    __OSHotReset();
 }
 
 void OSReturnToMenu(void) {

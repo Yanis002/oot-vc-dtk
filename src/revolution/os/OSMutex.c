@@ -93,37 +93,3 @@ void __OSUnlockAllMutex(OSThread* thread) {
         OSWakeupThread(&mutex->queue);
     }
 };
-
-bool OSTryLockMutex(OSMutex* mutex) {
-    bool enabled = OSDisableInterrupts();
-    OSThread* currThread = OSGetCurrentThread();
-    bool lock = false;
-
-    if (mutex->thread == NULL) {
-        OSMutex* tail;
-
-        mutex->thread = currThread;
-        mutex->lock++;
-
-        tail = currThread->mutexQueue.tail;
-        if (tail == NULL) {
-            currThread->mutexQueue.head = mutex;
-        } else {
-            tail->next = mutex;
-        }
-
-        mutex->prev = tail;
-        mutex->next = NULL;
-
-        currThread->mutexQueue.tail = mutex;
-        lock = true;
-    } else if (mutex->thread == currThread) {
-        mutex->lock++;
-        lock = true;
-    } else {
-        lock = false;
-    }
-
-    OSRestoreInterrupts(enabled);
-    return lock;
-}

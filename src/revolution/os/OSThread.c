@@ -1,11 +1,9 @@
-#include "revolution/os.h"
 #include "macros.h"
+#include "revolution/os.h"
 
-static void DefaultSwitchThreadCallback(OSThread* currThread,
-                                        OSThread* newThread);
+static void DefaultSwitchThreadCallback(OSThread* currThread, OSThread* newThread);
 
-static OSSwitchThreadCallback SwitchThreadCallback =
-    DefaultSwitchThreadCallback;
+static OSSwitchThreadCallback SwitchThreadCallback = DefaultSwitchThreadCallback;
 
 static OSThread DefaultThread;
 static OSThreadQueue RunQueue[32];
@@ -16,22 +14,9 @@ volatile static s32 Reschedule = 0;
 volatile static bool RunQueueHint = false;
 volatile static u32 RunQueueBits = 0;
 
-static void DefaultSwitchThreadCallback(OSThread* currThread,
-                                        OSThread* newThread){
+static void DefaultSwitchThreadCallback(OSThread* currThread, OSThread* newThread) {
 #pragma unused(currThread)
 #pragma unused(newThread)
-}
-
-OSSwitchThreadCallback OSSetSwitchThreadCallback(OSSwitchThreadCallback newCb) {
-    OSSwitchThreadCallback oldCb;
-    bool enabled = OSDisableInterrupts();
-
-    oldCb = SwitchThreadCallback;
-    SwitchThreadCallback =
-        (newCb != NULL) ? newCb : DefaultSwitchThreadCallback;
-
-    OSRestoreInterrupts(enabled);
-    return (oldCb == DefaultSwitchThreadCallback) ? NULL : oldCb;
 }
 
 void __OSThreadInit(void) {
@@ -84,12 +69,12 @@ void __OSThreadInit(void) {
     Reschedule = 0;
 }
 
-void OSSetCurrentThread(OSThread* thread) {
+static inline void OSSetCurrentThread(OSThread* thread) {
     SwitchThreadCallback(OSGetCurrentThread(), thread);
     OS_CURRENT_THREAD = thread;
 }
 
-void OSInitMutexQueue(OSMutexQueue* queue) {
+static inline void OSInitMutexQueue(OSMutexQueue* queue) {
     queue->tail = NULL;
     queue->head = NULL;
 }
@@ -99,9 +84,7 @@ void OSInitThreadQueue(OSThreadQueue* queue) {
     queue->head = NULL;
 }
 
-OSThread* OSGetCurrentThread(void) {
-    return OS_CURRENT_THREAD;
-}
+OSThread* OSGetCurrentThread(void) { return OS_CURRENT_THREAD; }
 
 static void __OSSwitchThread(OSThread* thread) {
     OSSetCurrentThread(thread);
@@ -109,11 +92,10 @@ static void __OSSwitchThread(OSThread* thread) {
     OSLoadContext(&thread->context);
 }
 
+bool OSIsThreadSuspended(OSThread* thread) { return (0 < thread->suspend) ? true : false; }
+
 bool OSIsThreadTerminated(OSThread* thread) {
-    return thread->state == OS_THREAD_STATE_MORIBUND ||
-                   thread->state == OS_THREAD_STATE_EXITED
-               ? true
-               : false;
+    return thread->state == OS_THREAD_STATE_MORIBUND || thread->state == OS_THREAD_STATE_EXITED ? true : false;
 }
 
 static bool __OSIsThreadActive(OSThread* thread) {
@@ -154,7 +136,7 @@ s32 OSEnableScheduler(void) {
     return old;
 }
 
-void OSClearStack(u8 val) {
+static inline void OSClearStack(u8 val) {
     u32* end;
     u32* begin;
     u32 longVal;
@@ -240,67 +222,64 @@ static OSThread* SetEffectivePriority(OSThread* thread, s32 prio) {
     OSThread* prev;
 
     switch (thread->state) {
-    case OS_THREAD_STATE_READY:
-        UnsetRun(thread);
-        thread->priority = prio;
-        thread->queue = &RunQueue[prio];
-        SetRun(thread);
-        break;
-    case OS_THREAD_STATE_SLEEPING:
-        next = thread->next;
-        prev = thread->prev;
-        if (next == NULL) {
-            thread->queue->tail = prev;
-        } else {
-            next->prev = prev;
-        }
+        case OS_THREAD_STATE_READY:
+            UnsetRun(thread);
+            thread->priority = prio;
+            thread->queue = &RunQueue[prio];
+            SetRun(thread);
+            break;
+        case OS_THREAD_STATE_SLEEPING:
+            next = thread->next;
+            prev = thread->prev;
+            if (next == NULL) {
+                thread->queue->tail = prev;
+            } else {
+                next->prev = prev;
+            }
 
-        if (prev == NULL) {
-            thread->queue->head = next;
-        } else {
-            prev->next = next;
-        }
+            if (prev == NULL) {
+                thread->queue->head = next;
+            } else {
+                prev->next = next;
+            }
 
-        thread->priority = prio;
+            thread->priority = prio;
 
-        for (iter = thread->queue->head;
-             iter != NULL && iter->priority <= thread->priority;
-             iter = iter->next) {
-        }
+            for (iter = thread->queue->head; iter != NULL && iter->priority <= thread->priority; iter = iter->next) {}
 
-        if (iter == NULL) {
-            iter = thread->queue->tail;
             if (iter == NULL) {
-                thread->queue->head = thread;
+                iter = thread->queue->tail;
+                if (iter == NULL) {
+                    thread->queue->head = thread;
+                } else {
+                    iter->next = thread;
+                }
+                thread->prev = iter;
+                thread->next = NULL;
+                thread->queue->tail = thread;
             } else {
-                iter->next = thread;
-            }
-            thread->prev = iter;
-            thread->next = NULL;
-            thread->queue->tail = thread;
-        } else {
-            thread->next = iter;
-            iterPrev = iter->prev;
-            iter->prev = thread;
-            thread->prev = iterPrev;
+                thread->next = iter;
+                iterPrev = iter->prev;
+                iter->prev = thread;
+                thread->prev = iterPrev;
 
-            if (iterPrev == NULL) {
-                thread->queue->head = thread;
-            } else {
-                iterPrev->next = thread;
+                if (iterPrev == NULL) {
+                    thread->queue->head = thread;
+                } else {
+                    iterPrev->next = thread;
+                }
             }
-        }
 
-        if (thread->mutex != NULL) {
-            return thread->mutex->thread;
-        }
-        break;
-    case OS_THREAD_STATE_RUNNING:
-        RunQueueHint = true;
-        thread->priority = prio;
-        break;
-    default:
-        break;
+            if (thread->mutex != NULL) {
+                return thread->mutex->thread;
+            }
+            break;
+        case OS_THREAD_STATE_RUNNING:
+            RunQueueHint = true;
+            thread->priority = prio;
+            break;
+        default:
+            break;
     }
 
     return NULL;
@@ -389,8 +368,7 @@ static OSThread* SelectThread(bool b) {
         do {
             OSEnableInterrupts();
 
-            while (RunQueueBits == 0) {
-            }
+            while (RunQueueBits == 0) {}
             OSDisableInterrupts();
 
         } while (RunQueueBits == 0);
@@ -434,8 +412,8 @@ void OSYieldThread(void) {
     OSRestoreInterrupts(enabled);
 }
 
-bool OSCreateThread(OSThread* thread, OSThreadFunc func, void* funcArg,
-                    void* stackBegin, u32 stackSize, s32 prio, u16 flags) {
+bool OSCreateThread(OSThread* thread, OSThreadFunc func, void* funcArg, void* stackBegin, u32 stackSize, s32 prio,
+                    u16 flags) {
     bool enabled;
     int i;
     OSThread* tail;
@@ -548,38 +526,38 @@ void OSCancelThread(OSThread* thread) {
     enabled = OSDisableInterrupts();
 
     switch (thread->state) {
-    case OS_THREAD_STATE_READY:
-        if (thread->suspend <= 0) {
-            UnsetRun(thread);
-        }
-        break;
-    case OS_THREAD_STATE_RUNNING:
-        RunQueueHint = 1;
-        break;
-    case OS_THREAD_STATE_SLEEPING:
-        next = thread->next;
-        prev = thread->prev;
-        if (next == NULL) {
-            thread->queue->tail = prev;
-        } else {
-            next->prev = prev;
-        }
+        case OS_THREAD_STATE_READY:
+            if (thread->suspend <= 0) {
+                UnsetRun(thread);
+            }
+            break;
+        case OS_THREAD_STATE_RUNNING:
+            RunQueueHint = 1;
+            break;
+        case OS_THREAD_STATE_SLEEPING:
+            next = thread->next;
+            prev = thread->prev;
+            if (next == NULL) {
+                thread->queue->tail = prev;
+            } else {
+                next->prev = prev;
+            }
 
-        if (prev == NULL) {
-            thread->queue->head = next;
-        } else {
-            prev->next = next;
-        }
+            if (prev == NULL) {
+                thread->queue->head = next;
+            } else {
+                prev->next = next;
+            }
 
-        thread->queue = NULL;
-        if (thread->suspend <= 0 && thread->mutex != NULL) {
-            UpdatePriority(thread->mutex->thread);
-        }
-        break;
-    default:
-        OSRestoreInterrupts(enabled);
-        return;
-        break;
+            thread->queue = NULL;
+            if (thread->suspend <= 0 && thread->mutex != NULL) {
+                UpdatePriority(thread->mutex->thread);
+            }
+            break;
+        default:
+            OSRestoreInterrupts(enabled);
+            return;
+            break;
     }
 
     OSClearContext(&thread->context);
@@ -657,37 +635,6 @@ bool OSJoinThread(OSThread* thread, void* val) {
     return false;
 }
 
-void OSDetachThread(OSThread* thread) {
-    bool enabled;
-    OSThread* next;
-    OSThread* prev;
-
-    enabled = OSDisableInterrupts();
-    thread->flags |= OS_THREAD_DETACHED;
-
-    if (thread->state == OS_THREAD_STATE_MORIBUND) {
-        next = thread->nextActive;
-        prev = thread->prevActive;
-
-        if (next == NULL) {
-            OS_THREAD_QUEUE.tail = prev;
-        } else {
-            next->prevActive = prev;
-        }
-
-        if (prev == NULL) {
-            OS_THREAD_QUEUE.head = next;
-        } else {
-            prev->nextActive = next;
-        }
-
-        thread->state = OS_THREAD_STATE_EXITED;
-    }
-
-    OSWakeupThread(&thread->joinQueue);
-    OSRestoreInterrupts(enabled);
-}
-
 s32 OSResumeThread(OSThread* thread) {
     bool enabled;
     s32 suspend;
@@ -703,61 +650,59 @@ s32 OSResumeThread(OSThread* thread) {
         thread->suspend = 0;
     } else if (thread->suspend == 0) {
         switch (thread->state) {
-        case OS_THREAD_STATE_READY:
-            thread->priority = __OSGetEffectivePriority(thread);
-            SetRun(thread);
-            break;
-        case OS_THREAD_STATE_SLEEPING:
-            next = thread->next;
-            prev = thread->prev;
-            if (next == NULL) {
-                thread->queue->tail = prev;
-            } else {
-                next->prev = prev;
-            }
+            case OS_THREAD_STATE_READY:
+                thread->priority = __OSGetEffectivePriority(thread);
+                SetRun(thread);
+                break;
+            case OS_THREAD_STATE_SLEEPING:
+                next = thread->next;
+                prev = thread->prev;
+                if (next == NULL) {
+                    thread->queue->tail = prev;
+                } else {
+                    next->prev = prev;
+                }
 
-            if (prev == NULL) {
-                thread->queue->head = next;
-            } else {
-                prev->next = next;
-            }
+                if (prev == NULL) {
+                    thread->queue->head = next;
+                } else {
+                    prev->next = next;
+                }
 
-            thread->priority = __OSGetEffectivePriority(thread);
+                thread->priority = __OSGetEffectivePriority(thread);
 
-            for (iter = thread->queue->head;
-                 iter != NULL && iter->priority <= thread->priority;
-                 iter = iter->next) {
-            }
+                for (iter = thread->queue->head; iter != NULL && iter->priority <= thread->priority;
+                     iter = iter->next) {}
 
-            if (iter == NULL) {
-                iter = thread->queue->tail;
                 if (iter == NULL) {
-                    thread->queue->head = thread;
+                    iter = thread->queue->tail;
+                    if (iter == NULL) {
+                        thread->queue->head = thread;
+                    } else {
+                        iter->next = thread;
+                    }
+                    thread->prev = iter;
+                    thread->next = NULL;
+                    thread->queue->tail = thread;
                 } else {
-                    iter->next = thread;
-                }
-                thread->prev = iter;
-                thread->next = NULL;
-                thread->queue->tail = thread;
-            } else {
-                thread->next = iter;
-                iterPrev = iter->prev;
-                iter->prev = thread;
-                thread->prev = iterPrev;
+                    thread->next = iter;
+                    iterPrev = iter->prev;
+                    iter->prev = thread;
+                    thread->prev = iterPrev;
 
-                if (iterPrev == NULL) {
-                    thread->queue->head = thread;
-                } else {
-                    iterPrev->next = thread;
+                    if (iterPrev == NULL) {
+                        thread->queue->head = thread;
+                    } else {
+                        iterPrev->next = thread;
+                    }
                 }
-            }
 
-            if (thread->mutex != NULL) {
-                UpdatePriority(thread->mutex->thread);
-            }
-            break;
-        default:
-            break;
+                if (thread->mutex != NULL) {
+                    UpdatePriority(thread->mutex->thread);
+                }
+                break;
+            default:
+                break;
         }
 
         __OSReschedule();
@@ -779,48 +724,48 @@ s32 OSSuspendThread(OSThread* thread) {
 
     if (suspend == 0) {
         switch (thread->state) {
-        case OS_THREAD_STATE_RUNNING:
-            RunQueueHint = true;
-            thread->state = OS_THREAD_STATE_READY;
-            break;
-        case OS_THREAD_STATE_READY:
-            UnsetRun(thread);
-            break;
-        case OS_THREAD_STATE_SLEEPING:
-            next = thread->next;
-            prev = thread->prev;
-            if (next == NULL) {
-                thread->queue->tail = prev;
-            } else {
-                next->prev = prev;
-            }
+            case OS_THREAD_STATE_RUNNING:
+                RunQueueHint = true;
+                thread->state = OS_THREAD_STATE_READY;
+                break;
+            case OS_THREAD_STATE_READY:
+                UnsetRun(thread);
+                break;
+            case OS_THREAD_STATE_SLEEPING:
+                next = thread->next;
+                prev = thread->prev;
+                if (next == NULL) {
+                    thread->queue->tail = prev;
+                } else {
+                    next->prev = prev;
+                }
 
-            if (prev == NULL) {
-                thread->queue->head = next;
-            } else {
-                prev->next = next;
-            }
+                if (prev == NULL) {
+                    thread->queue->head = next;
+                } else {
+                    prev->next = next;
+                }
 
-            thread->priority = OS_PRIORITY_MAX + 1;
+                thread->priority = OS_PRIORITY_MAX + 1;
 
-            tail = thread->queue->tail;
-            if (tail == NULL) {
-                thread->queue->head = thread;
-            } else {
-                tail->next = thread;
-            }
+                tail = thread->queue->tail;
+                if (tail == NULL) {
+                    thread->queue->head = thread;
+                } else {
+                    tail->next = thread;
+                }
 
-            thread->prev = tail;
-            thread->next = NULL;
-            thread->queue->tail = thread;
-            tail = thread;
+                thread->prev = tail;
+                thread->next = NULL;
+                thread->queue->tail = thread;
+                tail = thread;
 
-            if (thread->mutex != NULL) {
-                UpdatePriority(thread->mutex->thread);
-            }
-            break;
-        default:
-            break;
+                if (thread->mutex != NULL) {
+                    UpdatePriority(thread->mutex->thread);
+                }
+                break;
+            default:
+                break;
         }
 
         __OSReschedule();
@@ -842,10 +787,7 @@ void OSSleepThread(OSThreadQueue* queue) {
     currThread->state = OS_THREAD_STATE_SLEEPING;
     currThread->queue = queue;
 
-    for (iter = queue->head;
-         iter != NULL && iter->priority <= currThread->priority;
-         iter = iter->next) {
-    }
+    for (iter = queue->head; iter != NULL && iter->priority <= currThread->priority; iter = iter->next) {}
 
     if (iter == NULL) {
         iter = queue->tail;
@@ -903,53 +845,3 @@ void OSWakeupThread(OSThreadQueue* queue) {
     __OSReschedule();
     OSRestoreInterrupts(enabled);
 }
-
-bool OSSetThreadPriority(OSThread* thread, s32 prio) {
-    bool enabled;
-
-    if (prio < OS_PRIORITY_MIN || prio > OS_PRIORITY_MAX) {
-        return false;
-    }
-
-    enabled = OSDisableInterrupts();
-
-    if (thread->base != prio) {
-        thread->base = prio;
-        UpdatePriority(thread);
-        __OSReschedule();
-    }
-
-    OSRestoreInterrupts(enabled);
-    return true;
-}
-
-static void SleepAlarmHandler(OSAlarm* alarm, OSContext* ctx) {
-#pragma unused(ctx)
-
-    OSResumeThread((OSThread*)OSGetAlarmUserData(alarm));
-}
-
-void OSSleepTicks(s64 ticks) {
-    bool enabled;
-    OSAlarm alarm;
-    OSThread* thread;
-
-    enabled = OSDisableInterrupts();
-
-    thread = OS_CURRENT_THREAD;
-    if (thread == NULL) {
-        OSRestoreInterrupts(enabled);
-        return;
-    }
-
-    OSCreateAlarm(&alarm);
-    OSSetAlarmTag(&alarm, (u32)thread);
-    OSSetAlarmUserData(&alarm, thread);
-    OSSetAlarm(&alarm, ticks, SleepAlarmHandler);
-
-    OSSuspendThread(thread);
-    OSCancelAlarm(&alarm);
-    OSRestoreInterrupts(enabled);
-}
-
-// DECOMP_FORCEACTIVE(OSThread_c, IdleThread);

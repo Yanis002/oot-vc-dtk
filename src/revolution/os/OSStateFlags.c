@@ -17,20 +17,18 @@ static u32 CheckSum(const OSStateFlags* state) {
     return checksum;
 }
 
-bool __OSWriteStateFlags(const OSStateFlags* state) {
+bool __OSWriteStateFlags(const OSStateFlags* newState) {
     NANDFileInfo file;
+    bool bResult;
 
-    memcpy(&StateFlags, state, sizeof(OSStateFlags));
+    memcpy(&StateFlags, newState, sizeof(OSStateFlags));
     StateFlags.checksum = CheckSum(&StateFlags);
 
-    if (NANDOpen("/title/00000001/00000002/data/state.dat", &file,
-                 NAND_ACCESS_WRITE) == NAND_RESULT_OK) {
-        if (NANDWrite(&file, &StateFlags, sizeof(OSStateFlags)) !=
-            sizeof(OSStateFlags)) {
-            NANDClose(&file);
-            return false;
-        }
-        if (NANDClose(&file) != NAND_RESULT_OK) {
+    if (NANDOpen("/title/00000001/00000002/data/state.dat", &file, NAND_ACCESS_WRITE) == NAND_RESULT_OK) {
+        bResult = NANDWrite(&file, &StateFlags, sizeof(OSStateFlags));
+        NANDClose(&file);
+
+        if (bResult != NAND_RESULT_OK) {
             return false;
         }
     } else {

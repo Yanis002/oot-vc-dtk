@@ -1,34 +1,33 @@
+#include "macros.h"
 #include "revolution/nand.h"
 #include "revolution/os.h"
-#include "macros.h"
+#include "mem_funcs.h"
 
 // Why?!? :(
 #define MY_SEC_TO_TICKS(x) (x * (s64)OS_SEC_TO_TICKS(1))
 
 typedef enum {
-    PLAY_RECORD_STATE_STARTED,   //!< __OSStartPlayRecord
-    PLAY_RECORD_STATE_OPEN,      //!< Open play record
-    PLAY_RECORD_STATE_READ,      //!< Read play record
-    PLAY_RECORD_STATE_SEEK,      //!< Seek play record
+    PLAY_RECORD_STATE_STARTED, //!< __OSStartPlayRecord
+    PLAY_RECORD_STATE_OPEN, //!< Open play record
+    PLAY_RECORD_STATE_READ, //!< Read play record
+    PLAY_RECORD_STATE_SEEK, //!< Seek play record
     PLAY_RECORD_STATE_SET_ALARM, //!< Set alarm callback
-    PLAY_RECORD_STATE_WRITE,     //!< Save play record
-    PLAY_RECORD_STATE_CLOSE,     //!< Close play record
-    PLAY_RECORD_STATE_CLOSED,    //!< Play record was closed
-    PLAY_RECORD_STATE_TIMEOUT,   //!< Play record could not be closed
-    PLAY_RECORD_STATE_STOPPED    //!< __OSStopPlayRecord
+    PLAY_RECORD_STATE_WRITE, //!< Save play record
+    PLAY_RECORD_STATE_CLOSE, //!< Close play record
+    PLAY_RECORD_STATE_CLOSED, //!< Play record was closed
+    PLAY_RECORD_STATE_TIMEOUT, //!< Play record could not be closed
+    PLAY_RECORD_STATE_STOPPED //!< __OSStopPlayRecord
 } OSPlayRecordState;
 
 typedef struct OSPlayRecord {
-    u32 checksum;          // at 0x0
+    u32 checksum; // at 0x0
     wchar_t titleName[40]; // at 0x4
     char UNK_0x54[0x4];
-    s64 startTime;   // at 0x58
-    s64 stopTime;    // at 0x60
+    s64 startTime; // at 0x58
+    s64 stopTime; // at 0x60
     char titleId[6]; // at 0x68
     char UNK_0x6E[0x80 - 0x6E];
 } OSPlayRecord;
-
-static OSPlayRecordState PlayRecordState = PLAY_RECORD_STATE_STOPPED;
 
 static s64 PlayRecordLastCloseTime;
 static s32 PlayRecordLastError;
@@ -36,12 +35,13 @@ static bool PlayRecordRetry;
 static bool PlayRecordTerminated;
 static bool PlayRecordTerminate;
 static bool PlayRecordError;
+static OSPlayRecordState PlayRecordState;
 static bool PlayRecordGet;
 
-static OSPlayRecord PlayRecord ATTRIBUTE_ALIGN(32);
 static NANDFileInfo FileInfo;
 static NANDCommandBlock Block;
 static OSAlarm PlayRecordAlarm;
+static OSPlayRecord PlayRecord ATTRIBUTE_ALIGN(32);
 
 static void PlayRecordCallback(s32 result, NANDCommandBlock* block);
 
@@ -56,8 +56,6 @@ static u32 RecordCheckSum(const OSPlayRecord* playRec) {
 
     return checksum;
 }
-
-// DECOMP_FORCEACTIVE(OSPlayRecord_c, PlayRecord);
 
 static void PlayRecordAlarmCallback(OSAlarm* alarm, OSContext* ctx) {
 #pragma unused(alarm)
@@ -79,139 +77,130 @@ static void PlayRecordCallback(s32 result, NANDCommandBlock* block) {
 
     if (!PlayRecordRetry) {
         switch (PlayRecordState) {
-        case PLAY_RECORD_STATE_STARTED:
-            PlayRecordState = PLAY_RECORD_STATE_OPEN;
-            break;
-        case PLAY_RECORD_STATE_OPEN:
-            if (result == NAND_RESULT_MAXFD) {
-                PlayRecordRetry = true;
-                OSCreateAlarm(&PlayRecordAlarm);
-                OSSetAlarm(&PlayRecordAlarm, MY_SEC_TO_TICKS(1),
-                           PlayRecordAlarmCallback);
-                return;
-            } else if (result == NAND_RESULT_OK) {
-                if (!PlayRecordGet) {
-                    PlayRecordState = PLAY_RECORD_STATE_READ;
+            case PLAY_RECORD_STATE_STARTED:
+                PlayRecordState = PLAY_RECORD_STATE_OPEN;
+                break;
+            case PLAY_RECORD_STATE_OPEN:
+                if (result == NAND_RESULT_MAXFD) {
+                    PlayRecordRetry = true;
+                    OSCreateAlarm(&PlayRecordAlarm);
+                    OSSetAlarm(&PlayRecordAlarm, MY_SEC_TO_TICKS(1), PlayRecordAlarmCallback);
+                    return;
+                } else if (result == NAND_RESULT_OK) {
+                    if (!PlayRecordGet) {
+                        PlayRecordState = PLAY_RECORD_STATE_READ;
+                    } else {
+                        PlayRecordState = PLAY_RECORD_STATE_SET_ALARM;
+                    }
+                    break;
                 } else {
-                    PlayRecordState = PLAY_RECORD_STATE_SET_ALARM;
+                    PlayRecordError = true;
+                    PlayRecordState = PLAY_RECORD_STATE_CLOSED;
+                    return;
+                }
+            case PLAY_RECORD_STATE_READ:
+                if (result == sizeof(OSPlayRecord)) {
+                    PlayRecordGet = true;
+                    PlayRecordLastCloseTime = PlayRecord.stopTime;
+                    PlayRecordState = PLAY_RECORD_STATE_SEEK;
+                } else {
+                    PlayRecordError = true;
+                    PlayRecordState = PLAY_RECORD_STATE_CLOSE;
                 }
                 break;
-            } else {
-                PlayRecordError = true;
-                PlayRecordState = PLAY_RECORD_STATE_CLOSED;
-                return;
-            }
-        case PLAY_RECORD_STATE_READ:
-            if (result == sizeof(OSPlayRecord)) {
-                PlayRecordGet = true;
-                PlayRecordLastCloseTime = PlayRecord.stopTime;
-                PlayRecordState = PLAY_RECORD_STATE_SEEK;
-            } else {
-                PlayRecordError = true;
-                PlayRecordState = PLAY_RECORD_STATE_CLOSE;
-            }
-            break;
-        case PLAY_RECORD_STATE_SEEK:
-            if (result == NAND_RESULT_OK) {
-                PlayRecordState = PLAY_RECORD_STATE_SET_ALARM;
-            } else {
-                PlayRecordError = true;
-                PlayRecordState = PLAY_RECORD_STATE_CLOSE;
-            }
-            break;
-        case PLAY_RECORD_STATE_SET_ALARM:
-            PlayRecordState = PLAY_RECORD_STATE_WRITE;
-            break;
-        case PLAY_RECORD_STATE_WRITE:
-            if (result == sizeof(OSPlayRecord)) {
-                if (OSGetTime() - PlayRecordLastCloseTime >
-                    MY_SEC_TO_TICKS(300)) {
-                    PlayRecordState = PLAY_RECORD_STATE_CLOSE;
+            case PLAY_RECORD_STATE_SEEK:
+                if (result == NAND_RESULT_OK) {
+                    PlayRecordState = PLAY_RECORD_STATE_SET_ALARM;
                 } else {
-                    PlayRecordState = PLAY_RECORD_STATE_SEEK;
+                    PlayRecordError = true;
+                    PlayRecordState = PLAY_RECORD_STATE_CLOSE;
                 }
-            } else {
-                PlayRecordError = true;
-                PlayRecordState = PLAY_RECORD_STATE_CLOSE;
-            }
-            break;
-        case PLAY_RECORD_STATE_CLOSE:
-            if (PlayRecordError) {
+                break;
+            case PLAY_RECORD_STATE_SET_ALARM:
+                PlayRecordState = PLAY_RECORD_STATE_WRITE;
+                break;
+            case PLAY_RECORD_STATE_WRITE:
+                if (result == sizeof(OSPlayRecord)) {
+                    if (OSGetTime() - PlayRecordLastCloseTime > MY_SEC_TO_TICKS(300)) {
+                        PlayRecordState = PLAY_RECORD_STATE_CLOSE;
+                    } else {
+                        PlayRecordState = PLAY_RECORD_STATE_SEEK;
+                    }
+                } else {
+                    PlayRecordError = true;
+                    PlayRecordState = PLAY_RECORD_STATE_CLOSE;
+                }
+                break;
+            case PLAY_RECORD_STATE_CLOSE:
+                if (PlayRecordError) {
+                    PlayRecordState = PLAY_RECORD_STATE_CLOSED;
+                    return;
+                } else if (result == NAND_RESULT_OK) {
+                    PlayRecordLastCloseTime = PlayRecord.stopTime;
+                    PlayRecordState = PLAY_RECORD_STATE_OPEN;
+                } else {
+                    PlayRecordState = PLAY_RECORD_STATE_CLOSED;
+                    PlayRecordError = true;
+                    return;
+                }
+                break;
+            default:
                 PlayRecordState = PLAY_RECORD_STATE_CLOSED;
-                return;
-            } else if (result == NAND_RESULT_OK) {
-                PlayRecordLastCloseTime = PlayRecord.stopTime;
-                PlayRecordState = PLAY_RECORD_STATE_OPEN;
-            } else {
-                PlayRecordState = PLAY_RECORD_STATE_CLOSED;
                 PlayRecordError = true;
                 return;
-            }
-            break;
-        default:
-            PlayRecordState = PLAY_RECORD_STATE_CLOSED;
-            PlayRecordError = true;
-            return;
         }
     }
 
     PlayRecordRetry = false;
 
     switch (PlayRecordState) {
-    case PLAY_RECORD_STATE_OPEN:
-        error = NANDOpenAsync("/title/00000001/00000002/data/play_rec.dat",
-                              &FileInfo, NAND_ACCESS_RW, PlayRecordCallback,
-                              &Block);
-        break;
-    case PLAY_RECORD_STATE_READ:
-        error = NANDReadAsync(&FileInfo, &PlayRecord, sizeof(OSPlayRecord),
-                              PlayRecordCallback, &Block);
-        break;
-    case PLAY_RECORD_STATE_SEEK:
-        error = NANDSeekAsync(&FileInfo, 0, NAND_SEEK_BEG, PlayRecordCallback,
-                              &Block);
-        break;
-    case PLAY_RECORD_STATE_SET_ALARM:
-        OSCreateAlarm(&PlayRecordAlarm);
-        OSSetAlarm(&PlayRecordAlarm, MY_SEC_TO_TICKS(60),
-                   PlayRecordAlarmCallback);
-        break;
-    case PLAY_RECORD_STATE_WRITE:
-        PlayRecord.stopTime = OSGetTime();
-        PlayRecord.checksum = RecordCheckSum(&PlayRecord);
-        error = NANDWriteAsync(&FileInfo, &PlayRecord, sizeof(OSPlayRecord),
-                               PlayRecordCallback, &Block);
-        break;
-    case PLAY_RECORD_STATE_CLOSE:
-        error = NANDCloseAsync(&FileInfo, PlayRecordCallback, &Block);
-        break;
+        case PLAY_RECORD_STATE_OPEN:
+            error = NANDOpenAsync("/title/00000001/00000002/data/play_rec.dat", &FileInfo, NAND_ACCESS_RW,
+                                  PlayRecordCallback, &Block);
+            break;
+        case PLAY_RECORD_STATE_READ:
+            error = NANDReadAsync(&FileInfo, &PlayRecord, sizeof(OSPlayRecord), PlayRecordCallback, &Block);
+            break;
+        case PLAY_RECORD_STATE_SEEK:
+            error = NANDSeekAsync(&FileInfo, 0, NAND_SEEK_BEG, PlayRecordCallback, &Block);
+            break;
+        case PLAY_RECORD_STATE_SET_ALARM:
+            OSCreateAlarm(&PlayRecordAlarm);
+            OSSetAlarm(&PlayRecordAlarm, MY_SEC_TO_TICKS(60), PlayRecordAlarmCallback);
+            break;
+        case PLAY_RECORD_STATE_WRITE:
+            PlayRecord.stopTime = OSGetTime();
+            PlayRecord.checksum = RecordCheckSum(&PlayRecord);
+            error = NANDWriteAsync(&FileInfo, &PlayRecord, sizeof(OSPlayRecord), PlayRecordCallback, &Block);
+            break;
+        case PLAY_RECORD_STATE_CLOSE:
+            error = NANDCloseAsync(&FileInfo, PlayRecordCallback, &Block);
+            break;
     }
 
     if (error != NAND_RESULT_OK) {
         if (error == NAND_RESULT_BUSY) {
             OSCreateAlarm(&PlayRecordAlarm);
-            OSSetAlarm(&PlayRecordAlarm, MY_SEC_TO_TICKS(1),
-                       PlayRecordAlarmCallback);
+            OSSetAlarm(&PlayRecordAlarm, MY_SEC_TO_TICKS(1), PlayRecordAlarmCallback);
             PlayRecordRetry = true;
         } else {
             PlayRecordError = true;
 
             switch (PlayRecordState) {
-            case PLAY_RECORD_STATE_READ:
-            case PLAY_RECORD_STATE_SEEK:
-            case PLAY_RECORD_STATE_WRITE:
-                PlayRecordState = PLAY_RECORD_STATE_CLOSE;
-                error = NANDCloseAsync(&FileInfo, PlayRecordCallback, &Block);
-                if (error == NAND_RESULT_BUSY) {
-                    PlayRecordRetry = true;
-                    OSCreateAlarm(&PlayRecordAlarm);
-                    OSSetAlarm(&PlayRecordAlarm, MY_SEC_TO_TICKS(1),
-                               PlayRecordAlarmCallback);
-                }
-                break;
-            default:
-                PlayRecordState = PLAY_RECORD_STATE_CLOSED;
-                break;
+                case PLAY_RECORD_STATE_READ:
+                case PLAY_RECORD_STATE_SEEK:
+                case PLAY_RECORD_STATE_WRITE:
+                    PlayRecordState = PLAY_RECORD_STATE_CLOSE;
+                    error = NANDCloseAsync(&FileInfo, PlayRecordCallback, &Block);
+                    if (error == NAND_RESULT_BUSY) {
+                        PlayRecordRetry = true;
+                        OSCreateAlarm(&PlayRecordAlarm);
+                        OSSetAlarm(&PlayRecordAlarm, MY_SEC_TO_TICKS(1), PlayRecordAlarmCallback);
+                    }
+                    break;
+                default:
+                    PlayRecordState = PLAY_RECORD_STATE_CLOSED;
+                    break;
             }
         }
     }
@@ -240,10 +229,7 @@ void __OSStopPlayRecord(void) {
 
     PlayRecordTerminate = true;
 
-    if (PlayRecordState == PLAY_RECORD_STATE_CLOSED ||
-        PlayRecordState == PLAY_RECORD_STATE_STARTED ||
-        PlayRecordState == PLAY_RECORD_STATE_STOPPED ||
-        PlayRecordState == PLAY_RECORD_STATE_TIMEOUT) {
+    if (PlayRecordState == PLAY_RECORD_STATE_CLOSED || PlayRecordState == PLAY_RECORD_STATE_STARTED) {
         OSRestoreInterrupts(enabled);
     } else if (PlayRecordState == PLAY_RECORD_STATE_SET_ALARM) {
         OSCancelAlarm(&PlayRecordAlarm);
@@ -266,30 +252,27 @@ void __OSStopPlayRecord(void) {
                 }
 
                 if (OSGetTime() - start > OS_MSEC_TO_TICKS(500)) {
-                    PlayRecordState = PLAY_RECORD_STATE_TIMEOUT;
                     return;
                 }
             }
         }
 
         switch (PlayRecordState) {
-        case PLAY_RECORD_STATE_READ:
-        case PLAY_RECORD_STATE_SEEK:
-        case PLAY_RECORD_STATE_WRITE:
-            NANDClose(&FileInfo);
-            break;
-        case PLAY_RECORD_STATE_OPEN:
-            if (PlayRecordLastError == NAND_RESULT_OK && !PlayRecordRetry) {
+            case PLAY_RECORD_STATE_READ:
+            case PLAY_RECORD_STATE_SEEK:
+            case PLAY_RECORD_STATE_WRITE:
                 NANDClose(&FileInfo);
-            }
-            break;
-        case PLAY_RECORD_STATE_CLOSE:
-            if (PlayRecordRetry) {
-                NANDClose(&FileInfo);
-            }
-            break;
+                break;
+            case PLAY_RECORD_STATE_OPEN:
+                if (PlayRecordLastError == NAND_RESULT_OK && !PlayRecordRetry) {
+                    NANDClose(&FileInfo);
+                }
+                break;
+            case PLAY_RECORD_STATE_CLOSE:
+                if (PlayRecordRetry) {
+                    NANDClose(&FileInfo);
+                }
+                break;
         }
     }
-
-    PlayRecordState = PLAY_RECORD_STATE_STOPPED;
 }
