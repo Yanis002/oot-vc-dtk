@@ -232,8 +232,8 @@ void OSReturnToMenu(void) {
 }
 
 u32 OSGetResetCode(void) {
-    if (__OSRebootParams.WORD_0x0 != 0) {
-        return __OSRebootParams.WORD_0x4 | 0x80000000;
+    if (__OSRebootParams.valid != 0) {
+        return __OSRebootParams.restartCode | 0x80000000;
     }
 
     return PI_HW_REGS[PI_RESET] >> 3;
