@@ -302,8 +302,8 @@ config.libs = [
     RevolutionLib(
         "si",
         [
-            Object(NotLinked, "revolution/si/SIBios.c"),
-            Object(NotLinked, "revolution/si/SISamplingRate.c"),
+            Object(LinkedFor("vc-j"), "revolution/si/SIBios.c"),
+            Object(LinkedFor("vc-j"), "revolution/si/SISamplingRate.c"),
         ]
     ),
     RevolutionLib(

@@ -364,9 +364,15 @@ revolution/exi/EXICommon.c:
 
 revolution/si/SIBios.c:
 	.text       start:0x80096CF0 end:0x80098260
+	.data       start:0x80183EE8 end:0x80183F58
+	.bss        start:0x801DDA40 end:0x801DDC60
+	.sdata      start:0x8025C990 end:0x8025C998
+	.sbss       start:0x8025D650 end:0x8025D660
 
 revolution/si/SISamplingRate.c:
 	.text       start:0x80098260 end:0x80098340
+	.data       start:0x80183F58 end:0x80183FF0
+	.sbss       start:0x8025D660 end:0x8025D668
 
 revolution/db/db.c:
 	.text       start:0x80098340 end:0x80098428
