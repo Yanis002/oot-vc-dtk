@@ -1,5 +1,5 @@
-#include "revolution/os.h"
 #include "macros.h"
+#include "revolution/os.h"
 
 #define USEC_MAX 1000
 #define MSEC_MAX 1000
@@ -15,13 +15,11 @@
 #define BIAS 0xB2575
 
 // End of each month in standard year
-static s32 YearDays[MONTH_MAX] = {0,   31,  59,  90,  120, 151,
-                                  181, 212, 243, 273, 304, 334};
+static s32 YearDays[MONTH_MAX] = {0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334};
 // End of each month in leap year
-static s32 LeapYearDays[MONTH_MAX] = {0,   31,  60,  91,  121, 152,
-                                      182, 213, 244, 274, 305, 335};
+static s32 LeapYearDays[MONTH_MAX] = {0, 31, 60, 91, 121, 152, 182, 213, 244, 274, 305, 335};
 
-ASM s64 OSGetTime(void) {
+ASM s64 OSGetTime(void){
 #ifdef __MWERKS__ // clang-format off
     nofralloc
 OSGetTime_Start:
@@ -60,13 +58,9 @@ s64 __OSTimeToSystemTime(s64 time) {
     return sysTime;
 }
 
-static inline bool IsLeapYear(s32 year) {
-    return (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0);
-}
+static inline bool IsLeapYear(s32 year) { return (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0); }
 
-static inline s32 GetYearDays(s32 year, s32 mon) {
-    return (IsLeapYear(year) ? LeapYearDays : YearDays)[mon];
-}
+static inline s32 GetYearDays(s32 year, s32 mon) { return (IsLeapYear(year) ? LeapYearDays : YearDays)[mon]; }
 
 static inline s32 GetLeapDays(s32 year) {
     if (year < 1) {
@@ -84,8 +78,7 @@ static void GetDates(s32 days, OSCalendarTime* cal) DECOMP_DONT_INLINE {
     cal->wday = (days + 6) % WEEK_DAY_MAX;
 
     // WTF??
-    for (year = days / YEAR_DAY_MAX;
-         days < (totalDays = year * YEAR_DAY_MAX + GetLeapDays(year)); year--) {
+    for (year = days / YEAR_DAY_MAX; days < (totalDays = year * YEAR_DAY_MAX + GetLeapDays(year)); year--) {
         ;
     }
     days -= totalDays;
@@ -151,6 +144,5 @@ s64 OSCalendarTimeToTicks(const OSCalendarTime* cal) {
               (s64)0xEB1E1BF80ULL;
 #endif // clang-format on
 
-    return OS_SEC_TO_TICKS(seconds) + OS_MSEC_TO_TICKS((s64)cal->msec) +
-           OS_USEC_TO_TICKS((s64)cal->usec);
+    return OS_SEC_TO_TICKS(seconds) + OS_MSEC_TO_TICKS((s64)cal->msec) + OS_USEC_TO_TICKS((s64)cal->usec);
 }

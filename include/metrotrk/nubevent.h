@@ -19,8 +19,8 @@ typedef enum {
 
 typedef struct TRKEvent {
     TRKEventType type; // at 0x0
-    unsigned int id;   // at 0x4
-    int buffer;        // at 0x8
+    unsigned int id; // at 0x4
+    int buffer; // at 0x8
 } TRKEvent;
 
 void TRKDestructEvent(TRKEvent* event);

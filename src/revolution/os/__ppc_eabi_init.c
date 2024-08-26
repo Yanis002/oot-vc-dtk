@@ -1,13 +1,13 @@
+#include "macros.h"
 #include "revolution/base.h"
 #include "revolution/os.h"
-#include "macros.h"
 
 #pragma section ".ctors$00"
 DECL_SECTION(".ctors$00") extern funcptr_t _ctors[];
 #pragma section ".dtors$00"
 DECL_SECTION(".dtors$00") extern funcptr_t _dtors[];
 
-ASM void __init_hardware(void) {
+ASM void __init_hardware(void){
 #ifdef __MWERKS__ // clang-format off
     nofralloc
 
@@ -80,9 +80,7 @@ static inline void __fini_cpp(void) {
     }
 }
 
-static inline void _ExitProcess(void) {
-    PPCHalt();
-}
+static inline void _ExitProcess(void) { PPCHalt(); }
 
 void exit(void) {
     __fini_cpp();

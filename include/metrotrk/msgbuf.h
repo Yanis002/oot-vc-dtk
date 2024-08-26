@@ -32,10 +32,10 @@ typedef enum {
 } TRKMessageCommand;
 
 typedef struct TRKMessageBuffer {
-    TRKMutex mutex;                         // at 0x0
-    bool used;                              // at 0x4
-    unsigned int size;                      // at 0x8
-    unsigned int pos;                       // at 0xC
+    TRKMutex mutex; // at 0x0
+    bool used; // at 0x4
+    unsigned int size; // at 0x8
+    unsigned int pos; // at 0xC
     unsigned char data[kMessageBufferSize]; // at 0x10
 } TRKMessageBuffer;
 
@@ -50,10 +50,8 @@ DSError TRKReadBuffer1_ui64(TRKMessageBuffer* buf, unsigned long long* dst);
 DSError TRKReadBuffer1_ui32(TRKMessageBuffer* buf, unsigned int* dst);
 DSError TRKReadBuffer1_ui8(TRKMessageBuffer* buf, unsigned char* dst);
 
-DSError TRKAppendBuffer_ui32(TRKMessageBuffer* buf, const unsigned int* x,
-                             int n);
-DSError TRKAppendBuffer_ui8(TRKMessageBuffer* buf, const unsigned char* x,
-                            int n);
+DSError TRKAppendBuffer_ui32(TRKMessageBuffer* buf, const unsigned int* x, int n);
+DSError TRKAppendBuffer_ui8(TRKMessageBuffer* buf, const unsigned char* x, int n);
 
 DSError TRKAppendBuffer1_ui32(TRKMessageBuffer* buf, unsigned int x);
 DSError TRKAppendBuffer1_ui8(TRKMessageBuffer* buf, unsigned char x);

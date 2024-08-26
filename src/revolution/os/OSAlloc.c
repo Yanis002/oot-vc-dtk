@@ -2,17 +2,17 @@
 #include "stdint.h"
 
 typedef struct OSHeapDescriptor {
-    s32 size;                    // at 0x0
+    s32 size; // at 0x0
     struct OSHeapCell* freeList; // at 0x4
     struct OSHeapCell* usedList; // at 0x8
 } OSHeapDescriptor;
 
 typedef struct OSHeapCell {
-    struct OSHeapCell* prev;     // at 0x0
-    struct OSHeapCell* next;     // at 0x4
-    s32 size;                    // at 0x8
+    struct OSHeapCell* prev; // at 0x0
+    struct OSHeapCell* next; // at 0x4
+    s32 size; // at 0x8
     struct OSHeapDescriptor* hd; // at 0xC
-    s32 usedSize;                // at 0x10
+    s32 usedSize; // at 0x10
     char UNK_0x14[0x20 - 0x14];
 } OSHeapCell;
 

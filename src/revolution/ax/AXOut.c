@@ -16,19 +16,19 @@
 #define DRAM_IMAGE_DSP_ADDR 0x0CD2
 
 // Back again by popular demand!
-#define FUNNY_COPY(dst, src, type, n)                                          \
-    do {                                                                       \
-                                                                               \
-        type* __dst = (type*)dst;                                              \
-        type* __src = (type*)src;                                              \
-        int i;                                                                 \
-                                                                               \
-        for (i = 0; i < n / sizeof(type); i++) {                               \
-            *__dst = *__src;                                                   \
-            __dst++;                                                           \
-            __src++;                                                           \
-        }                                                                      \
-                                                                               \
+#define FUNNY_COPY(dst, src, type, n)            \
+    do {                                         \
+                                                 \
+        type* __dst = (type*)dst;                \
+        type* __src = (type*)src;                \
+        int i;                                   \
+                                                 \
+        for (i = 0; i < n / sizeof(type); i++) { \
+            *__dst = *__src;                     \
+            __dst++;                             \
+            __src++;                             \
+        }                                        \
+                                                 \
     } while (0)
 
 AXPROFILE __AXLocalProfile;
@@ -47,8 +47,7 @@ static s32 __AXRmtBuffLen;
 static s32 __AXRmtDspPtr;
 static s32 __AXRmtCpuPtr;
 
-static s16 __AXRmtOutBuffer[AX_RMT_MAX]
-                           [AX_SAMPLES_PER_FRAME_RMT * RMT_FRAME_MAX] ATTRIBUTE_ALIGN(32);
+static s16 __AXRmtOutBuffer[AX_RMT_MAX][AX_SAMPLES_PER_FRAME_RMT * RMT_FRAME_MAX] ATTRIBUTE_ALIGN(32);
 // TODO: What is this number?
 static u8 __AXOutSBuffer[768] ATTRIBUTE_ALIGN(32);
 static u32 __AXOutBuffer[OUT_RING_MAX][AX_SAMPLES_PER_FRAME] ATTRIBUTE_ALIGN(32);
@@ -108,8 +107,7 @@ u32 __AXOutNewFrame(void) {
         ptr = 0;
     }
 
-    if (__AXRmtCpuPtr >= __AXRmtDspPtr &&
-        __AXRmtCpuPtr < __AXRmtDspPtr + AX_SAMPLES_PER_FRAME_RMT) {
+    if (__AXRmtCpuPtr >= __AXRmtDspPtr && __AXRmtCpuPtr < __AXRmtDspPtr + AX_SAMPLES_PER_FRAME_RMT) {
         __AXRmtCpuPtr = ptr;
     }
 
@@ -165,7 +163,7 @@ static void __AXDSPInitCallback(DSPTask* task) {
 }
 
 static void __AXDSPResumeCallback(DSPTask* task) {
-    if ((u32) __AXOutDspReady == 2U) {
+    if ((u32)__AXOutDspReady == 2U) {
         __AXOutDspReady = 0U;
         OSGetTime();
         __AXOutNewFrame();
@@ -173,7 +171,6 @@ static void __AXDSPResumeCallback(DSPTask* task) {
     }
     __AXOutDspReady = 1U;
 }
-
 
 static void __AXDSPDoneCallback(DSPTask* task) {
 #pragma unused(task)
@@ -231,20 +228,17 @@ void __AXOutInit(u32 mode) {
     __AXOutputBufferMode = mode;
     __AXDebugSteppingMode = 0;
 
-    for (dst = (u32*)__AXOutBuffer, i = 0;
-         i < sizeof(__AXOutBuffer) / sizeof(u32); i++) {
+    for (dst = (u32*)__AXOutBuffer, i = 0; i < sizeof(__AXOutBuffer) / sizeof(u32); i++) {
         *dst++ = 0;
     }
     DCFlushRange(__AXOutBuffer, sizeof(__AXOutBuffer));
 
-    for (dst2 = (u32*)__AXOutSBuffer, i = 0;
-         i < sizeof(__AXOutSBuffer) / sizeof(u32); i++) {
+    for (dst2 = (u32*)__AXOutSBuffer, i = 0; i < sizeof(__AXOutSBuffer) / sizeof(u32); i++) {
         *dst2++ = 0;
     }
     DCFlushRange(__AXOutSBuffer, sizeof(__AXOutSBuffer));
 
-    for (dst2 = (u32*)__AXRmtOutBuffer, i = 0;
-         i < sizeof(__AXRmtOutBuffer) / sizeof(u32); i++) {
+    for (dst2 = (u32*)__AXRmtOutBuffer, i = 0; i < sizeof(__AXRmtOutBuffer) / sizeof(u32); i++) {
         *dst2++ = 0;
     }
     DCFlushRange(__AXRmtOutBuffer, sizeof(__AXRmtOutBuffer));
@@ -289,7 +283,6 @@ void __AXOutQuit(void) {
     AIStopDMA();
     OSRestoreInterrupts(interrupts);
 }
-
 
 AXOutCallback AXRegisterCallback(AXOutCallback callback) {
     AXOutCallback old = __AXUserFrameCallback;

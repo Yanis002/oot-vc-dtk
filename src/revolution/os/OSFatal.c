@@ -1,10 +1,10 @@
+#include "mem_funcs.h"
 #include "revolution/base.h"
 #include "revolution/exi.h"
 #include "revolution/gx.h"
 #include "revolution/os.h"
 #include "revolution/vi.h"
 #include "string.h"
-#include "mem_funcs.h"
 
 /**
  * Framebuffer formatted as 32-bits per two pixels
@@ -16,8 +16,8 @@
 
 typedef struct OSFatalParam {
     GXColor textColor; // at 0x0
-    GXColor bgColor;   // at 0x4
-    const char* msg;   // at 0x8
+    GXColor bgColor; // at 0x4
+    const char* msg; // at 0x8
 } OSFatalParam;
 
 static OSContext FatalContext;
@@ -41,8 +41,7 @@ static void ScreenClear(u8* fb, u16 width, u16 height, GXColor yuv) {
     }
 }
 
-static void ScreenReport(void* fb, u16 width, u16 height, GXColor msgYUV, s32 x,
-                         s32 y, u32 lf, const char* msg) {
+static void ScreenReport(void* fb, u16 width, u16 height, GXColor msgYUV, s32 x, s32 y, u32 lf, const char* msg) {
     u32 texel[70];
     u32 charWidth;
     u8* tmp;
@@ -123,30 +122,30 @@ static void ConfigureVideo(u16 width, u16 height) {
     rmode.viHeight = height;
 
     switch (VIGetTvFormat()) {
-    case VI_TV_FMT_NTSC:
-    case VI_TV_FMT_MPAL:
-        if (VI_HW_REGS[VI_VICLK] & VI_VICLK_SPEED /* == VI_VICLK_54MHZ */) {
-            // Progressive mode
-            rmode.viTVmode = VI_TV_INFO(VI_TV_FMT_NTSC, VI_SCAN_MODE_PROG);
-            rmode.viYOrigin = 0;
-            rmode.xfbMode = VI_XFB_MODE_SF;
-        } else {
-            // Non-progressive mode
-            rmode.viTVmode = VI_TV_INFO(VI_TV_FMT_NTSC, VI_SCAN_MODE_INT);
+        case VI_TV_FMT_NTSC:
+        case VI_TV_FMT_MPAL:
+            if (VI_HW_REGS[VI_VICLK] & VI_VICLK_SPEED /* == VI_VICLK_54MHZ */) {
+                // Progressive mode
+                rmode.viTVmode = VI_TV_INFO(VI_TV_FMT_NTSC, VI_SCAN_MODE_PROG);
+                rmode.viYOrigin = 0;
+                rmode.xfbMode = VI_XFB_MODE_SF;
+            } else {
+                // Non-progressive mode
+                rmode.viTVmode = VI_TV_INFO(VI_TV_FMT_NTSC, VI_SCAN_MODE_INT);
+                rmode.viYOrigin = 0;
+                rmode.xfbMode = VI_XFB_MODE_DF;
+            }
+            break;
+        case VI_TV_FMT_EURGB60:
+            rmode.viTVmode = VI_TV_INFO(VI_TV_FMT_EURGB60, VI_SCAN_MODE_INT);
             rmode.viYOrigin = 0;
             rmode.xfbMode = VI_XFB_MODE_DF;
-        }
-        break;
-    case VI_TV_FMT_EURGB60:
-        rmode.viTVmode = VI_TV_INFO(VI_TV_FMT_EURGB60, VI_SCAN_MODE_INT);
-        rmode.viYOrigin = 0;
-        rmode.xfbMode = VI_XFB_MODE_DF;
-        break;
-    case VI_TV_FMT_PAL:
-        rmode.viTVmode = VI_TV_INFO(VI_TV_FMT_PAL, VI_SCAN_MODE_INT);
-        rmode.viYOrigin = 47;
-        rmode.xfbMode = VI_XFB_MODE_DF;
-        break;
+            break;
+        case VI_TV_FMT_PAL:
+            rmode.viTVmode = VI_TV_INFO(VI_TV_FMT_PAL, VI_SCAN_MODE_INT);
+            rmode.viYOrigin = 47;
+            rmode.xfbMode = VI_XFB_MODE_DF;
+            break;
     }
 
     VIConfigure(&rmode);
@@ -241,9 +240,9 @@ static inline GXColor RGB2YUV2(GXColor rgb) {
     f32 Cr;
     GXColor yuv;
 
-    Y  = 0.5f + (16.0f + ((0.098f * (f32) rgb.b) + ((0.257f * (f32) rgb.r) + (0.504f * (f32) rgb.g))));
-    Cb = 0.5f + (128.0f + ((0.439f * (f32) rgb.b) + ((-0.148f * (f32) rgb.r) - (0.291f * (f32) rgb.g))));
-    Cr = 0.5f + (128.0f + (((0.439f * (f32) rgb.r) - (0.368f * (f32) rgb.g)) - (0.071f * (f32) rgb.b)));
+    Y = 0.5f + (16.0f + ((0.098f * (f32)rgb.b) + ((0.257f * (f32)rgb.r) + (0.504f * (f32)rgb.g))));
+    Cb = 0.5f + (128.0f + ((0.439f * (f32)rgb.b) + ((-0.148f * (f32)rgb.r) - (0.291f * (f32)rgb.g))));
+    Cr = 0.5f + (128.0f + (((0.439f * (f32)rgb.r) - (0.368f * (f32)rgb.g)) - (0.071f * (f32)rgb.b)));
 
     yuv.r = (Y > 235.0f) ? 235.0f : (Y < 16.0f) ? 16.0f : Y;
     yuv.g = (Cb > 240.0f) ? 240.0f : (Cb < 16.0f) ? 16.0f : Cb;
@@ -285,8 +284,7 @@ static void Halt(void) {
         ;
     }
 
-    ScreenReport(fb, FATAL_FB_W, FATAL_FB_H, RGB2YUV2(params->textColor), 48,
-                 100, msgFont->leading, params->msg);
+    ScreenReport(fb, FATAL_FB_W, FATAL_FB_H, RGB2YUV2(params->textColor), 48, 100, msgFont->leading, params->msg);
     DCFlushRange(fb, FATAL_FB_SIZE);
     VISetBlack(false);
     VIFlush();
@@ -300,8 +298,6 @@ static void Halt(void) {
     OSReport("%s\n", params->msg);
     PPCHalt();
 }
-
-
 
 // static void Halt(void) {
 //     u32 count;
@@ -317,7 +313,7 @@ static void Halt(void) {
 
 //     fontData = OSAllocFromMEM1ArenaLo(0xA1004, 0x20);
 //     OSLoadFont(fontData, OSGetArenaLo());
-    
+
 //     xfb = OSAllocFromMEM1ArenaLo(0x96000, 0x20);
 //     ScreenClear(xfb, 640, 480, RGB2YUV(fp->bgColor));
 //     VISetNextFrameBuffer(xfb);

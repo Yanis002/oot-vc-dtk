@@ -1,9 +1,9 @@
+#include "macros.h"
 #include "revolution/esp.h"
 #include "revolution/ipc.h"
 #include "revolution/os.h"
-#include "string.h"
-#include "macros.h"
 #include "stdio.h"
+#include "string.h"
 
 typedef struct AppLoaderStruct {
     // total size: 0x20
@@ -34,13 +34,12 @@ static u8 views[0xBD00] ATTRIBUTE_ALIGN(32);
 bool __OSInReboot;
 static bool Prepared;
 
-static void Run(register void *ptr) DECOMP_DONT_INLINE;
+static void Run(register void* ptr) DECOMP_DONT_INLINE;
 
 // These were actually re(?)implemented in NANDCore/OSExec according to BBA
 static s32 _ES_InitLib(s32* fd);
 static s32 _ES_GetTicketViews(s32* fd, u64 tid, void* pViews, u32* count);
 static s32 _ES_LaunchTitle(s32* fd, u64 tid, void* pViews) DECOMP_DONT_INLINE;
-
 
 static inline s32 _ES_InitLib(s32* fd) {
     s32 result;
@@ -58,7 +57,7 @@ static inline s32 _ES_InitLib(s32* fd) {
     return result;
 }
 
-bool PackArgs(void *addr, s32 argc, char* argv[]) {
+bool PackArgs(void* addr, s32 argc, char* argv[]) {
     s32 numArgs;
     char* bootInfo2;
     char* ptr;
@@ -70,8 +69,7 @@ bool PackArgs(void *addr, s32 argc, char* argv[]) {
 
     if (argc == 0) {
         *(u32*)&bootInfo2[8] = 0;
-    }
-    else {
+    } else {
         numArgs = argc;
         ptr = bootInfo2 + 0x2000;
         while (--argc >= 0) {
@@ -83,7 +81,7 @@ bool PackArgs(void *addr, s32 argc, char* argv[]) {
         ptr = bootInfo2 + ((ptr - bootInfo2) & ~3);
         ptr -= 4 * (numArgs + 1);
         list = (char**)ptr;
-        
+
         for (i = 0; i < numArgs + 1; i++) {
             list[i] = argv[i];
         }
@@ -93,11 +91,10 @@ bool PackArgs(void *addr, s32 argc, char* argv[]) {
         *(u32*)&bootInfo2[8] = (u32)(ptr - bootInfo2);
     }
 
-
     return true;
 }
 
-static ASM void Run(register void *ptr) {
+static ASM void Run(register void* ptr) {
 #ifdef __MWERKS__ // clang-format off
     fralloc
     bl ICFlashInvalidate
@@ -111,9 +108,7 @@ static ASM void Run(register void *ptr) {
 #endif // clang-format on
 }
 
-static void Callback(s32, DVDCommandBlock*) {
-    Prepared = true;
-}
+static void Callback(s32, DVDCommandBlock*) { Prepared = true; }
 
 void __OSGetExecParams(OSExecParams* out) {
     if (OS_DOL_EXEC_PARAMS >= (void*)0x80000000) {
@@ -144,8 +139,7 @@ void __OSLaunchMenu(void) {
     }
 
     // Get ticket views
-    if (_ES_GetTicketViews(&fd, MENU_TITLE_ID, pviews, &count) !=
-        IPC_RESULT_OK) {
+    if (_ES_GetTicketViews(&fd, MENU_TITLE_ID, pviews, &count) != IPC_RESULT_OK) {
         return;
     }
 
@@ -214,8 +208,7 @@ static s32 _ES_GetTicketViews(s32* fd, u64 tid, void* pViews, u32* count) {
         pVectors[1].base = pCount;
         pVectors[1].length = sizeof(u32);
 
-        result =
-            IOS_Ioctlv(*fd, ES_IOCTLV_GET_NUM_TICKET_VIEWS, 1, 1, pVectors);
+        result = IOS_Ioctlv(*fd, ES_IOCTLV_GET_NUM_TICKET_VIEWS, 1, 1, pVectors);
         if (result == IPC_RESULT_OK) {
             *count = *pCount;
         }

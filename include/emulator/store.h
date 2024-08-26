@@ -1,10 +1,10 @@
 #ifndef _STORE_H
 #define _STORE_H
 
-#include "emulator/xlObject.h"
-#include "revolution/types.h"
-#include "revolution/nand.h"
 #include "emulator/system.h"
+#include "emulator/xlObject.h"
+#include "revolution/nand.h"
+#include "revolution/types.h"
 
 typedef struct Store {
     /* 0x00 */ u32 unk_00;

@@ -57,35 +57,35 @@ void __OSEnableBarnacle(EXIChannel chan, u32 dev) {
     }
 
     switch (id) {
-    case EXI_ID_MEMCARD_59:
-    case EXI_ID_MEMCARD_123:
-    case EXI_ID_MEMCARD_251:
-    case EXI_ID_MEMCARD_507:
-    case EXI_ID_USB_ADAPTER:
-    case 0x01020000:
-    case 0x02020000:
-    case 0x03010000:
-    case 0x04020100:
-    case EXI_ID_BROADBAND_ADAPTER:
-    case 0x04020300:
-    case 0x04040404:
-    case 0x04060000:
-    case 0x04120000:
-    case 0x04130000:
-    case 0x04220000:
-    case 0x80000004:
-    case 0x80000008:
-    case 0x80000010:
-    case 0x80000020:
-    case EXI_ID_INVALID:
-        break;
-    default:
-        if (ProbeBarnacle(chan, dev, &id)) {
-            Chan = chan;
-            Dev = dev;
-            BarnacleEnabled = 0xA5FF005A;
-            Enabled = 0xA5FF005A;
-        }
-        break;
+        case EXI_ID_MEMCARD_59:
+        case EXI_ID_MEMCARD_123:
+        case EXI_ID_MEMCARD_251:
+        case EXI_ID_MEMCARD_507:
+        case EXI_ID_USB_ADAPTER:
+        case 0x01020000:
+        case 0x02020000:
+        case 0x03010000:
+        case 0x04020100:
+        case EXI_ID_BROADBAND_ADAPTER:
+        case 0x04020300:
+        case 0x04040404:
+        case 0x04060000:
+        case 0x04120000:
+        case 0x04130000:
+        case 0x04220000:
+        case 0x80000004:
+        case 0x80000008:
+        case 0x80000010:
+        case 0x80000020:
+        case EXI_ID_INVALID:
+            break;
+        default:
+            if (ProbeBarnacle(chan, dev, &id)) {
+                Chan = chan;
+                Dev = dev;
+                BarnacleEnabled = 0xA5FF005A;
+                Enabled = 0xA5FF005A;
+            }
+            break;
     }
 }

@@ -1,9 +1,9 @@
 #include "emulator/sram.h"
 #include "emulator/cpu.h"
 #include "emulator/ram.h"
-#include "emulator/vc64_RVL.h"
-#include "emulator/system.h"
 #include "emulator/store.h"
+#include "emulator/system.h"
+#include "emulator/vc64_RVL.h"
 
 static bool sramPut8(Sram* pSRAM, u32 nAddress, s8* pData) {
     fn_80061BC0(pSRAM->pStore, (u8*)pData, nAddress & 0x7FFF, sizeof(s8));

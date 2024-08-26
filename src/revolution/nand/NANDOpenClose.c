@@ -146,17 +146,17 @@ s32 NANDSafeClose(NANDFileInfo* info) {
         if (result != 0) {
             return nandConvertErrorCode(result);
         }
-    
+
         result = ISFS_Close(info->tempFd);
         if (result != 0) {
             return nandConvertErrorCode(result);
         }
-    
+
         result = ISFS_Rename(info->tempPath, info->openPath);
         if (result != 0) {
             return nandConvertErrorCode(result);
         }
-    
+
         nandGetParentDirectory(path, info->tempPath);
         return nandConvertErrorCode(ISFS_Delete(path));
     }

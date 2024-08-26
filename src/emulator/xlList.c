@@ -50,7 +50,7 @@ bool xlListFree(tXL_LIST** ppList) {
     return true;
 }
 
-bool xlListMakeItem(tXL_LIST* pList, void** ppItem) { 
+bool xlListMakeItem(tXL_LIST* pList, void** ppItem) {
     s32 nSize;
     void* pListNode;
     void* pNode;

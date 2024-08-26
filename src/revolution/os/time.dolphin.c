@@ -1,13 +1,7 @@
 #include "revolution/os.h"
 
-OSTime __get_clock(void) {
-    return __OSGetSystemTime();
-}
+OSTime __get_clock(void) { return __OSGetSystemTime(); }
 
-u32 __get_time(void) {
-    return OSTicksToSeconds(OSGetTime()) - 0x43E83E00;
-}
+u32 __get_time(void) { return OSTicksToSeconds(OSGetTime()) - 0x43E83E00; }
 
-int __to_gm_time(void) {
-    return 0;
-}
+int __to_gm_time(void) { return 0; }

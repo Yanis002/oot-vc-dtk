@@ -25,8 +25,8 @@
 #include "emulator/video.h"
 #include "emulator/xlHeap.h"
 #include "macros.h"
-#include "revolution/vi.h"
 #include "revolution/os.h"
+#include "revolution/vi.h"
 #include "stdlib.h"
 #include "string.h"
 

@@ -3,9 +3,9 @@
 #include "emulator/xlFileRVL.h"
 #include "emulator/xlHeap.h"
 #include "emulator/xlPostRVL.h"
-#include "revolution/ai.h"
 #include "macros.h"
 #include "math.h"
+#include "revolution/ai.h"
 #include "stdlib.h"
 
 _XL_OBJECTTYPE gClassAudio = {

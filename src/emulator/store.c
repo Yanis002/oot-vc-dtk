@@ -94,7 +94,6 @@ static bool fn_800618D4(Store* pStore, void* arg1, s32 arg2, s32 arg3) {
     s32 var_r28;
     s32 i;
 
-
     for (var_r26 = arg3; var_r26 > 0; var_r26--) {
         while (true) {
             if (!unknownInline(pStore, 1)) {
@@ -120,7 +119,6 @@ static bool fn_800618D4(Store* pStore, void* arg1, s32 arg2, s32 arg3) {
                 if (NANDSeek(&pStore->nandFileInfo, var_r28, NAND_SEEK_BEG) < 0) {
                     break;
                 }
-
             }
         }
 
@@ -142,14 +140,13 @@ static bool fn_800618D4(Store* pStore, void* arg1, s32 arg2, s32 arg3) {
             // }
 
             // if (var_r7 != 0) {
-                var_r4 = 0;
-                for (i = 0; i < ((var_r5 - 8) + 7) >> 3; i++) {
-                    *((u8*)arg1 + i) = *((u8*)pStore->unk_9C + i);
-                }
+            var_r4 = 0;
+            for (i = 0; i < ((var_r5 - 8) + 7) >> 3; i++) {
+                *((u8*)arg1 + i) = *((u8*)pStore->unk_9C + i);
+            }
             // }
         }
     }
-
 
     fn_80064600(&pStore->nandFileInfo, 1);
     return true;
@@ -206,7 +203,8 @@ static bool fn_80061CAC(Store* pStore) {
             return true;
         }
 
-        if (NANDWriteAsync(&pStore->nandFileInfo, pStore->unk_AC, pStore->unk_00, fn_80061C4C, &pStore->nandCmdBlock) >= 0) {
+        if (NANDWriteAsync(&pStore->nandFileInfo, pStore->unk_AC, pStore->unk_00, fn_80061C4C, &pStore->nandCmdBlock) >=
+            0) {
             break;
         }
 

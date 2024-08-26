@@ -16,10 +16,10 @@ static inline void KillThreads(void) {
         next = iter->nextActive;
 
         switch (iter->state) {
-        case OS_THREAD_STATE_SLEEPING:
-        case OS_THREAD_STATE_READY:
-            OSCancelThread(iter);
-            break;
+            case OS_THREAD_STATE_SLEEPING:
+            case OS_THREAD_STATE_READY:
+                OSCancelThread(iter);
+                break;
         }
     }
 }
@@ -29,8 +29,7 @@ void OSRegisterShutdownFunction(OSShutdownFunctionInfo* info) {
     OSShutdownFunctionInfo* prev;
     OSShutdownFunctionInfo* tail;
 
-    for (it = ShutdownFunctionQueue.head; it != NULL && it->prio <= info->prio;
-         it = it->next) {
+    for (it = ShutdownFunctionQueue.head; it != NULL && it->prio <= info->prio; it = it->next) {
         ;
     }
 
@@ -91,18 +90,18 @@ void __OSShutdownDevices(u32 event) {
     bool keepEnable;
 
     switch (event) {
-    case 0:
-    case OS_SD_EVENT_RESTART:
-    case OS_SD_EVENT_RETURN_TO_MENU:
-    case OS_SD_EVENT_LAUNCH_APP:
-        keepEnable = false;
-        break;
-    case 1:
-    case OS_SD_EVENT_SHUTDOWN:
-    case 3:
-    default:
-        keepEnable = true;
-        break;
+        case 0:
+        case OS_SD_EVENT_RESTART:
+        case OS_SD_EVENT_RETURN_TO_MENU:
+        case OS_SD_EVENT_LAUNCH_APP:
+            keepEnable = false;
+            break;
+        case 1:
+        case OS_SD_EVENT_SHUTDOWN:
+        case 3:
+        default:
+            keepEnable = true;
+            break;
     }
 
     __OSStopAudioSystem();
@@ -196,8 +195,7 @@ void OSRestart(u32 resetCode) {
         __OSShutdownDevices(4);
         OSEnableScheduler();
         __OSRelaunchTitle();
-    }
-    else if (type == 0x80) {
+    } else if (type == 0x80) {
         OSDisableScheduler();
         __OSShutdownDevices(4);
         OSEnableScheduler();
@@ -245,5 +243,4 @@ void OSResetSystem(u32 arg0, u32 arg1, u32 arg2) {
 #pragma unused(arg2)
 
     OSPanic("OSReset.c", 935, "OSResetSystem() is obsoleted. It doesn't work any longer.\n");
-
 }

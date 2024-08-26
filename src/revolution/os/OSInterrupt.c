@@ -1,10 +1,10 @@
+#include "macros.h"
 #include "revolution/ai.h"
 #include "revolution/base.h"
 #include "revolution/dsp.h"
 #include "revolution/exi.h"
 #include "revolution/os.h"
 #include "string.h"
-#include "macros.h"
 
 static OSInterruptHandler* InterruptHandlerTable;
 s64 __OSLastInterruptTime;

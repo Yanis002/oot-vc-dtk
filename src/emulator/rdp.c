@@ -518,7 +518,8 @@ bool rdpParseGBI(Rdp* pRDP, u64** ppnGBI, RspUCodeType eTypeUCode) {
                         lbl_8025D190 = rectangle.nY1;
                         lbl_8025D174 = pFrame->bHackPause + 7;
                         pFrame->nHackCount = 8;
-                    } else if (rectangle.nX1 != 1280 || rectangle.nY1 != 960 || ((rectangle.nX0 != 0 || rectangle.nY0 != 0) && rectangle.nY1 == 960)) {
+                    } else if (rectangle.nX1 != 1280 || rectangle.nY1 != 960 ||
+                               ((rectangle.nX0 != 0 || rectangle.nY0 != 0) && rectangle.nY1 == 960)) {
                         lbl_8025D170 = 1;
                         lbl_8025D174 = pFrame->bHackPause;
                     }
@@ -529,7 +530,8 @@ bool rdpParseGBI(Rdp* pRDP, u64** ppnGBI, RspUCodeType eTypeUCode) {
                         if (pFrame->bHackPause == 0xB && lbl_8025D174 == 0 && lbl_8025D178 != 0) {
                             lbl_8025D170 = 1;
                             lbl_8025D174 = pFrame->bHackPause + 1;
-                        } else if (pFrame->bHackPause == 12 && lbl_8025D178 != 0 && rectangle.nX0 == 0 && rectangle.nY0 == 0 && rectangle.nX1 == 640 && rectangle.nY1 == 480) {
+                        } else if (pFrame->bHackPause == 12 && lbl_8025D178 != 0 && rectangle.nX0 == 0 &&
+                                   rectangle.nY0 == 0 && rectangle.nX1 == 640 && rectangle.nY1 == 480) {
                             lbl_8025D170 = 1;
                             lbl_8025D174 = pFrame->bHackPause;
                         }

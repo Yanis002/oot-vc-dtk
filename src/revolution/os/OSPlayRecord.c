@@ -1,7 +1,7 @@
 #include "macros.h"
+#include "mem_funcs.h"
 #include "revolution/nand.h"
 #include "revolution/os.h"
-#include "mem_funcs.h"
 
 // Why?!? :(
 #define MY_SEC_TO_TICKS(x) (x * (s64)OS_SEC_TO_TICKS(1))

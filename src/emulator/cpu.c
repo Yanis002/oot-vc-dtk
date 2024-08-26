@@ -13,8 +13,8 @@
 #include "emulator/xlObject.h"
 #include "emulator/xlPostRVL.h"
 #include "macros.h"
-#include "revolution/vi.h"
 #include "math.h"
+#include "revolution/vi.h"
 
 static inline bool cpuMakeCachedAddress(Cpu* pCPU, s32 nAddressN64, s32 nAddressHost, CpuFunction* pFunction);
 static bool cpuFindCachedAddress(Cpu* pCPU, s32 nAddressN64, s32* pnAddressHost);

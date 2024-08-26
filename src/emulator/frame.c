@@ -11,9 +11,9 @@
 #include "emulator/xlPostRVL.h"
 #include "macros.h"
 #include "math.h"
+#include "mem_funcs.h"
 #include "revolution/demo.h"
 #include "revolution/gx.h"
-#include "mem_funcs.h"
 
 //! TODO: document
 extern bool lbl_8025D098;
@@ -2446,7 +2446,8 @@ bool frameEnd(Frame* pFrame) {
         DCInvalidateRange(pData, N64_FRAME_WIDTH * N64_FRAME_HEIGHT * sizeof(u16));
     }
 
-    if ((gpSystem->eTypeROM == 'NABJ' || gpSystem->eTypeROM == 'NABE' || gpSystem->eTypeROM == 'NABP') && pFrame->bGrabbedFrame) {
+    if ((gpSystem->eTypeROM == 'NABJ' || gpSystem->eTypeROM == 'NABE' || gpSystem->eTypeROM == 'NABP') &&
+        pFrame->bGrabbedFrame) {
         pData = pFrame->nTempBuffer;
         CopyCFB(pData);
         pFrame->bGrabbedFrame = false;
@@ -3723,13 +3724,9 @@ static inline bool frameFreeTexture(Frame* pFrame, FrameTexture* pTexture) {
 static bool frameSetupCache(Frame* pFrame) {
     s32 iTexture;
 
-    
-
     if (!xlHeapTake(&pFrame->aPixelData, 0x30000000 | 0x00300000)) {
         return false;
     }
-
-    
 
     if (!xlHeapTake(&pFrame->aColorData, 0x30000000 | (N64_FRAME_WIDTH * 1024))) {
         return false;
@@ -4094,7 +4091,7 @@ bool frameSetMatrix(Frame* pFrame, Mtx44 matrix, FrameMatrixType eType, bool bLo
                 memcpy(pFrame->matrixProjection, matrix, sizeof(Mtx44));
             } else {
                 PSMTX44Concat(matrix, pFrame->matrixProjection, pFrame->matrixProjection);
-            } 
+            }
 
             pFrame->nMode |= 0x04000000;
             pFrame->nMode &= ~0x8000000;

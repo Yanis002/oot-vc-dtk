@@ -655,15 +655,13 @@ static void SPEC2_MakeStatus(s32 chan, PADStatus* status, u32 data[2]) {
 
 #define UNK(squared) ((squared ^ (squared >> 31)) - (squared) >= 9)
 
-    if (
-        UNK(SQ(status->stickX) - SQ(lbl_802090E0[chan].stickX)) 
-        || UNK(SQ(status->stickY) - SQ(lbl_802090E0[chan].stickY)) 
-        || UNK(SQ(status->substickX) - SQ(lbl_802090E0[chan].substickX)) 
-        || UNK(SQ(status->substickY) - SQ(lbl_802090E0[chan].substickY))
-        || UNK(SQ(status->triggerLeft) - SQ(lbl_802090E0[chan].triggerLeft))
-        || UNK(SQ(status->triggerRight) - SQ(lbl_802090E0[chan].triggerRight))
-        || status->button != lbl_802090E0[chan].button
-    ) {
+    if (UNK(SQ(status->stickX) - SQ(lbl_802090E0[chan].stickX)) ||
+        UNK(SQ(status->stickY) - SQ(lbl_802090E0[chan].stickY)) ||
+        UNK(SQ(status->substickX) - SQ(lbl_802090E0[chan].substickX)) ||
+        UNK(SQ(status->substickY) - SQ(lbl_802090E0[chan].substickY)) ||
+        UNK(SQ(status->triggerLeft) - SQ(lbl_802090E0[chan].triggerLeft)) ||
+        UNK(SQ(status->triggerRight) - SQ(lbl_802090E0[chan].triggerRight)) ||
+        status->button != lbl_802090E0[chan].button) {
         fn_8009AA44();
     }
 

@@ -1,6 +1,6 @@
+#include "macros.h"
 #include "revolution/exi.h"
 #include "revolution/os.h"
-#include "macros.h"
 
 #define OS_SRAM_SIZE (sizeof(OSSram) + sizeof(OSSramEx))
 
@@ -11,11 +11,11 @@ typedef struct OSScb {
             OSSramEx sramEx;
         };
         u8 block[OS_SRAM_SIZE];
-    };            // at 0x0
-    u32 pos;      // at 0x40
+    }; // at 0x0
+    u32 pos; // at 0x40
     bool enabled; // at 0x44
-    bool locked;  // at 0x48
-    bool sync;    // at 0x4C
+    bool locked; // at 0x48
+    bool sync; // at 0x4C
     UNKWORD WORD_0x50;
 } OSScb;
 
@@ -67,7 +67,6 @@ static bool WriteSram(const void* src, u32 pos, s32 size) {
         return false;
     }
 
-
     if (!EXISelect(EXI_CHAN_0, EXI_DEV_INT, EXI_FREQ_8MHZ)) {
         EXIUnlock(EXI_CHAN_0);
         return false;
@@ -108,9 +107,7 @@ static void* LockSram(u32 pos) {
     return Scb.block + pos;
 }
 
-static inline OSSramEx* __OSLockSramEx(void) {
-    return (OSSramEx*)LockSram(sizeof(OSSram));
-}
+static inline OSSramEx* __OSLockSramEx(void) { return (OSSramEx*)LockSram(sizeof(OSSram)); }
 
 static bool UnlockSram(bool save, u32 pos) {
     u16* data;
@@ -127,8 +124,7 @@ static bool UnlockSram(bool save, u32 pos) {
             // Checksum base SRAM
             sram->invchecksum = 0;
             sram->checksum = 0;
-            for (data = (u16*)&sram->counterBias; data < (u16*)&Scb.sramEx;
-                 data++) {
+            for (data = (u16*)&sram->counterBias; data < (u16*)&Scb.sramEx; data++) {
                 sram->checksum += *data;
                 sram->invchecksum += ~*data;
             }
@@ -139,14 +135,11 @@ static bool UnlockSram(bool save, u32 pos) {
         }
 
         sramEx = &Scb.sramEx;
-        if (Scb.pos <= sizeof(OSSram) &&
-            (((u32)sramEx->gbs & 0x7C00) == 0x5000 ||
-             ((u32)sramEx->gbs & 0xC0) == 0xC0)) {
+        if (Scb.pos <= sizeof(OSSram) && (((u32)sramEx->gbs & 0x7C00) == 0x5000 || ((u32)sramEx->gbs & 0xC0) == 0xC0)) {
             sramEx->gbs = 0;
         }
 
-        Scb.sync =
-            WriteSram(Scb.block + Scb.pos, Scb.pos, OS_SRAM_SIZE - Scb.pos);
+        Scb.sync = WriteSram(Scb.block + Scb.pos, Scb.pos, OS_SRAM_SIZE - Scb.pos);
         if (Scb.sync) {
             Scb.pos = OS_SRAM_SIZE;
         }
@@ -157,13 +150,9 @@ static bool UnlockSram(bool save, u32 pos) {
     return Scb.sync;
 }
 
-static inline bool __OSUnlockSramEx(bool save) {
-    return UnlockSram(save, sizeof(OSSram));
-}
+static inline bool __OSUnlockSramEx(bool save) { return UnlockSram(save, sizeof(OSSram)); }
 
-bool __OSSyncSram(void) {
-    return Scb.sync;
-}
+bool __OSSyncSram(void) { return Scb.sync; }
 
 bool __OSReadROM(void* dst, s32 size, const void* src) {
     u32 imm;

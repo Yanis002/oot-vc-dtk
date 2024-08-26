@@ -595,8 +595,7 @@ bool OSJoinThread(OSThread* thread, void* val) {
 
     enabled = OSDisableInterrupts();
 
-    if (!(thread->flags & OS_THREAD_DETACHED) &&
-        thread->state != OS_THREAD_STATE_MORIBUND &&
+    if (!(thread->flags & OS_THREAD_DETACHED) && thread->state != OS_THREAD_STATE_MORIBUND &&
         thread->joinQueue.head == NULL) {
         OSSleepThread(&thread->joinQueue);
         if (!__OSIsThreadActive(thread)) {

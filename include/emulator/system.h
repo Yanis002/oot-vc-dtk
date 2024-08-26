@@ -4,8 +4,8 @@
 #include "emulator/cpu.h"
 #include "emulator/mi.h"
 #include "emulator/xlObject.h"
-#include "revolution/types.h"
 #include "revolution/pad.h"
+#include "revolution/types.h"
 
 // `C` if `eTypeROM` is `CZLJ`
 #define GET_GAME_MEDIUM(eTypeROM) ((eTypeROM >> 24) & 0xFF)

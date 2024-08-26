@@ -31,9 +31,7 @@ void __OSInitSystemCall(void) {
     memcpy(OSPhysicalToCached(OS_PHYS_SYSCALL_INTR), __OSSystemCallVectorStart,
            (u32)__OSSystemCallVectorEnd - (u32)__OSSystemCallVectorStart);
 
-    DCFlushRangeNoSync(OSPhysicalToCached(OS_PHYS_SYSCALL_INTR),
-                       OS_INTR_SLOT_SIZE);
+    DCFlushRangeNoSync(OSPhysicalToCached(OS_PHYS_SYSCALL_INTR), OS_INTR_SLOT_SIZE);
     __sync();
-    ICInvalidateRange(OSPhysicalToCached(OS_PHYS_SYSCALL_INTR),
-                      OS_INTR_SLOT_SIZE);
+    ICInvalidateRange(OSPhysicalToCached(OS_PHYS_SYSCALL_INTR), OS_INTR_SLOT_SIZE);
 }

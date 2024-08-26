@@ -1,12 +1,11 @@
 #include "emulator/pif.h"
-#include "emulator/flash.h"
-#include "emulator/system.h"
-#include "emulator/vc64_RVL.h"
-#include "emulator/xlHeap.h"
+#include "emulator/controller.h"
 #include "emulator/eeprom.h"
 #include "emulator/flash.h"
 #include "emulator/store.h"
-#include "emulator/controller.h"
+#include "emulator/system.h"
+#include "emulator/vc64_RVL.h"
+#include "emulator/xlHeap.h"
 
 _XL_OBJECTTYPE gClassPIF = {
     "PIF",

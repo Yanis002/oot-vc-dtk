@@ -1,9 +1,9 @@
+#include "macros.h"
 #include "revolution/base.h"
 #include "revolution/db.h"
 #include "revolution/os.h"
-#include "macros.h"
 
-ASM void DCEnable(void) {
+ASM void DCEnable(void){
 #ifdef __MWERKS__ // clang-format off
     nofralloc
     
@@ -16,7 +16,7 @@ ASM void DCEnable(void) {
 #endif // clang-format on
 }
 
-ASM void DCInvalidateRange(register const void* buf, register u32 len) {
+ASM void DCInvalidateRange(register const void* buf, register u32 len){
 #ifdef __MWERKS__ // clang-format off
     nofralloc
     
@@ -38,7 +38,7 @@ do_invalidate:
 #endif // clang-format on
 }
 
-ASM void DCFlushRange(register const void* buf, register u32 len) {
+ASM void DCFlushRange(register const void* buf, register u32 len){
 #ifdef __MWERKS__ // clang-format off
     nofralloc
     
@@ -61,7 +61,7 @@ do_flush:
 #endif // clang-format on
 }
 
-ASM void DCStoreRange(register const void* buf, register u32 len) {
+ASM void DCStoreRange(register const void* buf, register u32 len){
 #ifdef __MWERKS__ // clang-format off
     nofralloc
     
@@ -84,7 +84,7 @@ do_store:
 #endif // clang-format on
 }
 
-ASM void DCFlushRangeNoSync(register const void* buf, register u32 len) {
+ASM void DCFlushRangeNoSync(register const void* buf, register u32 len){
 #ifdef __MWERKS__ // clang-format off
     nofralloc
     
@@ -106,7 +106,7 @@ do_flush:
 #endif // clang-format on
 }
 
-ASM void DCZeroRange(register const void* buf, register u32 len) {
+ASM void DCZeroRange(register const void* buf, register u32 len){
 #ifdef __MWERKS__ // clang-format off
     nofralloc
     
@@ -128,7 +128,7 @@ do_zero:
 #endif // clang-format on
 }
 
-ASM void ICInvalidateRange(register const void* buf, register u32 len) {
+ASM void ICInvalidateRange(register const void* buf, register u32 len){
 #ifdef __MWERKS__ // clang-format off
     nofralloc
     
@@ -153,7 +153,7 @@ do_invalidate:
 #endif // clang-format on
 }
 
-ASM void ICFlashInvalidate(void) {
+ASM void ICFlashInvalidate(void){
 #ifdef __MWERKS__ // clang-format off
     nofralloc
     
@@ -233,8 +233,7 @@ void L2GlobalInvalidate(void) {
     l2cr = PPCMfl2cr();
     PPCMtl2cr(l2cr | L2CR_L2I);
 
-    while (PPCMfl2cr() & L2CR_L2IP) {
-    }
+    while (PPCMfl2cr() & L2CR_L2IP) {}
 
     l2cr = PPCMfl2cr();
     PPCMtl2cr(l2cr & ~L2CR_L2I);
@@ -250,8 +249,7 @@ void DMAErrorHandler(u8 error, OSContext* ctx, u32 dsisr, u32 dar, ...) {
     OSReport("Machine check received\n");
     OSReport("HID2 = 0x%x   SRR1 = 0x%x\n", hid2, ctx->srr1);
 
-    if (!(hid2 & (HID2_DCHERR | HID2_DNCERR | HID2_DCMERR | HID2_DQOERR)) ||
-        !(ctx->srr1 & 0x200000)) {
+    if (!(hid2 & (HID2_DCHERR | HID2_DNCERR | HID2_DCMERR | HID2_DQOERR)) || !(ctx->srr1 & 0x200000)) {
         OSReport("Machine check was not DMA/locked cache related\n");
         OSDumpContext(ctx);
         PPCHalt();
@@ -261,8 +259,7 @@ void DMAErrorHandler(u8 error, OSContext* ctx, u32 dsisr, u32 dar, ...) {
     OSReport("The following errors have been detected and cleared :\n");
 
     if (hid2 & HID2_DCHERR) {
-        OSReport(
-            "\t- Requested a locked cache tag that was already in the cache\n");
+        OSReport("\t- Requested a locked cache tag that was already in the cache\n");
     }
     if (hid2 & HID2_DNCERR) {
         OSReport("\t- DMA attempted to access normal cache\n");

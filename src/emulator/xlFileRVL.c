@@ -1,6 +1,6 @@
 #include "emulator/xlFileRVL.h"
-#include "emulator/xlHeap.h"
 #include "emulator/xlCoreRVL.h"
+#include "emulator/xlHeap.h"
 #include "revolution/arc.h"
 #include "revolution/cnt.h"
 #include "stddef.h"

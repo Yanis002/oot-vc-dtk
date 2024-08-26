@@ -1,5 +1,5 @@
-#include "emulator/vc64_RVL.h"
 #include "emulator/xlCoreRVL.h"
+#include "emulator/vc64_RVL.h"
 #include "emulator/xlHeap.h"
 #include "emulator/xlList.h"
 #include "emulator/xlPostRVL.h"

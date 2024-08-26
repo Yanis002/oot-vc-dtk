@@ -1,7 +1,7 @@
+#include "macros.h"
 #include "revolution/ipc.h"
 #include "revolution/os.h"
 #include "revolution/vi.h"
-#include "macros.h"
 
 typedef enum {
     STM_IOCTL_REG_STM_EVENT = 0x1000,
@@ -43,18 +43,16 @@ static s32 __OSStateEventHandler(s32 result, void* arg);
 static void LockUp(void);
 
 static inline s32 AccessVIDimRegs(void) {
-    IPCResult result = IOS_IoctlAsync(
-        StmImDesc, STM_IOCTL_SET_VI_DIM, StmVdInBuf, sizeof(StmVdInBuf),
-        StmVdOutBuf, sizeof(StmVdOutBuf), __OSVIDimReplyHandler, NULL);
+    IPCResult result = IOS_IoctlAsync(StmImDesc, STM_IOCTL_SET_VI_DIM, StmVdInBuf, sizeof(StmVdInBuf), StmVdOutBuf,
+                                      sizeof(StmVdOutBuf), __OSVIDimReplyHandler, NULL);
     return result != IPC_RESULT_OK ? result : 1;
 }
 
 static inline void __OSRegisterStateEvent(void) {
     bool enabled = OSDisableInterrupts();
 
-    if (IOS_IoctlAsync(StmEhDesc, STM_IOCTL_REG_STM_EVENT, StmEhInBuf,
-                       sizeof(StmEhInBuf), StmEhOutBuf, sizeof(StmEhOutBuf),
-                       __OSStateEventHandler, NULL) == IPC_RESULT_OK) {
+    if (IOS_IoctlAsync(StmEhDesc, STM_IOCTL_REG_STM_EVENT, StmEhInBuf, sizeof(StmEhInBuf), StmEhOutBuf,
+                       sizeof(StmEhOutBuf), __OSStateEventHandler, NULL) == IPC_RESULT_OK) {
         StmEhRegistered = true;
     } else {
         StmEhRegistered = false;
@@ -151,8 +149,7 @@ void __OSShutdownToSBY(void) {
     // clang-format on
 
     in_args[0] = 0;
-    IOS_Ioctl(StmImDesc, STM_IOCTL_SHUTDOWN_TO_SBY, StmImInBuf,
-              sizeof(StmImInBuf), StmImOutBuf, sizeof(StmImOutBuf));
+    IOS_Ioctl(StmImDesc, STM_IOCTL_SHUTDOWN_TO_SBY, StmImInBuf, sizeof(StmImInBuf), StmImOutBuf, sizeof(StmImOutBuf));
     LockUp();
 
 #undef in_args
@@ -166,8 +163,7 @@ void __OSHotReset(void) {
     OS_ASSERT(StmReady, "Error: The firmware doesn't support reboot feature.\n");
     // clang-format on
 
-    IOS_Ioctl(StmImDesc, STM_IOCTL_HOT_RESET, StmImInBuf, sizeof(StmImInBuf),
-              StmImOutBuf, sizeof(StmImOutBuf));
+    IOS_Ioctl(StmImDesc, STM_IOCTL_HOT_RESET, StmImInBuf, sizeof(StmImInBuf), StmImOutBuf, sizeof(StmImOutBuf));
     LockUp();
 }
 
@@ -221,8 +217,8 @@ static inline s32 __OSSetIdleLEDMode(u32 mode) {
 
     in_args[0] = mode;
 
-    return IOS_Ioctl(StmImDesc, STM_IOCTL_SET_IDLE_LED_MODE, StmImInBuf,
-                     sizeof(StmImInBuf), StmImOutBuf, sizeof(StmImOutBuf));
+    return IOS_Ioctl(StmImDesc, STM_IOCTL_SET_IDLE_LED_MODE, StmImInBuf, sizeof(StmImInBuf), StmImOutBuf,
+                     sizeof(StmImOutBuf));
 
 #undef in_args
 }
@@ -238,8 +234,8 @@ s32 __OSUnRegisterStateEvent(void) {
         return -6;
     }
 
-    result = IOS_Ioctl(StmImDesc, STM_IOCTL_UNREG_STM_EVENT, StmImInBuf,
-                       sizeof(StmImInBuf), StmImOutBuf, sizeof(StmImOutBuf));
+    result = IOS_Ioctl(StmImDesc, STM_IOCTL_UNREG_STM_EVENT, StmImInBuf, sizeof(StmImInBuf), StmImOutBuf,
+                       sizeof(StmImOutBuf));
     if (result == IPC_RESULT_OK) {
         StmEhRegistered = false;
     }

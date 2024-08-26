@@ -46,9 +46,7 @@ void __DSPHandler(s16 intr, OSContext* ctx) {
     OSContext tmpCtx;
     u32 ucode;
 
-    DSP_HW_REGS[DSP_CSR] =
-        (DSP_HW_REGS[DSP_CSR] & ~(DSP_CSR_AIDINT | DSP_CSR_ARINT)) |
-        DSP_CSR_DSPINT;
+    DSP_HW_REGS[DSP_CSR] = (DSP_HW_REGS[DSP_CSR] & ~(DSP_CSR_AIDINT | DSP_CSR_ARINT)) | DSP_CSR_DSPINT;
 
     OSClearContext(&tmpCtx);
     OSSetCurrentContext(&tmpCtx);
@@ -63,97 +61,109 @@ void __DSPHandler(s16 intr, OSContext* ctx) {
     }
 
     switch (ucode) {
-    case DSP_INIT:
-        __DSP_curr_task->state = DSP_TASK_STATE_1;
-        if (__DSP_curr_task->initCallback != NULL) {
-            __DSP_curr_task->initCallback(__DSP_curr_task);
-        }
-        break;
-    case DSP_RESUME:
-        __DSP_curr_task->state = DSP_TASK_STATE_1;
-        if (__DSP_curr_task->resumeCallback != NULL) {
-            __DSP_curr_task->resumeCallback(__DSP_curr_task);
-        }
-        break;
-    case DSP_YIELD:
-        if (__DSP_rude_task_pending) {
-            if (__DSP_curr_task == __DSP_rude_task) {
-                DSP_SEND_MAIL_SYNC(MAIL_CONTINUE);
+        case DSP_INIT:
+            __DSP_curr_task->state = DSP_TASK_STATE_1;
+            if (__DSP_curr_task->initCallback != NULL) {
+                __DSP_curr_task->initCallback(__DSP_curr_task);
+            }
+            break;
+        case DSP_RESUME:
+            __DSP_curr_task->state = DSP_TASK_STATE_1;
+            if (__DSP_curr_task->resumeCallback != NULL) {
+                __DSP_curr_task->resumeCallback(__DSP_curr_task);
+            }
+            break;
+        case DSP_YIELD:
+            if (__DSP_rude_task_pending) {
+                if (__DSP_curr_task == __DSP_rude_task) {
+                    DSP_SEND_MAIL_SYNC(MAIL_CONTINUE);
 
-                __DSP_rude_task = NULL;
-                __DSP_rude_task_pending = false;
+                    __DSP_rude_task = NULL;
+                    __DSP_rude_task_pending = false;
 
-                if (__DSP_curr_task->resumeCallback != NULL) {
-                    __DSP_curr_task->resumeCallback(__DSP_curr_task);
+                    if (__DSP_curr_task->resumeCallback != NULL) {
+                        __DSP_curr_task->resumeCallback(__DSP_curr_task);
+                    }
+                } else {
+                    DSP_SEND_MAIL_SYNC(MAIL_NEW_UCODE);
+
+                    __DSP_exec_task(__DSP_curr_task, __DSP_rude_task);
+
+                    __DSP_curr_task->state = DSP_TASK_STATE_2;
+                    __DSP_curr_task = __DSP_rude_task;
+
+                    __DSP_rude_task = NULL;
+                    __DSP_rude_task_pending = false;
+                }
+            } else if (__DSP_curr_task->next == NULL) {
+                if (__DSP_curr_task == __DSP_first_task) {
+                    DSP_SEND_MAIL_SYNC(MAIL_CONTINUE);
+
+                    if (__DSP_curr_task->resumeCallback != NULL) {
+                        __DSP_curr_task->resumeCallback(__DSP_curr_task);
+                    }
+                } else {
+                    DSP_SEND_MAIL_SYNC(MAIL_NEW_UCODE);
+
+                    __DSP_exec_task(__DSP_curr_task, __DSP_first_task);
+
+                    __DSP_curr_task->state = DSP_TASK_STATE_2;
+                    __DSP_curr_task = __DSP_first_task;
                 }
             } else {
                 DSP_SEND_MAIL_SYNC(MAIL_NEW_UCODE);
 
-                __DSP_exec_task(__DSP_curr_task, __DSP_rude_task);
+                __DSP_exec_task(__DSP_curr_task, __DSP_curr_task->next);
 
                 __DSP_curr_task->state = DSP_TASK_STATE_2;
-                __DSP_curr_task = __DSP_rude_task;
+                __DSP_curr_task = __DSP_curr_task->next;
+            }
+            break;
+        case DSP_DONE:
+            if (__DSP_rude_task_pending) {
+                if (__DSP_curr_task != __DSP_rude_task) {
+                    if (__DSP_curr_task->doneCallback != NULL) {
+                        __DSP_curr_task->doneCallback(__DSP_curr_task);
+                    }
+
+                    DSP_SEND_MAIL_SYNC(MAIL_NEW_UCODE);
+
+                    __DSP_exec_task(NULL, __DSP_rude_task);
+                    __DSP_remove_task(__DSP_curr_task);
+
+                    __DSP_curr_task = __DSP_rude_task;
+                    __DSP_rude_task = NULL;
+                    __DSP_rude_task_pending = false;
+                    break;
+                }
 
                 __DSP_rude_task = NULL;
                 __DSP_rude_task_pending = false;
             }
-        } else if (__DSP_curr_task->next == NULL) {
-            if (__DSP_curr_task == __DSP_first_task) {
-                DSP_SEND_MAIL_SYNC(MAIL_CONTINUE);
 
-                if (__DSP_curr_task->resumeCallback != NULL) {
-                    __DSP_curr_task->resumeCallback(__DSP_curr_task);
+            if (__DSP_curr_task->next == NULL) {
+                if (__DSP_curr_task == __DSP_first_task) {
+                    if (__DSP_curr_task->doneCallback != NULL) {
+                        __DSP_curr_task->doneCallback(__DSP_curr_task);
+                    }
+
+                    DSP_SEND_MAIL_SYNC(MAIL_RESET);
+
+                    __DSP_curr_task->state = DSP_TASK_STATE_3;
+                    __DSP_remove_task(__DSP_curr_task);
+
+                } else {
+                    if (__DSP_curr_task->doneCallback != NULL) {
+                        __DSP_curr_task->doneCallback(__DSP_curr_task);
+                    }
+
+                    DSP_SEND_MAIL_SYNC(MAIL_NEW_UCODE);
+
+                    __DSP_curr_task->state = DSP_TASK_STATE_3;
+                    __DSP_exec_task(NULL, __DSP_first_task);
+                    __DSP_curr_task = __DSP_first_task;
+                    __DSP_remove_task(__DSP_last_task);
                 }
-            } else {
-                DSP_SEND_MAIL_SYNC(MAIL_NEW_UCODE);
-
-                __DSP_exec_task(__DSP_curr_task, __DSP_first_task);
-
-                __DSP_curr_task->state = DSP_TASK_STATE_2;
-                __DSP_curr_task = __DSP_first_task;
-            }
-        } else {
-            DSP_SEND_MAIL_SYNC(MAIL_NEW_UCODE);
-
-            __DSP_exec_task(__DSP_curr_task, __DSP_curr_task->next);
-
-            __DSP_curr_task->state = DSP_TASK_STATE_2;
-            __DSP_curr_task = __DSP_curr_task->next;
-        }
-        break;
-    case DSP_DONE:
-        if (__DSP_rude_task_pending) {
-            if (__DSP_curr_task != __DSP_rude_task) {
-                if (__DSP_curr_task->doneCallback != NULL) {
-                    __DSP_curr_task->doneCallback(__DSP_curr_task);
-                }
-
-                DSP_SEND_MAIL_SYNC(MAIL_NEW_UCODE);
-
-                __DSP_exec_task(NULL, __DSP_rude_task);
-                __DSP_remove_task(__DSP_curr_task);
-
-                __DSP_curr_task = __DSP_rude_task;
-                __DSP_rude_task = NULL;
-                __DSP_rude_task_pending = false;
-                break;
-            }
-
-            __DSP_rude_task = NULL;
-            __DSP_rude_task_pending = false;
-        }
-
-        if (__DSP_curr_task->next == NULL) {
-            if (__DSP_curr_task == __DSP_first_task) {
-                if (__DSP_curr_task->doneCallback != NULL) {
-                    __DSP_curr_task->doneCallback(__DSP_curr_task);
-                }
-
-                DSP_SEND_MAIL_SYNC(MAIL_RESET);
-
-                __DSP_curr_task->state = DSP_TASK_STATE_3;
-                __DSP_remove_task(__DSP_curr_task);
-
             } else {
                 if (__DSP_curr_task->doneCallback != NULL) {
                     __DSP_curr_task->doneCallback(__DSP_curr_task);
@@ -162,28 +172,16 @@ void __DSPHandler(s16 intr, OSContext* ctx) {
                 DSP_SEND_MAIL_SYNC(MAIL_NEW_UCODE);
 
                 __DSP_curr_task->state = DSP_TASK_STATE_3;
-                __DSP_exec_task(NULL, __DSP_first_task);
-                __DSP_curr_task = __DSP_first_task;
-                __DSP_remove_task(__DSP_last_task);
+                __DSP_exec_task(NULL, __DSP_curr_task->next);
+                __DSP_curr_task = __DSP_curr_task->next;
+                __DSP_remove_task(__DSP_curr_task->prev);
             }
-        } else {
-            if (__DSP_curr_task->doneCallback != NULL) {
-                __DSP_curr_task->doneCallback(__DSP_curr_task);
+            break;
+        case DSP_SYNC:
+            if (__DSP_curr_task->requestCallback != NULL) {
+                __DSP_curr_task->requestCallback(__DSP_curr_task);
             }
-
-            DSP_SEND_MAIL_SYNC(MAIL_NEW_UCODE);
-
-            __DSP_curr_task->state = DSP_TASK_STATE_3;
-            __DSP_exec_task(NULL, __DSP_curr_task->next);
-            __DSP_curr_task = __DSP_curr_task->next;
-            __DSP_remove_task(__DSP_curr_task->prev);
-        }
-        break;
-    case DSP_SYNC:
-        if (__DSP_curr_task->requestCallback != NULL) {
-            __DSP_curr_task->requestCallback(__DSP_curr_task);
-        }
-        break;
+            break;
     }
 
     OSClearContext(&tmpCtx);
@@ -248,16 +246,11 @@ void __DSP_boot_task(DSPTask* task) {
     DSP_SEND_MAIL_SYNC(task->startVector);
 
     __DSP_debug_printf("DSP is booting task: 0x%08X\n", task);
-    __DSP_debug_printf("__DSP_boot_task()  : IRAM MMEM ADDR: 0x%08X\n",
-                       task->iramMmemAddr);
-    __DSP_debug_printf("__DSP_boot_task()  : IRAM DSP ADDR : 0x%08X\n",
-                       task->iramDspAddr);
-    __DSP_debug_printf("__DSP_boot_task()  : IRAM LENGTH   : 0x%08X\n",
-                       task->iramMmemLen);
-    __DSP_debug_printf("__DSP_boot_task()  : DRAM MMEM ADDR: 0x%08X\n",
-                       task->dramMmemLen);
-    __DSP_debug_printf("__DSP_boot_task()  : Start Vector  : 0x%08X\n",
-                       task->startVector);
+    __DSP_debug_printf("__DSP_boot_task()  : IRAM MMEM ADDR: 0x%08X\n", task->iramMmemAddr);
+    __DSP_debug_printf("__DSP_boot_task()  : IRAM DSP ADDR : 0x%08X\n", task->iramDspAddr);
+    __DSP_debug_printf("__DSP_boot_task()  : IRAM LENGTH   : 0x%08X\n", task->iramMmemLen);
+    __DSP_debug_printf("__DSP_boot_task()  : DRAM MMEM ADDR: 0x%08X\n", task->dramMmemLen);
+    __DSP_debug_printf("__DSP_boot_task()  : Start Vector  : 0x%08X\n", task->startVector);
 }
 
 void __DSP_insert_task(DSPTask* task) {

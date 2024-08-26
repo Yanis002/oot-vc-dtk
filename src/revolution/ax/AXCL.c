@@ -235,7 +235,7 @@ void __AXClInit(void) {
     __AXClWrite = (u16*)__AXCommandList;
     __AXCompressor = true;
 
-    __AXAuxCVolume = __AXAuxBVolume = __AXAuxAVolume =  AX_MAX_VOLUME;
+    __AXAuxCVolume = __AXAuxBVolume = __AXAuxAVolume = AX_MAX_VOLUME;
 }
 
 void __AXClQuit(void) {}

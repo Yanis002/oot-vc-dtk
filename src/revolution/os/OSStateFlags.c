@@ -1,7 +1,7 @@
+#include "macros.h"
 #include "revolution/nand.h"
 #include "revolution/os.h"
 #include "string.h"
-#include "macros.h"
 
 static OSStateFlags StateFlags ATTRIBUTE_ALIGN(32);
 
@@ -41,8 +41,7 @@ bool __OSWriteStateFlags(const OSStateFlags* newState) {
 bool __OSReadStateFlags(OSStateFlags* state) {
     NANDFileInfo file;
 
-    if (NANDOpen("/title/00000001/00000002/data/state.dat", &file,
-                 NAND_ACCESS_READ) == NAND_RESULT_OK) {
+    if (NANDOpen("/title/00000001/00000002/data/state.dat", &file, NAND_ACCESS_READ) == NAND_RESULT_OK) {
 
         s32 bytesRead = NANDRead(&file, &StateFlags, sizeof(OSStateFlags));
         NANDClose(&file);

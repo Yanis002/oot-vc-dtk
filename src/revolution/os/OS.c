@@ -344,9 +344,7 @@ static inline void CheckTargets(void) {
     }
 }
 
-inline u32 test(u32 t) {
-    return t & 0x0FFFFFFF;
-}
+inline u32 test(u32 t) { return t & 0x0FFFFFFF; }
 
 static void ReportOSInfo(void) {
     OSConsoleType type;
@@ -403,7 +401,7 @@ static void ReportOSInfo(void) {
             }
             break;
         case OS_CONSOLE_MASK_TDEV:
-            tdev = category ;
+            tdev = category;
             OSReport("TDEV-based emulation HW%d\n", test(tdev) - 3);
             break;
         default:

@@ -1,7 +1,6 @@
 #include "revolution/ax.h"
 
-const char* __AXVersion =
-    "<< RVL_SDK - AX \trelease build: Oct  1 2006 03:26:07 (0x4200_60422) >>";
+const char* __AXVersion = "<< RVL_SDK - AX \trelease build: Oct  1 2006 03:26:07 (0x4200_60422) >>";
 
 static bool __init = false;
 

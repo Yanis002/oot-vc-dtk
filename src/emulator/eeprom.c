@@ -1,8 +1,8 @@
 #include "emulator/eeprom.h"
 #include "emulator/cpu.h"
+#include "emulator/store.h"
 #include "emulator/vc64_RVL.h"
 #include "emulator/xlHeap.h"
-#include "emulator/store.h"
 
 _XL_OBJECTTYPE gClassEEPROM = {
     "MEMORY-PAK",
@@ -97,7 +97,7 @@ static inline bool eepromEvent_UnknownInline(EEPROM* pEEPROM, void* pArgument) {
 
     if (pEEPROM->pStore != NULL && !storeFreeObject((void**)&pEEPROM->pStore)) {
         return false;
-    } 
+    }
 
     if ((s32)pArgument < 0x8000) {
         var_r6 = 0x8000;
@@ -124,10 +124,12 @@ bool eepromEvent(EEPROM* pEEPROM, s32 nEvent, void* pArgument) {
             if (!cpuSetGetBlock(SYSTEM_CPU(gpSystem), (CpuDevice*)pArgument, (GetBlockFunc)eepromGetBlock)) {
                 return false;
             }
-            if (!cpuSetDevicePut(SYSTEM_CPU(gpSystem), (CpuDevice*)pArgument, (Put8Func)eepromPut8, (Put16Func)eepromPut16, (Put32Func)eepromPut32, (Put64Func)eepromPut64)) {
+            if (!cpuSetDevicePut(SYSTEM_CPU(gpSystem), (CpuDevice*)pArgument, (Put8Func)eepromPut8,
+                                 (Put16Func)eepromPut16, (Put32Func)eepromPut32, (Put64Func)eepromPut64)) {
                 return false;
             }
-            if (!cpuSetDeviceGet(SYSTEM_CPU(gpSystem), (CpuDevice*)pArgument, (Get8Func)eepromGet8, (Get16Func)eepromGet16, (Get32Func)eepromGet32, (Get64Func)eepromGet64)) {
+            if (!cpuSetDeviceGet(SYSTEM_CPU(gpSystem), (CpuDevice*)pArgument, (Get8Func)eepromGet8,
+                                 (Get16Func)eepromGet16, (Get32Func)eepromGet32, (Get64Func)eepromGet64)) {
                 return false;
             }
         case 0:

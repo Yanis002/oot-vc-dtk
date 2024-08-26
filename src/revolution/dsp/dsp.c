@@ -1,23 +1,15 @@
 #include "revolution/dsp.h"
 #include "revolution/os.h"
 
-const char* __DSPVersion =
-    "<< RVL_SDK - DSP \trelease build: Sep 20 2006 22:25:51 (0x4200_60422) >>";
+const char* __DSPVersion = "<< RVL_SDK - DSP \trelease build: Sep 20 2006 22:25:51 (0x4200_60422) >>";
 
 static bool __DSP_init_flag = false;
 
-bool DSPCheckMailToDSP(void) {
-    return (DSP_HW_REGS[DSP_DSPMBOX_H] & DSP_DSPMBOX_H_STATUS) != 0;
-}
+bool DSPCheckMailToDSP(void) { return (DSP_HW_REGS[DSP_DSPMBOX_H] & DSP_DSPMBOX_H_STATUS) != 0; }
 
-bool DSPCheckMailFromDSP(void) {
-    return (DSP_HW_REGS[DSP_CPUMBOX_H] & DSP_CPUMBOX_H_STATUS) != 0;
-}
+bool DSPCheckMailFromDSP(void) { return (DSP_HW_REGS[DSP_CPUMBOX_H] & DSP_CPUMBOX_H_STATUS) != 0; }
 
-DSPMail DSPReadMailFromDSP(void) {
-    return (DSPMail)(DSP_HW_REGS[DSP_CPUMBOX_H] << 16 |
-                     DSP_HW_REGS[DSP_CPUMBOX_L]);
-}
+DSPMail DSPReadMailFromDSP(void) { return (DSPMail)(DSP_HW_REGS[DSP_CPUMBOX_H] << 16 | DSP_HW_REGS[DSP_CPUMBOX_L]); }
 
 void DSPSendMailToDSP(DSPMail mail) {
     DSP_HW_REGS[DSP_DSPMBOX_H] = ((uintptr_t)mail) >> 16 & 0xFFFF;
@@ -29,10 +21,7 @@ static inline void DSPAssertInt(void) {
 
     enabled = OSDisableInterrupts();
 
-    DSP_HW_REGS[DSP_CSR] =
-        (DSP_HW_REGS[DSP_CSR] &
-         ~(DSP_CSR_AIDINT | DSP_CSR_ARINT | DSP_CSR_DSPINT)) |
-        DSP_CSR_PIINT;
+    DSP_HW_REGS[DSP_CSR] = (DSP_HW_REGS[DSP_CSR] & ~(DSP_CSR_AIDINT | DSP_CSR_ARINT | DSP_CSR_DSPINT)) | DSP_CSR_PIINT;
 
     OSRestoreInterrupts(enabled);
 }
@@ -40,8 +29,7 @@ static inline void DSPAssertInt(void) {
 void DSPInit(void) {
     bool enabled;
 
-    __DSP_debug_printf("DSPInit(): Build Date: %s %s\n", "Sep 20 2006",
-                       "22:25:51");
+    __DSP_debug_printf("DSPInit(): Build Date: %s %s\n", "Sep 20 2006", "22:25:51");
 
     if (__DSP_init_flag == true) {
         return;
@@ -54,13 +42,9 @@ void DSPInit(void) {
     __OSSetInterruptHandler(OS_INTR_DSP_DSP, __DSPHandler);
     __OSUnmaskInterrupts(OS_INTR_MASK(OS_INTR_DSP_DSP));
 
-    DSP_HW_REGS[DSP_CSR] =
-        (DSP_HW_REGS[DSP_CSR] &
-         ~(DSP_CSR_AIDINT | DSP_CSR_ARINT | DSP_CSR_DSPINT)) |
-        DSP_CSR_RES;
+    DSP_HW_REGS[DSP_CSR] = (DSP_HW_REGS[DSP_CSR] & ~(DSP_CSR_AIDINT | DSP_CSR_ARINT | DSP_CSR_DSPINT)) | DSP_CSR_RES;
 
-    DSP_HW_REGS[DSP_CSR] &=
-        ~(DSP_CSR_HALT | DSP_CSR_AIDINT | DSP_CSR_ARINT | DSP_CSR_DSPINT);
+    DSP_HW_REGS[DSP_CSR] &= ~(DSP_CSR_HALT | DSP_CSR_AIDINT | DSP_CSR_ARINT | DSP_CSR_DSPINT);
 
     __DSP_tmp_task = NULL;
     __DSP_curr_task = NULL;
@@ -72,9 +56,7 @@ void DSPInit(void) {
     OSRestoreInterrupts(enabled);
 }
 
-bool DSPCheckInit(void) {
-    return __DSP_init_flag;
-}
+bool DSPCheckInit(void) { return __DSP_init_flag; }
 
 DSPTask* DSPAddTask(DSPTask* task) {
     bool enabled;
@@ -94,8 +76,7 @@ DSPTask* DSPAddTask(DSPTask* task) {
     return task;
 }
 
-DSPTask *DSPCancelTask(DSPTask *task)
-{
+DSPTask* DSPCancelTask(DSPTask* task) {
     bool old;
 
     old = OSDisableInterrupts();

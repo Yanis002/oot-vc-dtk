@@ -21,7 +21,8 @@ typedef enum SimulatorArgumentType {
     SAT_COUNT = 11
 } SimulatorArgumentType;
 
-void fn_80007020(void);;
+void fn_80007020(void);
+;
 bool simulatorDVDShowError(s32 nStatus, void* anData, s32 nSizeRead, u32 nOffset);
 bool simulatorDVDOpen(char* szNameFile, DVDFileInfo* pFileInfo);
 bool simulatorDVDRead(DVDFileInfo* pFileInfo, void* anData, s32 nSizeRead, s32 nOffset, DVDCallback callback);

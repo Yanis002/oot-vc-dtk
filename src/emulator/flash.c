@@ -1,9 +1,9 @@
 #include "emulator/flash.h"
 #include "emulator/ram.h"
+#include "emulator/store.h"
 #include "emulator/system.h"
 #include "emulator/vc64_RVL.h"
 #include "emulator/xlHeap.h"
-#include "emulator/store.h"
 #include "macros.h"
 
 static bool flashPut8(Flash* pFLASH, u32 nAddress, s8* pData) { return true; }

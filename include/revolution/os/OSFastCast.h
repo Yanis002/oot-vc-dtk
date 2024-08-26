@@ -140,7 +140,6 @@ static inline f32 __OSu8tof32(register u8* arg) {
 
 static inline void OSu8tof32(u8* in, f32* out) { *out = __OSu8tof32(in); }
 
-
 #ifdef __cplusplus
 }
 #endif

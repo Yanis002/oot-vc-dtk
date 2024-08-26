@@ -1,10 +1,10 @@
 #ifndef _CONTROLLER_H
 #define _CONTROLLER_H
 
-#include "emulator/xlObject.h"
 #include "emulator/system.h"
-#include "revolution/types.h"
+#include "emulator/xlObject.h"
 #include "revolution/pad.h"
+#include "revolution/types.h"
 
 typedef struct lbl_801C7DB8_Struct {
     /* 0x00 */ void* unk_00;

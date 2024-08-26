@@ -1,33 +1,23 @@
 #include "revolution/os.h"
 
 static bool OnShutdown(bool final, u32 event);
-static OSShutdownFunctionInfo ShutdownFunctionInfo = {OnShutdown, 127, NULL,
-                                                      NULL};
+static OSShutdownFunctionInfo ShutdownFunctionInfo = {OnShutdown, 127, NULL, NULL};
 
-u32 OSGetPhysicalMem1Size(void) {
-    return OS_PHYSICAL_MEM1_SIZE;
-}
+u32 OSGetPhysicalMem1Size(void) { return OS_PHYSICAL_MEM1_SIZE; }
 
-u32 OSGetPhysicalMem2Size(void) {
-    return OS_PHYSICAL_MEM2_SIZE;
-}
+u32 OSGetPhysicalMem2Size(void) { return OS_PHYSICAL_MEM2_SIZE; }
 
-u32 OSGetConsoleSimulatedMem1Size(void) {
-    return OS_SIMULATED_MEM1_SIZE;
-}
+u32 OSGetConsoleSimulatedMem1Size(void) { return OS_SIMULATED_MEM1_SIZE; }
 
-u32 OSGetConsoleSimulatedMem2Size(void) {
-    return OS_SIMULATED_MEM2_SIZE;
-}
+u32 OSGetConsoleSimulatedMem2Size(void) { return OS_SIMULATED_MEM2_SIZE; }
 
 static bool OnShutdown(bool final, u32 event) {
 #pragma unused(event)
 
     if (final) {
         MI_HW_REGS[MI_PROT_MEM0] = 0xFF;
-        __OSMaskInterrupts(
-            OS_INTR_MASK(OS_INTR_MEM_0) | OS_INTR_MASK(OS_INTR_MEM_1) |
-            OS_INTR_MASK(OS_INTR_MEM_2) | OS_INTR_MASK(OS_INTR_MEM_3));
+        __OSMaskInterrupts(OS_INTR_MASK(OS_INTR_MEM_0) | OS_INTR_MASK(OS_INTR_MEM_1) | OS_INTR_MASK(OS_INTR_MEM_2) |
+                           OS_INTR_MASK(OS_INTR_MEM_3));
     }
 
     return true;
@@ -470,8 +460,7 @@ static void BATConfig(void) {
 
     mem1sim = OSGetConsoleSimulatedMem1Size();
     mem1phys = OSGetPhysicalMem1Size();
-    if (OSGetConsoleSimulatedMem1Size() < mem1phys &&
-        mem1sim == OS_MEM_MB_TO_B(24)) {
+    if (OSGetConsoleSimulatedMem1Size() < mem1phys && mem1sim == OS_MEM_MB_TO_B(24)) {
         DCInvalidateRange((void*)0x81800000, OS_MEM_MB_TO_B(24));
         MI_HW_REGS[MI_REG_0x28] = 2;
     }
@@ -506,9 +495,8 @@ void __OSInitMemoryProtection(void) {
     MI_HW_REGS[MI_REG_0x20] = 0;
     MI_HW_REGS[MI_PROT_MEM0] = 0xFF;
 
-    __OSMaskInterrupts(
-        OS_INTR_MASK(OS_INTR_MEM_0) | OS_INTR_MASK(OS_INTR_MEM_1) |
-        OS_INTR_MASK(OS_INTR_MEM_2) | OS_INTR_MASK(OS_INTR_MEM_3));
+    __OSMaskInterrupts(OS_INTR_MASK(OS_INTR_MEM_0) | OS_INTR_MASK(OS_INTR_MEM_1) | OS_INTR_MASK(OS_INTR_MEM_2) |
+                       OS_INTR_MASK(OS_INTR_MEM_3));
     __OSSetInterruptHandler(OS_INTR_MEM_0, MEMIntrruptHandler);
     __OSSetInterruptHandler(OS_INTR_MEM_1, MEMIntrruptHandler);
     __OSSetInterruptHandler(OS_INTR_MEM_2, MEMIntrruptHandler);

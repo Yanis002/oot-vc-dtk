@@ -1,7 +1,7 @@
-#include "revolution/gx.h"
 #include "emulator/_buildtev.h"
 #include "emulator/frame.h"
 #include "emulator/vc64_RVL.h"
+#include "revolution/gx.h"
 
 GXTevColorArg gCombinedColor[] = {
     GX_CC_CPREV, GX_CC_TEXC, GX_CC_TEXC, GX_CC_C2,   GX_CC_RASC,  GX_CC_KONST, GX_CC_ONE,  GX_CC_APREV,
@@ -231,9 +231,11 @@ bool SetTevStageTable(Frame* pFrame, s32 numCycles) {
     }
 
     pFrame->aMode[FMT_OTHER1] = (pFrame->aMode[FMT_OTHER1] >> 0x10) & 1;
-    pFrame->nMode =  ((pFrame->nMode & 0x40000000) & ~1) | (pFrame->aMode[3] & 1);
-    // pFrame->aMode[FMT_COMBINE_ALPHA2] = (pFrame->aMode[FMT_COMBINE_ALPHA2] & 0x40000000 & ~1) | (pFrame->aMode[3] & 1);
-    // ((u32) pFrame->aMode[5] >> 0x10) & 1, (pFrame->unkB0 & 0x40000000 & ~1) | (pFrame->aMode[3] & 1), pFrame->aMode[3])
+    pFrame->nMode = ((pFrame->nMode & 0x40000000) & ~1) | (pFrame->aMode[3] & 1);
+    // pFrame->aMode[FMT_COMBINE_ALPHA2] = (pFrame->aMode[FMT_COMBINE_ALPHA2] & 0x40000000 & ~1) | (pFrame->aMode[3] &
+    // 1);
+    // ((u32) pFrame->aMode[5] >> 0x10) & 1, (pFrame->unkB0 & 0x40000000 & ~1) | (pFrame->aMode[3] & 1),
+    // pFrame->aMode[3])
 
     ctP = BuildCombineModeTev(tempColor1, tempAlpha1, tempColor2, tempAlpha2, numCycles);
     SetTableTevStages(pFrame, ctP);

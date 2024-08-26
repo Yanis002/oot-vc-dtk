@@ -1,7 +1,7 @@
+#include "macros.h"
 #include "revolution/base.h"
 #include "revolution/db.h"
 #include "revolution/os.h"
-#include "macros.h"
 
 static ASM void __OSLoadFPUContext(UNKWORD unused, register OSContext* ctx) {
 #ifdef __MWERKS__ // clang-format off
@@ -89,8 +89,7 @@ _exit:
 #endif // clang-format on
 }
 
-static ASM void __OSSaveFPUContext(UNKWORD unused, UNKWORD unused1,
-                                   register OSContext* ctx) {
+static ASM void __OSSaveFPUContext(UNKWORD unused, UNKWORD unused1, register OSContext* ctx){
 #ifdef __MWERKS__ // clang-format off
     nofralloc
     
@@ -176,7 +175,7 @@ _exit:
 #endif // clang-format on
 }
 
-ASM void OSSaveFPUContext(register OSContext* ctx) {
+ASM void OSSaveFPUContext(register OSContext* ctx){
 #ifdef __MWERKS__ // clang-format off
     nofralloc
 
@@ -221,11 +220,9 @@ _not_current_fpu_ctx:
 #endif // clang-format on
 }
 
-OSContext* OSGetCurrentContext(void) {
-    return OS_CURRENT_CONTEXT;
-}
+OSContext* OSGetCurrentContext(void) { return OS_CURRENT_CONTEXT; }
 
-ASM bool OSSaveContext(register OSContext* ctx) {
+ASM bool OSSaveContext(register OSContext* ctx){
 #ifdef __MWERKS__ // clang-format off
     nofralloc
 
@@ -349,7 +346,7 @@ _load_special_regs:
 #endif // clang-format on
 }
 
-ASM void* OSGetStackPointer(void) {
+ASM void* OSGetStackPointer(void){
 #ifdef __MWERKS__ // clang-format off
     nofralloc
 
@@ -358,7 +355,7 @@ ASM void* OSGetStackPointer(void) {
 #endif // clang-format on
 }
 
-ASM void OSSwitchFiber(register void* func, register void* stack) {
+ASM void OSSwitchFiber(register void* func, register void* stack){
 #ifdef __MWERKS__ // clang-format off
     nofralloc
 
@@ -382,8 +379,7 @@ ASM void OSSwitchFiber(register void* func, register void* stack) {
 #endif // clang-format on
 }
 
-ASM void OSSwitchFiberEx(u32 r3, u32 r4, u32 r5, u32 r6, register void* func,
-                         register void* stack) {
+ASM void OSSwitchFiberEx(u32 r3, u32 r4, u32 r5, u32 r6, register void* func, register void* stack) {
 #ifdef __MWERKS__ // clang-format off
     nofralloc
 
@@ -416,8 +412,7 @@ void OSClearContext(OSContext* ctx) {
     }
 }
 
-ASM void OSInitContext(register OSContext* ctx, register void* _srr0,
-                       register void* stack) {
+ASM void OSInitContext(register OSContext* ctx, register void* _srr0, register void* stack) {
 #ifdef __MWERKS__ // clang-format off
     nofralloc
     
@@ -481,25 +476,19 @@ void OSDumpContext(const OSContext* ctx) {
     u32 i;
     u32* sp;
 
-    OSReport(
-        "------------------------- Context 0x%08x -------------------------\n",
-        ctx);
+    OSReport("------------------------- Context 0x%08x -------------------------\n", ctx);
 
     for (i = 0; i < 16; i++) {
-        OSReport("r%-2d  = 0x%08x (%14d)  r%-2d  = 0x%08x (%14d)\n", i,
-                 ctx->gprs[i], ctx->gprs[i], i + 16, ctx->gprs[i + 16],
-                 ctx->gprs[i + 16]);
+        OSReport("r%-2d  = 0x%08x (%14d)  r%-2d  = 0x%08x (%14d)\n", i, ctx->gprs[i], ctx->gprs[i], i + 16,
+                 ctx->gprs[i + 16], ctx->gprs[i + 16]);
     }
 
-    OSReport("LR   = 0x%08x                   CR   = 0x%08x\n", ctx->lr,
-             ctx->cr);
-    OSReport("SRR0 = 0x%08x                   SRR1 = 0x%08x\n", ctx->srr0,
-             ctx->srr1);
+    OSReport("LR   = 0x%08x                   CR   = 0x%08x\n", ctx->lr, ctx->cr);
+    OSReport("SRR0 = 0x%08x                   SRR1 = 0x%08x\n", ctx->srr0, ctx->srr1);
 
     OSReport("\nGQRs----------\n");
     for (i = 0; i < 4; i++) {
-        OSReport("gqr%d = 0x%08x \t gqr%d = 0x%08x\n", i, ctx->gqrs[i], i + 4,
-                 ctx->gqrs[i + 4]);
+        OSReport("gqr%d = 0x%08x \t gqr%d = 0x%08x\n", i, ctx->gqrs[i], i + 4, ctx->gqrs[i + 4]);
     }
 
     if (ctx->state & OS_CONTEXT_STATE_FP_SAVED) {
@@ -512,14 +501,12 @@ void OSDumpContext(const OSContext* ctx) {
 
         OSReport("\n\nFPRs----------\n");
         for (i = 0; i < 32; i += 2) {
-            OSReport("fr%d \t= %d \t fr%d \t= %d\n", i, (u32)ctx->fprs[i],
-                     i + 1, (u32)ctx->fprs[i + 1]);
+            OSReport("fr%d \t= %d \t fr%d \t= %d\n", i, (u32)ctx->fprs[i], i + 1, (u32)ctx->fprs[i + 1]);
         }
 
         OSReport("\n\nPSFs----------\n");
         for (i = 0; i < 32; i += 2) {
-            OSReport("ps%d \t= 0x%x \t ps%d \t= 0x%x\n", i, (u32)ctx->psfs[i],
-                     i + 1, (u32)ctx->psfs[i + 1]);
+            OSReport("ps%d \t= 0x%x \t ps%d \t= 0x%x\n", i, (u32)ctx->psfs[i], i + 1, (u32)ctx->psfs[i + 1]);
         }
 
         OSClearContext(&tempCtx);
