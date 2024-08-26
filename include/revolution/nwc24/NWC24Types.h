@@ -1,5 +1,5 @@
-#ifndef RVL_SDK_NWC24_TYPES_H
-#define RVL_SDK_NWC24_TYPES_H
+#ifndef _RVL_SDK_NWC24_TYPES_H
+#define _RVL_SDK_NWC24_TYPES_H
 
 #include "revolution/types.h"
 

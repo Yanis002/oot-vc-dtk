@@ -5,8 +5,8 @@
  * https://wiibrew.org/wiki/Memory_map
  */
 
-#ifndef RVL_SDK_OS_HARDWARE_H
-#define RVL_SDK_OS_HARDWARE_H
+#ifndef _RVL_SDK_OS_HARDWARE_H
+#define _RVL_SDK_OS_HARDWARE_H
 
 #include "macros.h"
 #include "revolution/dvd/dvd.h"
@@ -53,37 +53,37 @@ typedef enum {
 } OSBootMagic;
 
 typedef struct OSBootInfo {
-    DVDDiskID diskID; // at 0x0
-    u32 bootMagic; // at 0x20
-    u32 aplVersion; // at 0x24
-    u32 physMemSize; // at 0x28
-    u32 consoleType; // at 0x2C
-    void* arenaLo; // at 0x30
-    void* arenaHi; // at 0x34
-    void* fstStart; // at 0x38
-    u32 fstSize; // at 0x3C
+    /* 0x0 */ DVDDiskID diskID;
+    /* 0x20 */ u32 bootMagic;
+    /* 0x24 */ u32 aplVersion;
+    /* 0x28 */ u32 physMemSize;
+    /* 0x2C */ u32 consoleType;
+    /* 0x30 */ void* arenaLo;
+    /* 0x34 */ void* arenaHi;
+    /* 0x38 */ void* fstStart;
+    /* 0x3C */ u32 fstSize;
 } OSBootInfo;
 
 typedef struct OSDebugInterface {
-    bool usingDebugger; // at 0x0
-    u32 exceptionMask; // at 0x4
-    void* exceptionHook; // at 0x8
-    void* exceptionHookLR; // at 0xC
+    /* 0x0 */ bool usingDebugger;
+    /* 0x4 */ u32 exceptionMask;
+    /* 0x8 */ void* exceptionHook;
+    /* 0xC */ void* exceptionHookLR;
 } OSDebugInterface;
 
 typedef struct OSBI2 {
-    u32 dbgMonitorSize; // at 0x0
-    u32 simulatedMemSize; // at 0x4
-    u32 argumentOfs; // at 0x8
-    u32 debugFlag; // at 0xC
-    u32 trackLocation; // at 0x10
-    u32 trackSize; // at 0x14
-    u32 countryCode; // at 0x18
+    /* 0x0 */ u32 dbgMonitorSize;
+    /* 0x4 */ u32 simulatedMemSize;
+    /* 0x8 */ u32 argumentOfs;
+    /* 0xC */ u32 debugFlag;
+    /* 0x10 */ u32 trackLocation;
+    /* 0x14 */ u32 trackSize;
+    /* 0x18 */ u32 countryCode;
     u32 WORD_0x1C;
     u32 lastInsert;
-    u32 padSpec; // at 0x24
-    u32 totalTextDataLimit; // at 0x28
-    u32 simulatedMem2Size; // at 0x2C
+    /* 0x24 */ u32 padSpec;
+    /* 0x28 */ u32 totalTextDataLimit;
+    /* 0x2C */ u32 simulatedMem2Size;
 } OSBI2;
 
 /**

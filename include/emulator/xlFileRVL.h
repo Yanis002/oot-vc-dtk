@@ -6,6 +6,10 @@
 #include "revolution/dvd.h"
 #include "revolution/types.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 typedef bool (*DVDOpenCallback)(char*, DVDFileInfo*);
 typedef bool (*DVDReadCallback)(DVDFileInfo*, void*, s32, s32, DVDCallback);
 
@@ -37,5 +41,9 @@ bool xlFileSetPosition(tXL_FILE* pFile, s32 nOffset);
 bool xlFileEvent(tXL_FILE* pFile, s32 nEvent, void* pArgument);
 
 extern _XL_OBJECTTYPE gTypeFile;
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

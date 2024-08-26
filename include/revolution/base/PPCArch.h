@@ -1,5 +1,5 @@
-#ifndef RVL_SDK_PPC_ARCH_H
-#define RVL_SDK_PPC_ARCH_H
+#ifndef _RVL_SDK_PPC_ARCH_H
+#define _RVL_SDK_PPC_ARCH_H
 
 #include "revolution/types.h"
 

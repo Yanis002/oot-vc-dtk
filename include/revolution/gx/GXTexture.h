@@ -1,5 +1,5 @@
-#ifndef RVL_SDK_GX_TEXTURE_H
-#define RVL_SDK_GX_TEXTURE_H
+#ifndef _RVL_SDK_GX_TEXTURE_H
+#define _RVL_SDK_GX_TEXTURE_H
 
 #include "revolution/gx/GXInternal.h"
 #include "revolution/gx/GXTypes.h"

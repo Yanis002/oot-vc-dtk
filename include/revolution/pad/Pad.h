@@ -1,5 +1,5 @@
-#ifndef RVL_SDK_PAD_H
-#define RVL_SDK_PAD_H
+#ifndef _RVL_SDK_PAD_H
+#define _RVL_SDK_PAD_H
 
 #include "revolution/types.h"
 

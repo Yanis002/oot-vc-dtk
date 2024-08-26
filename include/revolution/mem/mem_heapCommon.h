@@ -1,5 +1,5 @@
-#ifndef RVL_SDK_MEM_HEAP_COMMON_H
-#define RVL_SDK_MEM_HEAP_COMMON_H
+#ifndef _RVL_SDK_MEM_HEAP_COMMON_H
+#define _RVL_SDK_MEM_HEAP_COMMON_H
 
 #include "mem_funcs.h"
 #include "revolution/mem/mem_list.h"
@@ -18,20 +18,20 @@ typedef enum {
 } MEMHeapOpt;
 
 typedef struct MEMiHeapHead {
-    u32 magic; // at 0x0
-    MEMLink link; // at 0x4
-    MEMList list; // at 0xC
-    u8* start; // at 0x18
-    u8* end; // at 0x1C
-    OSMutex mutex; // at 0x20
+    /* 0x0 */ u32 magic;
+    /* 0x4 */ MEMLink link;
+    /* 0xC */ MEMList list;
+    /* 0x18 */ u8* start;
+    /* 0x1C */ u8* end;
+    /* 0x20 */ OSMutex mutex;
 
-    union {
+    /* 0x38 */ union {
         u32 attribute;
         struct {
             u32 attribute_0_24 : 24;
             u32 opt : 8;
         };
-    }; // at 0x38
+    };
 } MEMiHeapHead;
 
 void MEMiInitHeapHead(MEMiHeapHead* heap, u32 magic, void* start, void* end, u16 opt);

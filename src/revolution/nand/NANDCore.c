@@ -188,7 +188,7 @@ s32 nandConvertErrorCode(s32 result) {
         -20,                            NAND_RESULT_UNKNOWN,
         -21,                            NAND_RESULT_UNKNOWN,
         IPC_RESULT_ALLOC_FAILED,        NAND_RESULT_ALLOC_FAILED,
-        -23,                            NAND_RESULT_UNKNOWN
+        -23,                            NAND_RESULT_UNKNOWN,
     };
     // clang-format on
 

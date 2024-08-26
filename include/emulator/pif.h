@@ -4,6 +4,10 @@
 #include "emulator/xlObject.h"
 #include "revolution/types.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #define PIF_RAM_START 0x7C0
 #define PIF_RAM_END 0x7FF
 
@@ -45,5 +49,9 @@ bool pifSetControllerType(Pif* pPIF, s32 channel, ControllerType type);
 bool pifEvent(Pif* pPIF, s32 nEvent, void* pArgument);
 
 extern _XL_OBJECTTYPE gClassPIF;
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

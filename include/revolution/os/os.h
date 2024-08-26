@@ -1,5 +1,5 @@
-#ifndef RVL_SDK_OS_H
-#define RVL_SDK_OS_H
+#ifndef _RVL_SDK_OS_H
+#define _RVL_SDK_OS_H
 
 #include "revolution/os/OSContext.h"
 #include "revolution/os/OSExec.h"
@@ -54,13 +54,13 @@ typedef enum {
 } OSExceptionType;
 
 typedef struct OSIOSRev {
-    u8 idHi; // at 0x0
-    u8 idLo; // at 0x1
-    u8 verMajor; // at 0x2
-    u8 verMinor; // at 0x3
-    u8 buildMon; // at 0x4
-    u8 buildDay; // at 0x5
-    u16 buildYear; // at 0x6
+    /* 0x0 */ u8 idHi;
+    /* 0x1 */ u8 idLo;
+    /* 0x2 */ u8 verMajor;
+    /* 0x3 */ u8 verMinor;
+    /* 0x4 */ u8 buildMon;
+    /* 0x5 */ u8 buildDay;
+    /* 0x6 */ u16 buildYear;
 } OSIOSRev;
 
 typedef void (*OSExceptionHandler)(u8 type, OSContext* ctx);

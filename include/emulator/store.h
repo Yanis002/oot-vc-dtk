@@ -6,6 +6,10 @@
 #include "revolution/nand.h"
 #include "revolution/types.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 typedef struct Store {
     /* 0x00 */ u32 unk_00;
     /* 0x08 */ char szFileName[9];
@@ -33,5 +37,9 @@ bool fn_80061DB8(void);
 bool storeEvent(Store* pStore, s32 nEvent, void* pArgument);
 
 extern _XL_OBJECTTYPE gClassStore;
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

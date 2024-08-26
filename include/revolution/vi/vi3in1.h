@@ -1,5 +1,5 @@
-#ifndef RVL_SDK_VI_VI3IN1_H
-#define RVL_SDK_VI_VI3IN1_H
+#ifndef _RVL_SDK_VI_VI3IN1_H
+#define _RVL_SDK_VI_VI3IN1_H
 
 #include "revolution/types.h"
 

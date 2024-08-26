@@ -1,5 +1,5 @@
-#ifndef RVL_SDK_DSP_DEBUG_H
-#define RVL_SDK_DSP_DEBUG_H
+#ifndef _RVL_SDK_DSP_DEBUG_H
+#define _RVL_SDK_DSP_DEBUG_H
 
 #include "revolution/types.h"
 

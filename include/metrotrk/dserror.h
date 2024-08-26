@@ -1,5 +1,5 @@
-#ifndef METROTRK_DEBUGGER_PORTABLE_DSERROR_H
-#define METROTRK_DEBUGGER_PORTABLE_DSERROR_H
+#ifndef _METROTRK_DSERROR_H
+#define _METROTRK_DSERROR_H
 
 #include "revolution/types.h"
 

@@ -1,5 +1,5 @@
-#ifndef METROTRK_DEBUGGER_OS_DOLPHIN_DOLPHIN_TRK_H
-#define METROTRK_DEBUGGER_OS_DOLPHIN_DOLPHIN_TRK_H
+#ifndef _METROTRK_TRK_H
+#define _METROTRK_TRK_H
 
 #include "revolution/types.h"
 

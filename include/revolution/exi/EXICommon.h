@@ -1,5 +1,5 @@
-#ifndef RVL_SDK_EXI_COMMON_H
-#define RVL_SDK_EXI_COMMON_H
+#ifndef _RVL_SDK_EXI_COMMON_H
+#define _RVL_SDK_EXI_COMMON_H
 
 #include "revolution/os/OSContext.h"
 #include "revolution/types.h"

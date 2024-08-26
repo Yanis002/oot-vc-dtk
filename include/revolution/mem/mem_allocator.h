@@ -1,5 +1,5 @@
-#ifndef RVL_SDK_MEM_ALLOCATOR_H
-#define RVL_SDK_MEM_ALLOCATOR_H
+#ifndef _RVL_SDK_MEM_ALLOCATOR_H
+#define _RVL_SDK_MEM_ALLOCATOR_H
 
 #include "revolution/types.h"
 
@@ -15,15 +15,15 @@ typedef void* (*MEMAllocatorAllocFunc)(struct MEMAllocator* allocator, u32 size)
 typedef void (*MEMAllocatorFreeFunc)(struct MEMAllocator* allocator, void* block);
 
 typedef struct MEMAllocatorFuncs {
-    MEMAllocatorAllocFunc allocFunc; // at 0x0
-    MEMAllocatorFreeFunc freeFunc; // at 0x4
+    /* 0x0 */ MEMAllocatorAllocFunc allocFunc;
+    /* 0x4 */ MEMAllocatorFreeFunc freeFunc;
 } MEMAllocatorFuncs;
 
 typedef struct MEMAllocator {
-    const MEMAllocatorFuncs* funcs; // at 0x0
-    struct MEMiHeapHead* heap; // at 0x4
-    u32 heapParam1; // at 0x8
-    u32 heapParam2; // at 0xC
+    /* 0x0 */ const MEMAllocatorFuncs* funcs;
+    /* 0x4 */ struct MEMiHeapHead* heap;
+    /* 0x8 */ u32 heapParam1;
+    /* 0xC */ u32 heapParam2;
 } MEMAllocator;
 
 void* MEMAllocFromAllocator(MEMAllocator* allocator, u32 size);

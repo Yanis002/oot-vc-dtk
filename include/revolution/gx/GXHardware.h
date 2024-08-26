@@ -11,8 +11,8 @@
  * https://patents.google.com/patent/US6697074
  */
 
-#ifndef RVL_SDK_GX_HARDWARE_H
-#define RVL_SDK_GX_HARDWARE_H
+#ifndef _RVL_SDK_GX_HARDWARE_H
+#define _RVL_SDK_GX_HARDWARE_H
 
 #include "macros.h"
 #include "revolution/gx/GXTypes.h"

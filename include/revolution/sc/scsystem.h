@@ -1,5 +1,5 @@
-#ifndef RVL_SDK_SC_SCSYSTEM_H
-#define RVL_SDK_SC_SCSYSTEM_H
+#ifndef _RVL_SDK_SC_SCSYSTEM_H
+#define _RVL_SDK_SC_SCSYSTEM_H
 
 #include "revolution/types.h"
 

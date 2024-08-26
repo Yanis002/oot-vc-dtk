@@ -1,5 +1,5 @@
-#ifndef METROTRK_DEBUGGER_PORTABLE_MUTEX_TRK_H
-#define METROTRK_DEBUGGER_PORTABLE_MUTEX_TRK_H
+#ifndef _METROTRK_MUTEX_TRK_H
+#define _METROTRK_MUTEX_TRK_H
 
 #include "metrotrk/dserror.h"
 #include "revolution/types.h"

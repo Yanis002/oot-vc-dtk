@@ -6,6 +6,10 @@
 #include "emulator/xlObject.h"
 #include "revolution/types.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 // __anon_0x753E7
 typedef struct AI {
     /* 0x00 */ s32 nSize;
@@ -31,5 +35,9 @@ bool aiEnable(AI* pAI, bool bEnable);
 bool aiEvent(AI* pAI, s32 nEvent, void* pArgument);
 
 extern _XL_OBJECTTYPE gClassAI;
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

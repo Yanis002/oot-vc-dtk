@@ -5,6 +5,10 @@
 #include "emulator/xlObject.h"
 #include "revolution/types.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #define SP_DMEM_SIZE 0x1000
 
 #define SP_DMEM_START 0x04000000
@@ -325,5 +329,9 @@ bool rspUpdate(Rsp* pRSP, RspUpdateMode eMode);
 bool rspEvent(Rsp* pRSP, s32 nEvent, void* pArgument);
 
 extern _XL_OBJECTTYPE gClassRSP;
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

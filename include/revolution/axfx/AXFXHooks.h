@@ -1,5 +1,5 @@
-#ifndef RVL_SDK_AXFX_HOOKS_H
-#define RVL_SDK_AXFX_HOOKS_H
+#ifndef _RVL_SDK_AXFX_HOOKS_H
+#define _RVL_SDK_AXFX_HOOKS_H
 
 #include "revolution/types.h"
 #include "stddef.h"

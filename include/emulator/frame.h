@@ -8,6 +8,10 @@
 #include "revolution/mtx.h"
 #include "revolution/types.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #define FRAME_SYNC_TOKEN 0x7D00
 
 // N64 frame buffer dimensions
@@ -415,5 +419,9 @@ bool frameInvalidateCache(Frame* pFrame, s32 nOffset0, s32 nOffset1);
 void SetNumTexGensChans(Frame* pFrame, s32 numCycles);
 void SetTevStages(Frame* pFrame, s32 cycle, s32 numCycles);
 bool SetTevStageTable(Frame* pFrame, s32 numCycles);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

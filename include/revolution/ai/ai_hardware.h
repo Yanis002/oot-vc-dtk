@@ -1,5 +1,5 @@
-#ifndef RVL_SDK_AI_HARDWARE_H
-#define RVL_SDK_AI_HARDWARE_H
+#ifndef _RVL_SDK_AI_HARDWARE_H
+#define _RVL_SDK_AI_HARDWARE_H
 
 #include "macros.h"
 #include "revolution/types.h"

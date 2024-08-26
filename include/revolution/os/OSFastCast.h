@@ -1,5 +1,5 @@
-#ifndef RVL_SDK_OS_FAST_CAST_H
-#define RVL_SDK_OS_FAST_CAST_H
+#ifndef _RVL_SDK_OS_FAST_CAST_H
+#define _RVL_SDK_OS_FAST_CAST_H
 
 #include "revolution/types.h"
 

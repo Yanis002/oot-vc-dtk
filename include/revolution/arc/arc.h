@@ -2,8 +2,8 @@
  * Modified from decompilation by riidefi in WiiCore
  */
 
-#ifndef RVL_SDK_ARC_H
-#define RVL_SDK_ARC_H
+#ifndef _RVL_SDK_ARC_H
+#define _RVL_SDK_ARC_H
 
 #include "revolution/types.h"
 
@@ -17,15 +17,15 @@ typedef enum {
 } ARCEntryType;
 
 typedef struct ARCNode {
-    union {
+    /* 0x0 */ union {
         struct {
             u32 is_folder : 8;
             u32 name : 24;
         };
         u32 packed_type_name;
-    }; // at 0x0
+    };
 
-    union {
+    /* 0x4 */ union {
         struct {
             u32 offset;
             u32 size;
@@ -35,52 +35,52 @@ typedef struct ARCNode {
             u32 parent;
             u32 sibling_next;
         } folder;
-    }; // at 0x4
+    };
 } ARCNode;
 
 typedef struct ARCHeader {
-    u32 magic; // at 0x0
+    /* 0x0 */ u32 magic;
 
     struct {
-        s32 offset; // at 0x4
-        s32 size; // at 0x8
+        /* 0x4 */ s32 offset;
+        /* 0x8 */ s32 size;
     } nodes;
 
     struct {
-        s32 offset; // at 0xC
+        /* 0xC */ s32 offset;
     } files;
 
     char UNK_0x10[0x10];
 } ARCHeader;
 
 typedef struct ARCHandle {
-    ARCHeader* header; // at 0x0
-    ARCNode* nodes; // at 0x4
-    u8* file; // at 0x8
-    u32 count; // at 0xC
-    const char* strings; // at 0x10
-    u32 fstSize; // at 0x14
-    s32 entrynum; // at 0x18
+    /* 0x0 */ ARCHeader* header;
+    /* 0x4 */ ARCNode* nodes;
+    /* 0x8 */ u8* file;
+    /* 0xC */ u32 count;
+    /* 0x10 */ const char* strings;
+    /* 0x14 */ u32 fstSize;
+    /* 0x18 */ s32 entrynum;
 } ARCHandle;
 
 typedef struct ARCFileInfo {
-    ARCHandle* handle; // at 0x0
-    u32 offset; // at 0x4
-    u32 size; // at 0x8
+    /* 0x0 */ ARCHandle* handle;
+    /* 0x4 */ u32 offset;
+    /* 0x8 */ u32 size;
 } ARCFileInfo;
 
 typedef struct ARCEntry {
-    ARCHandle* handle; // at 0x0
-    u32 path; // at 0x4
-    ARCEntryType type; // at 0x8
-    const char* name; // at 0xC
+    /* 0x0 */ ARCHandle* handle;
+    /* 0x4 */ u32 path;
+    /* 0x8 */ ARCEntryType type;
+    /* 0xC */ const char* name;
 } ARCEntry;
 
 typedef struct ARCDir {
-    ARCHandle* handle; // at 0x0
-    u32 path_begin; // at 0x4
-    u32 path_it; // at 0x8
-    u32 path_end; // at 0xC
+    /* 0x0 */ ARCHandle* handle;
+    /* 0x4 */ u32 path_begin;
+    /* 0x8 */ u32 path_it;
+    /* 0xC */ u32 path_end;
 } ARCDir;
 
 bool ARCGetCurrentDir(ARCHandle* handle, char* string, u32 maxlen);

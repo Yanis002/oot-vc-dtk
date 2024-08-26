@@ -1,5 +1,5 @@
-#ifndef RVL_SDK_NDEV_EXI2_AD_DEBUGGER_DRIVER_H
-#define RVL_SDK_NDEV_EXI2_AD_DEBUGGER_DRIVER_H
+#ifndef _RVL_SDK_NDEV_EXI2_AD_DEBUGGER_DRIVER_H
+#define _RVL_SDK_NDEV_EXI2_AD_DEBUGGER_DRIVER_H
 
 #include "revolution/ndevexi2ad/exi2.h"
 #include "revolution/os.h"

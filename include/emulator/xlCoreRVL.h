@@ -6,6 +6,10 @@
 #include "revolution/gx.h"
 #include "revolution/types.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 //! TODO: confirm this
 typedef struct UnknownContentStruct {
     /* 0x00 */ CNTFileInfo fileInfo;
@@ -24,5 +28,9 @@ void xlExit(void);
 extern GXRenderModeObj* rmode;
 extern UnknownContentStruct gUnkContent;
 extern CNTFileInfo gCNTFileInfo;
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

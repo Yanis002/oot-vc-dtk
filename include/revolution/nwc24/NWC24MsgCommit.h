@@ -1,5 +1,5 @@
-#ifndef RVL_SDK_NWC24_MSG_COMMIT_H
-#define RVL_SDK_NWC24_MSG_COMMIT_H
+#ifndef _RVL_SDK_NWC24_MSG_COMMIT_H
+#define _RVL_SDK_NWC24_MSG_COMMIT_H
 
 #include "revolution/nwc24/NWC24Types.h"
 #include "revolution/types.h"

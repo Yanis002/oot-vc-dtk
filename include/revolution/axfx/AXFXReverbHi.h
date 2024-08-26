@@ -1,5 +1,5 @@
-#ifndef RVL_SDK_AXFX_REVERB_HI_H
-#define RVL_SDK_AXFX_REVERB_HI_H
+#ifndef _RVL_SDK_AXFX_REVERB_HI_H
+#define _RVL_SDK_AXFX_REVERB_HI_H
 
 #include "revolution/axfx/AXFXReverbHiExp.h"
 #include "revolution/types.h"
@@ -9,13 +9,13 @@ extern "C" {
 #endif
 
 typedef struct AXFX_REVERBHI {
-    AXFX_REVERBHI_EXP exp; // at 0x0
-    f32 coloration; // at 0x148
-    f32 mix; // at 0x14C
-    f32 time; // at 0x150
-    f32 damping; // at 0x154
-    f32 preDelay; // at 0x158
-    f32 crosstalk; // at 0x15C
+    /* 0x0 */ AXFX_REVERBHI_EXP exp;
+    /* 0x148 */ f32 coloration;
+    /* 0x14C */ f32 mix;
+    /* 0x150 */ f32 time;
+    /* 0x154 */ f32 damping;
+    /* 0x158 */ f32 preDelay;
+    /* 0x15C */ f32 crosstalk;
 } AXFX_REVERBHI;
 
 u32 AXFXReverbHiGetMemSize(AXFX_REVERBHI* fx);

@@ -1,5 +1,5 @@
-#ifndef RVL_SDK_GX_TRANSFORM_H
-#define RVL_SDK_GX_TRANSFORM_H
+#ifndef _RVL_SDK_GX_TRANSFORM_H
+#define _RVL_SDK_GX_TRANSFORM_H
 
 #include "revolution/gx/GXTypes.h"
 #include "revolution/mtx.h"

@@ -1,5 +1,5 @@
-#ifndef RVL_SDK_OS_EXEC_H
-#define RVL_SDK_OS_EXEC_H
+#ifndef _RVL_SDK_OS_EXEC_H
+#define _RVL_SDK_OS_EXEC_H
 
 #include "revolution/types.h"
 
@@ -8,13 +8,13 @@ extern "C" {
 #endif
 
 typedef struct OSExecParams {
-    int valid; // at 0x0
-    u32 restartCode; // at 0x4
-    u32 bootDol; // at 0x8
-    void* regionStart; // at 0xC
-    void* regionEnd; // at 0x10
-    int argsUseDefault; // at 0x14
-    void* argsAddr; // at 0x18
+    /* 0x0 */ int valid;
+    /* 0x4 */ u32 restartCode;
+    /* 0x8 */ u32 bootDol;
+    /* 0xC */ void* regionStart;
+    /* 0x10 */ void* regionEnd;
+    /* 0x14 */ int argsUseDefault;
+    /* 0x18 */ void* argsAddr;
 } OSExecParams;
 
 extern bool __OSInReboot;

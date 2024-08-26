@@ -1,5 +1,5 @@
-#ifndef RVL_SDK_GX_DRAW_H
-#define RVL_SDK_GX_DRAW_H
+#ifndef _RVL_SDK_GX_DRAW_H
+#define _RVL_SDK_GX_DRAW_H
 
 #include "revolution/types.h"
 

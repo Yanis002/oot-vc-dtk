@@ -2,8 +2,8 @@
  * References: Dolphin Emulator, Retro Modding Wiki, vgmstream
  */
 
-#ifndef RVL_SDK_PUBLIC_AX_H
-#define RVL_SDK_PUBLIC_AX_H
+#ifndef _RVL_SDK_PUBLIC_AX_H
+#define _RVL_SDK_PUBLIC_AX_H
 
 #ifdef __cplusplus
 extern "C" {

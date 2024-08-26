@@ -1,5 +1,5 @@
-#ifndef RVL_SDK_AXFX_SRC_COEF_H
-#define RVL_SDK_AXFX_SRC_COEF_H
+#ifndef _RVL_SDK_AXFX_SRC_COEF_H
+#define _RVL_SDK_AXFX_SRC_COEF_H
 
 #include "revolution/types.h"
 

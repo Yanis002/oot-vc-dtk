@@ -20,12 +20,12 @@ typedef enum {
 } OSPlayRecordState;
 
 typedef struct OSPlayRecord {
-    u32 checksum; // at 0x0
-    wchar_t titleName[40]; // at 0x4
+    /* 0x0 */ u32 checksum;
+    /* 0x4 */ wchar_t titleName[40];
     char UNK_0x54[0x4];
-    s64 startTime; // at 0x58
-    s64 stopTime; // at 0x60
-    char titleId[6]; // at 0x68
+    /* 0x58 */ s64 startTime;
+    /* 0x60 */ s64 stopTime;
+    /* 0x68 */ char titleId[6];
     char UNK_0x6E[0x80 - 0x6E];
 } OSPlayRecord;
 

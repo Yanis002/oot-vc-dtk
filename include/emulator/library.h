@@ -5,6 +5,10 @@
 #include "emulator/xlObject.h"
 #include "revolution/types.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 typedef void (*LibraryFuncImpl)(Cpu*);
 
 // __anon_0x7AD10
@@ -32,8 +36,8 @@ bool libraryFunctionReplaced(Library* pLibrary, s32 iFunction);
 bool libraryCall(Library* pLibrary, Cpu* pCPU, s32 iFunction);
 bool libraryEvent(Library* pLibrary, s32 nEvent, void* pArgument);
 
-#if VERSION == MQ_J
-bool libraryUpdate(Library* pLibrary);
+#ifdef __cplusplus
+}
 #endif
 
 #endif

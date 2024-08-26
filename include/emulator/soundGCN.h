@@ -4,6 +4,10 @@
 #include "emulator/xlObject.h"
 #include "revolution/types.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #define VI_NTSC_CLOCK 48681812
 
 // __anon_0x221A3
@@ -63,5 +67,9 @@ bool soundPlayBeep(Sound* pSound, SoundBeep iBeep);
 bool soundEvent(Sound* pSound, s32 nEvent, void* pArgument);
 
 extern _XL_OBJECTTYPE gClassAudio;
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

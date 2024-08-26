@@ -1,5 +1,5 @@
-#ifndef RVL_SDK_SI_SISAMPLINGRATE_H
-#define RVL_SDK_SI_SISAMPLINGRATE_H
+#ifndef _RVL_SDK_SI_SISAMPLINGRATE_H
+#define _RVL_SDK_SI_SISAMPLINGRATE_H
 
 #include "revolution/types.h"
 

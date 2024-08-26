@@ -1,5 +1,5 @@
-#ifndef RVL_SDK_NWC24_MBOX_CTRL_H
-#define RVL_SDK_NWC24_MBOX_CTRL_H
+#ifndef _RVL_SDK_NWC24_MBOX_CTRL_H
+#define _RVL_SDK_NWC24_MBOX_CTRL_H
 
 #include "revolution/nwc24/NWC24Types.h"
 #include "revolution/types.h"

@@ -1,5 +1,5 @@
-#ifndef RVL_SDK_OS_NET_H
-#define RVL_SDK_OS_NET_H
+#ifndef _RVL_SDK_OS_NET_H
+#define _RVL_SDK_OS_NET_H
 
 #include "revolution/types.h"
 

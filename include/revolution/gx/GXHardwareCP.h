@@ -1,5 +1,5 @@
-#ifndef RVL_SDK_GX_HARDWARE_CP_H
-#define RVL_SDK_GX_HARDWARE_CP_H
+#ifndef _RVL_SDK_GX_HARDWARE_CP_H
+#define _RVL_SDK_GX_HARDWARE_CP_H
 
 #include "revolution/gx/GXTypes.h"
 #include "revolution/types.h"

@@ -5,6 +5,10 @@
 #include "revolution/dvd.h"
 #include "revolution/types.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 typedef enum SimulatorArgumentType {
     SAT_NONE = -1,
     SAT_NAME = 0,
@@ -31,5 +35,9 @@ bool simulatorGetArgument(SimulatorArgumentType eType, char** pszArgument);
 bool xlMain(void);
 
 extern System* gpSystem;
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

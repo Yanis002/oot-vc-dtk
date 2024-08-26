@@ -1,5 +1,5 @@
-#ifndef RVL_SDK_NWC24_STD_API_H
-#define RVL_SDK_NWC24_STD_API_H
+#ifndef _RVL_SDK_NWC24_STD_API_H
+#define _RVL_SDK_NWC24_STD_API_H
 
 #include "revolution/types.h"
 #include "stddef.h"

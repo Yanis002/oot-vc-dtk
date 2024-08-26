@@ -1,5 +1,5 @@
-#ifndef RVL_SDK_AXFX_COMMON_H
-#define RVL_SDK_AXFX_COMMON_H
+#ifndef _RVL_SDK_AXFX_COMMON_H
+#define _RVL_SDK_AXFX_COMMON_H
 
 #include "revolution/types.h"
 
@@ -8,22 +8,22 @@ extern "C" {
 #endif
 
 typedef struct AXFX_BUS {
-    s32* left; // at 0x0
-    s32* right; // at 0x4
-    s32* surround; // at 0x8
+    /* 0x0 */ s32* left;
+    /* 0x4 */ s32* right;
+    /* 0x8 */ s32* surround;
 } AXFX_BUS;
 
 typedef struct AXFX_BUFFERUPDATE {
-    s32* left; // at 0x0
-    s32* right; // at 0x4
-    s32* surround; // at 0x8
+    /* 0x0 */ s32* left;
+    /* 0x4 */ s32* right;
+    /* 0x8 */ s32* surround;
 } AXFX_BUFFERUPDATE;
 
 typedef struct AXFX_BUFFERUPDATE_DPL2 {
-    s32* left; // at 0x0
-    s32* right; // at 0x4
-    s32* left_surround; // at 0x8
-    s32* right_surround; // at 0xC
+    /* 0x0 */ s32* left;
+    /* 0x4 */ s32* right;
+    /* 0x8 */ s32* left_surround;
+    /* 0xC */ s32* right_surround;
 } AXFX_BUFFERUPDATE_DPL2;
 
 #ifdef __cplusplus

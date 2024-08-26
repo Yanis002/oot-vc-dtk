@@ -5,6 +5,10 @@
 #include "revolution/os.h"
 #include "revolution/types.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 // __anon_0x1BD8E
 typedef enum MemCardCommand {
     MC_C_NONE = 0,
@@ -181,5 +185,9 @@ bool mcardOpen(MemCard* pMCard, char* fileName, char* comment, char* icon, char*
 bool mcardOpenDuringGame(MemCard* pMCard);
 bool mcardStore(MemCard* pMCard);
 bool mcardUpdate(void);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

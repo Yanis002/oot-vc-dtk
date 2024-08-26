@@ -1,5 +1,5 @@
-#ifndef RVL_SDK_DVD_BROADWAY_H
-#define RVL_SDK_DVD_BROADWAY_H
+#ifndef _RVL_SDK_DVD_BROADWAY_H
+#define _RVL_SDK_DVD_BROADWAY_H
 
 #include "revolution/os/OSAlarm.h"
 #include "revolution/types.h"

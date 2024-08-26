@@ -1,5 +1,5 @@
-#ifndef RVL_SDK_IPC_CLT_H
-#define RVL_SDK_IPC_CLT_H
+#ifndef _RVL_SDK_IPC_CLT_H
+#define _RVL_SDK_IPC_CLT_H
 
 #include "revolution/os.h"
 #include "revolution/types.h"
@@ -62,59 +62,59 @@ typedef enum {
 typedef s32 (*IPCAsyncCallback)(s32 result, void* arg);
 
 typedef struct IPCIOVector {
-    void* base; // at 0x0
-    u32 length; // at 0x4
+    /* 0x0 */ void* base;
+    /* 0x4 */ u32 length;
 } IPCIOVector;
 
 typedef struct IPCOpenArgs {
-    const char* path; // at 0x0
-    IPCOpenMode mode; // at 0x4
+    /* 0x0 */ const char* path;
+    /* 0x4 */ IPCOpenMode mode;
 } IPCOpenArgs;
 
 typedef struct IPCReadWriteArgs {
-    void* data; // at 0x0
-    u32 length; // at 0x4
+    /* 0x0 */ void* data;
+    /* 0x4 */ u32 length;
 } IPCReadWriteArgs;
 
 typedef struct IPCSeekArgs {
-    s32 offset; // at 0x0
-    IPCSeekMode mode; // at 0x4
+    /* 0x0 */ s32 offset;
+    /* 0x4 */ IPCSeekMode mode;
 } IPCSeekArgs;
 
 typedef struct IPCIoctlArgs {
-    s32 type; // at 0x0
-    void* in; // at 0x4
-    s32 inSize; // at 0x8
-    void* out; // at 0xC
-    s32 outSize; // at 0x10
+    /* 0x0 */ s32 type;
+    /* 0x4 */ void* in;
+    /* 0x8 */ s32 inSize;
+    /* 0xC */ void* out;
+    /* 0x10 */ s32 outSize;
 } IPCIoctlArgs;
 
 typedef struct IPCIoctlvArgs {
-    s32 type; // at 0x0
-    u32 inCount; // at 0x4
-    u32 outCount; // at 0x8
-    IPCIOVector* vectors; // at 0xC
+    /* 0x0 */ s32 type;
+    /* 0x4 */ u32 inCount;
+    /* 0x8 */ u32 outCount;
+    /* 0xC */ IPCIOVector* vectors;
 } IPCIoctlvArgs;
 
 typedef struct IPCRequest {
-    IPCRequestType type; // at 0x0
-    s32 ret; // at 0x4
-    s32 fd; // at 0x8
-    union {
+    /* 0x0 */ IPCRequestType type;
+    /* 0x4 */ s32 ret;
+    /* 0x8 */ s32 fd;
+    /* 0xC */ union {
         IPCOpenArgs open;
         IPCReadWriteArgs rw;
         IPCSeekArgs seek;
         IPCIoctlArgs ioctl;
         IPCIoctlvArgs ioctlv;
-    }; // at 0xC
+    };
 } IPCRequest;
 
 typedef struct IPCRequestEx {
-    IPCRequest base; // at 0x0
-    IPCAsyncCallback callback; // at 0x20
-    void* callbackArg; // at 0x24
-    bool reboot; // at 0x28
-    OSThreadQueue queue; // at 0x2C
+    /* 0x0 */ IPCRequest base;
+    /* 0x20 */ IPCAsyncCallback callback;
+    /* 0x24 */ void* callbackArg;
+    /* 0x28 */ bool reboot;
+    /* 0x2C */ OSThreadQueue queue;
     char padding[64 - 0x34];
 } IPCRequestEx;
 

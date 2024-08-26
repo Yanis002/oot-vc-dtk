@@ -1,5 +1,5 @@
-#ifndef METROTRK_DEBUGGER_PORTABLE_NUBEVENT_H
-#define METROTRK_DEBUGGER_PORTABLE_NUBEVENT_H
+#ifndef _METROTRK_NUBEVENT_H
+#define _METROTRK_NUBEVENT_H
 
 #include "metrotrk/dserror.h"
 #include "revolution/types.h"
@@ -18,9 +18,9 @@ typedef enum {
 } TRKEventType;
 
 typedef struct TRKEvent {
-    TRKEventType type; // at 0x0
-    unsigned int id; // at 0x4
-    int buffer; // at 0x8
+    /* 0x0 */ TRKEventType type;
+    /* 0x4 */ unsigned int id;
+    /* 0x8 */ int buffer;
 } TRKEvent;
 
 void TRKDestructEvent(TRKEvent* event);

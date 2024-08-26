@@ -2,8 +2,8 @@
  * References: YAGCD
  */
 
-#ifndef RVL_SDK_PUBLIC_AI_H
-#define RVL_SDK_PUBLIC_AI_H
+#ifndef _RVL_SDK_PUBLIC_AI_H
+#define _RVL_SDK_PUBLIC_AI_H
 
 #ifdef __cplusplus
 extern "C" {

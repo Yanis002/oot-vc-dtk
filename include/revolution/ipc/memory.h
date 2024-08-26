@@ -1,5 +1,5 @@
-#ifndef RVL_SDK_IPC_MEMORY_H
-#define RVL_SDK_IPC_MEMORY_H
+#ifndef _RVL_SDK_IPC_MEMORY_H
+#define _RVL_SDK_IPC_MEMORY_H
 
 #include "revolution/types.h"
 

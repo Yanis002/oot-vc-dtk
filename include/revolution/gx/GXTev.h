@@ -1,5 +1,5 @@
-#ifndef RVL_SDK_GX_TEV_H
-#define RVL_SDK_GX_TEV_H
+#ifndef _RVL_SDK_GX_TEV_H
+#define _RVL_SDK_GX_TEV_H
 
 #include "revolution/gx/GXTypes.h"
 #include "revolution/types.h"

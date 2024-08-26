@@ -1,5 +1,5 @@
-#ifndef RVL_SDK_CNT_H
-#define RVL_SDK_CNT_H
+#ifndef _RVL_SDK_CNT_H
+#define _RVL_SDK_CNT_H
 
 #include "revolution/arc.h"
 #include "revolution/types.h"
@@ -9,15 +9,15 @@ extern "C" {
 #endif
 
 typedef struct CNTHandle {
-    ARCHandle arcHandle; // at 0x0
-    s32 fd; // at 0x1C
+    /* 0x0 */ ARCHandle arcHandle;
+    /* 0x1C */ s32 fd;
 } CNTHandle;
 
 typedef struct CNTFileInfo {
-    CNTHandle* handle; // at 0x0
-    u32 offset; // at 0x4
-    u32 length; // at 0x8
-    u32 position; // at 0xC
+    /* 0x0 */ CNTHandle* handle;
+    /* 0x4 */ u32 offset;
+    /* 0x8 */ u32 length;
+    /* 0xC */ u32 position;
 } CNTFileInfo;
 
 s32 contentFastOpenNAND(CNTHandle* handle, s32 entrynum, CNTFileInfo* info);

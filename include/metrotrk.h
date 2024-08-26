@@ -1,5 +1,5 @@
-#ifndef METROTRK_H
-#define METROTRK_H
+#ifndef _METROTRK_H
+#define _METROTRK_H
 
 #ifdef __cplusplus
 extern "C" {

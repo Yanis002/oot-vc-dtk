@@ -6,6 +6,10 @@
 #include "revolution/pad.h"
 #include "revolution/types.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 typedef struct lbl_801C7DB8_Struct {
     /* 0x00 */ void* unk_00;
     /* 0x04 */ u32 unk_04;
@@ -49,5 +53,9 @@ bool fn_800631B8(Controller* pController, s32 arg1);
 bool controllerEvent(Controller* pController, s32 nEvent, void* pArgument);
 
 extern _XL_OBJECTTYPE gClassController;
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

@@ -4,6 +4,10 @@
 #include "emulator/xlObject.h"
 #include "revolution/types.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 // RDRAM Interface Registers
 #define RI_MODE 0x00
 #define RI_CONFIG 0x04
@@ -55,5 +59,9 @@ bool ramGetSize(Ram* pRAM, s32* nSize);
 bool ramEvent(Ram* pRAM, s32 nEvent, void* pArgument);
 
 extern _XL_OBJECTTYPE gClassRAM;
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

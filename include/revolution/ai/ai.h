@@ -1,5 +1,5 @@
-#ifndef RVL_SDK_AI_H
-#define RVL_SDK_AI_H
+#ifndef _RVL_SDK_AI_H
+#define _RVL_SDK_AI_H
 
 #include "revolution/os/OSContext.h"
 #include "revolution/types.h"

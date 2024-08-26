@@ -4,6 +4,10 @@
 #include "emulator/xlObject.h"
 #include "revolution/types.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 // __anon_0x74AB9
 typedef struct Sram {
     /* 0x00 */ s32 unk_00;
@@ -14,5 +18,9 @@ typedef struct Sram {
 bool sramEvent(Sram* pSram, s32 nEvent, void* pArgument);
 
 extern _XL_OBJECTTYPE gClassSram;
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

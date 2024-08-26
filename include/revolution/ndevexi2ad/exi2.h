@@ -1,5 +1,5 @@
-#ifndef RVL_SDK_NDEV_EXI2_AD_EXI2_H
-#define RVL_SDK_NDEV_EXI2_AD_EXI2_H
+#ifndef _RVL_SDK_NDEV_EXI2_AD_EXI2_H
+#define _RVL_SDK_NDEV_EXI2_AD_EXI2_H
 
 #include "revolution/types.h"
 

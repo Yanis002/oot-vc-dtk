@@ -3,6 +3,10 @@
 
 #include "revolution/types.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 typedef struct _XL_OBJECTTYPE _XL_OBJECTTYPE;
 
 typedef bool (*EventFunc)(void* pObject, s32 nEvent, void* pArgument);
@@ -25,5 +29,9 @@ bool xlObjectTest(void* pObject, _XL_OBJECTTYPE* pType);
 bool xlObjectEvent(void* pObject, s32 nEvent, void* pArgument);
 bool xlObjectSetup(void);
 bool xlObjectReset(void);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

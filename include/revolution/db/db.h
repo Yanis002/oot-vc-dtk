@@ -1,5 +1,5 @@
-#ifndef RVL_SDK_DB_H
-#define RVL_SDK_DB_H
+#ifndef _RVL_SDK_DB_H
+#define _RVL_SDK_DB_H
 
 #include "revolution/types.h"
 

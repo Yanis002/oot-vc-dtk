@@ -1,5 +1,5 @@
-#ifndef RVL_SDK_NWC24_IPC_H
-#define RVL_SDK_NWC24_IPC_H
+#ifndef _RVL_SDK_NWC24_IPC_H
+#define _RVL_SDK_NWC24_IPC_H
 
 #include "revolution/ipc.h"
 #include "revolution/nwc24/NWC24Types.h"

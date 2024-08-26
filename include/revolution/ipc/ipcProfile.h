@@ -1,5 +1,5 @@
-#ifndef RVL_SDK_IPC_PROFILE_H
-#define RVL_SDK_IPC_PROFILE_H
+#ifndef _RVL_SDK_IPC_PROFILE_H
+#define _RVL_SDK_IPC_PROFILE_H
 
 #include "revolution/ipc/ipcclt.h"
 #include "revolution/types.h"

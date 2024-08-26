@@ -1,5 +1,5 @@
-#ifndef RVL_SDK_AX_ALLOC_H
-#define RVL_SDK_AX_ALLOC_H
+#ifndef _RVL_SDK_AX_ALLOC_H
+#define _RVL_SDK_AX_ALLOC_H
 
 #include "revolution/ax/AXVPB.h"
 #include "revolution/types.h"

@@ -4,6 +4,10 @@
 #include "emulator/xlObject.h"
 #include "revolution/types.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 // __anon_0x73B29
 typedef struct Disk {
     /* 0x00 */ void* pHost;
@@ -12,5 +16,9 @@ typedef struct Disk {
 bool diskEvent(Disk* pDisk, s32 nEvent, void* pArgument);
 
 extern _XL_OBJECTTYPE gClassDisk;
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

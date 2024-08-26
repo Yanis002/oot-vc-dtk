@@ -15,9 +15,9 @@
 #define FATAL_FB_SIZE (FATAL_FB_W * FATAL_FB_H * 2)
 
 typedef struct OSFatalParam {
-    GXColor textColor; // at 0x0
-    GXColor bgColor; // at 0x4
-    const char* msg; // at 0x8
+    /* 0x0 */ GXColor textColor;
+    /* 0x4 */ GXColor bgColor;
+    /* 0x8 */ const char* msg;
 } OSFatalParam;
 
 static OSContext FatalContext;

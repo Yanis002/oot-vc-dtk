@@ -53,20 +53,20 @@ typedef enum {
 
 // For ISFS_Create*/ISFS_GetAttr
 typedef struct FSFileIoctl {
-    u32 ownerId; // at 0x0
-    u16 groupId; // at 0x4
-    char path[FS_MAX_PATH]; // at 0x6
-    u8 ownerPerm; // at 0x46
-    u8 groupPerm; // at 0x47
-    u8 otherPerm; // at 0x48
-    u8 attr; // at 0x49
+    /* 0x0 */ u32 ownerId;
+    /* 0x4 */ u16 groupId;
+    /* 0x6 */ char path[FS_MAX_PATH];
+    /* 0x46 */ u8 ownerPerm;
+    /* 0x47 */ u8 groupPerm;
+    /* 0x48 */ u8 otherPerm;
+    /* 0x49 */ u8 attr;
     char UNK_0x4A[0x4C - 0x4A];
 } FSFileIoctl;
 
 // For ISFS_Rename
 typedef struct FSRenameIoctl {
-    char from[FS_MAX_PATH]; // at 0x0
-    char to[FS_MAX_PATH]; // at 0x40
+    /* 0x0 */ char from[FS_MAX_PATH];
+    /* 0x40 */ char to[FS_MAX_PATH];
 } FSRenameIoctl;
 
 /**
@@ -76,33 +76,33 @@ typedef struct FSRenameIoctl {
 
 // For ISFS_GetStatsAsync
 typedef struct FSGetStatsAsyncCtx {
-    FSStats* statsOut; // at 0x0
+    /* 0x0 */ FSStats* statsOut;
 } FSGetStatsAsyncCtx;
 
 // For ISFS_ReadDirAsync
 typedef struct FSReadDirAsyncCtx {
-    u32* fileCountOut; // at 0x0
+    /* 0x0 */ u32* fileCountOut;
 } FSReadDirAsyncCtx;
 
 // For ISFS_GetAttrAsync
 typedef struct FSGetAttrAsyncCtx {
-    u32* ownerIdOut; // at 0x0
-    u16* groupIdOut; // at 0x4
-    u32* attrOut; // at 0x8
-    u32* ownerPermOut; // at 0xC
-    u32* groupPermOut; // at 0x10
-    u32* otherPermOut; // at 0x14
+    /* 0x0 */ u32* ownerIdOut;
+    /* 0x4 */ u16* groupIdOut;
+    /* 0x8 */ u32* attrOut;
+    /* 0xC */ u32* ownerPermOut;
+    /* 0x10 */ u32* groupPermOut;
+    /* 0x14 */ u32* otherPermOut;
 } FSGetAttrAsyncCtx;
 
 // For ISFS_GetUsageAsync
 typedef struct FSGetUsageAsyncCtx {
-    u32* blockCountOut; // at 0x0
-    u32* fileCountOut; // at 0x4
+    /* 0x0 */ u32* blockCountOut;
+    /* 0x4 */ u32* fileCountOut;
 } FSGetUsageAsyncCtx;
 
 // For ISFS_GetFileStatsAsync
 typedef struct FSGetFileStatsAsyncCtx {
-    FSFileStats* statsOut; // at 0x0
+    /* 0x0 */ FSFileStats* statsOut;
 } FSGetFileStatsAsyncCtx;
 
 /**
@@ -110,26 +110,26 @@ typedef struct FSGetFileStatsAsyncCtx {
  */
 typedef struct FSCommandBlock {
     // Data for ioctl
-    union {
+    /* 0x0 */ union {
         FSFileIoctl fileIoctl;
         FSRenameIoctl renameIoctl;
         u8 ioctlWork[0x100];
-    }; // at 0x0
+    };
 
     // User callback settings
-    FSAsyncCallback callback; // at 0x100
-    void* callbackArg; // at 0x104
+    /* 0x100 */ FSAsyncCallback callback;
+    /* 0x104 */ void* callbackArg;
 
     // Data for FS IPC callback (_isfsFuncCb)
-    FSCallbackState callbackState; // at 0x108
-    union {
+    /* 0x108 */ FSCallbackState callbackState;
+    /* 0x10C */ union {
         FSGetStatsAsyncCtx getStatsCtx;
         FSReadDirAsyncCtx readDirCtx;
         FSGetAttrAsyncCtx getAttrCtx;
         FSGetUsageAsyncCtx getUsageCtx;
         FSGetFileStatsAsyncCtx getFileStatsCtx;
         u8 forceUnionSize[0x140 - 0x10C];
-    }; // at 0x10C
+    };
 } FSCommandBlock;
 
 static s32 __fsFd = -1;

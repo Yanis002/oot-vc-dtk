@@ -1,5 +1,5 @@
-#ifndef RVL_SDK_GX_VERT_H
-#define RVL_SDK_GX_VERT_H
+#ifndef _RVL_SDK_GX_VERT_H
+#define _RVL_SDK_GX_VERT_H
 
 #include "revolution/gx/GXHardware.h"
 #include "revolution/types.h"

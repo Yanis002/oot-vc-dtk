@@ -6,6 +6,10 @@
 #include "emulator/xlObject.h"
 #include "revolution/types.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 // __anon_0x83D15
 typedef struct PI {
     /* 0x00 */ s32 nStatus;
@@ -30,5 +34,9 @@ bool piGet32(PI* pPI, u32 nAddress, s32* pData);
 bool piEvent(PI* pPI, s32 nEvent, void* pArgument);
 
 extern _XL_OBJECTTYPE gClassPI;
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

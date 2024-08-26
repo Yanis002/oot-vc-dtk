@@ -1,6 +1,10 @@
 #ifndef REVOLUTION_H
 #define REVOLUTION_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include "revolution/ai.h"
 #include "revolution/arc.h"
 #include "revolution/ax.h"
@@ -34,5 +38,9 @@
 #include "revolution/vi.h"
 #include "revolution/wenc.h"
 #include "revolution/wpad.h"
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

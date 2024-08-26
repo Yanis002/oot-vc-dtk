@@ -1,5 +1,5 @@
-#ifndef RVL_SDK_OS_INTERRUPT_H
-#define RVL_SDK_OS_INTERRUPT_H
+#ifndef _RVL_SDK_OS_INTERRUPT_H
+#define _RVL_SDK_OS_INTERRUPT_H
 
 #include "revolution/os/OSContext.h"
 #include "revolution/types.h"

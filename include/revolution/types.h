@@ -39,7 +39,9 @@ typedef int bool;
 
 #define ATTRIBUTE_ALIGN(num) __attribute__((aligned(num)))
 
+#ifndef NULL
 #define NULL (void*)0
+#endif
 
 typedef int UNKWORD;
 typedef void UNKTYPE;

@@ -1,5 +1,5 @@
-#ifndef RVL_SDK_MEM_EXP_HEAP_H
-#define RVL_SDK_MEM_EXP_HEAP_H
+#ifndef _RVL_SDK_MEM_EXP_HEAP_H
+#define _RVL_SDK_MEM_EXP_HEAP_H
 
 #include "revolution/types.h"
 
@@ -17,37 +17,37 @@ typedef enum {
 } MEMiExpHeapAllocMode;
 
 typedef struct MEMiExpHeapMBlock {
-    u16 state; // at 0x0
-    union {
+    /* 0x0 */ u16 state;
+    /* 0x2 */ union {
         u16 settings;
         struct {
             u16 allocDir : 1;
             u16 align : 7;
             u16 group : 8;
         };
-    }; // at 0x2
-    u32 size; // at 0x4
-    struct MEMiExpHeapMBlock* prev; // at 0x8
-    struct MEMiExpHeapMBlock* next; // at 0xC
+    };
+    /* 0x4 */ u32 size;
+    /* 0x8 */ struct MEMiExpHeapMBlock* prev;
+    /* 0xC */ struct MEMiExpHeapMBlock* next;
 } MEMiExpHeapMBlock;
 
 typedef struct MEMiExpHeapMBlockList {
-    MEMiExpHeapMBlock* head; // at 0x0
-    MEMiExpHeapMBlock* tail; // at 0x4
+    /* 0x0 */ MEMiExpHeapMBlock* head;
+    /* 0x4 */ MEMiExpHeapMBlock* tail;
 } MEMiExpHeapMBlockList;
 
 // Placed in heap after base heap head
 typedef struct MEMiExpHeapHead {
-    MEMiExpHeapMBlockList freeMBlocks; // at 0x0
-    MEMiExpHeapMBlockList usedMBlocks; // at 0x8
-    u16 group; // at 0x10
-    union {
+    /* 0x0 */ MEMiExpHeapMBlockList freeMBlocks;
+    /* 0x8 */ MEMiExpHeapMBlockList usedMBlocks;
+    /* 0x10 */ u16 group;
+    /* 0x12 */ union {
         u16 SHORT_0x12;
         struct {
             u16 SHORT_0x12_0_15 : 15;
             u16 allocMode : 1;
         };
-    }; // at 0x12
+    };
 } MEMiExpHeapHead;
 
 struct MEMiHeapHead* MEMCreateExpHeapEx(void* start, u32 size, u16 opt);

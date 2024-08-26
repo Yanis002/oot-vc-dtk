@@ -1,5 +1,5 @@
-#ifndef RVL_SDK_NWC24_SCHEDULE_H
-#define RVL_SDK_NWC24_SCHEDULE_H
+#ifndef _RVL_SDK_NWC24_SCHEDULE_H
+#define _RVL_SDK_NWC24_SCHEDULE_H
 
 #include "revolution/nwc24/NWC24Schedule.h"
 #include "revolution/nwc24/NWC24Types.h"

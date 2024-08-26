@@ -5,6 +5,10 @@
 #include "emulator/xlObject.h"
 #include "revolution/types.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 typedef struct Rdp {
     /* 0x00 */ s32 nBIST;
     /* 0x04 */ s32 nStatus;
@@ -23,5 +27,9 @@ bool rdpParseGBI(Rdp* pRDP, u64** ppnGBI, RspUCodeType eTypeUCode);
 bool rdpEvent(Rdp* pRDP, s32 nEvent, void* pArgument);
 
 extern _XL_OBJECTTYPE gClassRDP;
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

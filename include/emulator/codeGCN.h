@@ -4,6 +4,10 @@
 #include "emulator/xlObject.h"
 #include "revolution/types.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 // __anon_0x57A1
 typedef struct Code {
     /* 0x0 */ s32 nMode;
@@ -12,5 +16,9 @@ typedef struct Code {
 bool codeEvent(Code* pCode, s32 nEvent, void* pArgument);
 
 extern _XL_OBJECTTYPE gClassCode;
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

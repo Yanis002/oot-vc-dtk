@@ -4,6 +4,10 @@
 #include "emulator/xlObject.h"
 #include "revolution/types.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 // __anon_0x7428F
 typedef struct Flash {
     /* 0x00 */ s32 unk_00;
@@ -21,5 +25,9 @@ bool fn_80045300(Flash* pFLASH, s32* arg1);
 bool flashEvent(Flash* pFLASH, s32 nEvent, void* pArgument);
 
 extern _XL_OBJECTTYPE gClassFlash;
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

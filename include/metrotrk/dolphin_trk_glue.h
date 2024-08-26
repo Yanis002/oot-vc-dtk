@@ -1,5 +1,5 @@
-#ifndef METROTRK_DEBUGGER_OS_DOLPHIN_DOLPHIN_TRK_GLUE_H
-#define METROTRK_DEBUGGER_OS_DOLPHIN_DOLPHIN_TRK_GLUE_H
+#ifndef _METROTRK_TRK_GLUE_H
+#define _METROTRK_TRK_GLUE_H
 
 #include "metrotrk/UART.h"
 #include "revolution/types.h"

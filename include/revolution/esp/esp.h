@@ -1,5 +1,5 @@
-#ifndef RVL_SDK_ESP_H
-#define RVL_SDK_ESP_H
+#ifndef _RVL_SDK_ESP_H
+#define _RVL_SDK_ESP_H
 
 #include "revolution/arc.h"
 #include "revolution/ipc.h"

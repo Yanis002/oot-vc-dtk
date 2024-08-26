@@ -6,6 +6,10 @@
 #include "emulator/xlObject.h"
 #include "revolution/types.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 // __anon_0x75B37
 typedef struct VI {
     /* 0x00 */ s32 nScan;
@@ -39,5 +43,9 @@ bool viForceRetrace(VI* pVI);
 bool viEvent(VI* pVI, s32 nEvent, void* pArgument);
 
 extern _XL_OBJECTTYPE gClassVI;
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

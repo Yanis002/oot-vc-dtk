@@ -1,13 +1,12 @@
 #ifndef _MACROS_H
 #define _MACROS_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 // The VERSION macro will be set to one of these version numbers.
-#define MQ_J 1
-#define MQ_U 2
-#define MQ_E 3
-#define CE_J 4
-#define CE_U 5
-#define CE_E 6
+#define VC_J 1
 
 #define ALIGN_PREV(X, N) ((X) & ~((N) - 1))
 #define ALIGN_NEXT(X, N) ALIGN_PREV(((X) + (N) - 1), N)
@@ -67,5 +66,9 @@ inline void padStack(void) { int pad = 0; }
 #define INIT DECL_SECTION(".init")
 #define CTORS DECL_SECTION(".ctors")
 #define DTORS DECL_SECTION(".dtors")
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

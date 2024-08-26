@@ -1,5 +1,5 @@
-#ifndef RVL_SDK_GX_ATTR_H
-#define RVL_SDK_GX_ATTR_H
+#ifndef _RVL_SDK_GX_ATTR_H
+#define _RVL_SDK_GX_ATTR_H
 
 #include "revolution/gx/GXTypes.h"
 #include "revolution/types.h"
@@ -9,15 +9,15 @@ extern "C" {
 #endif
 
 typedef struct _GXVtxDescList {
-    GXAttr attr; // at 0x0
-    GXAttrType type; // at  0x4
+    /* 0x0 */ GXAttr attr;
+    /* 0x4 */ GXAttrType type;
 } GXVtxDescList;
 
 typedef struct _GXVtxAttrFmtList {
-    GXAttr attr; // at 0x0
-    GXCompCnt compCnt; // at 0x4
-    GXCompType compType; // at 0x8
-    u8 shift; // at 0xC
+    /* 0x0 */ GXAttr attr;
+    /* 0x4 */ GXCompCnt compCnt;
+    /* 0x8 */ GXCompType compType;
+    /* 0xC */ u8 shift;
 } GXVtxAttrFmtList;
 
 void GXSetVtxDesc(GXAttr name, GXAttrType type);

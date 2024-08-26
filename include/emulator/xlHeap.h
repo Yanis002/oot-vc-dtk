@@ -3,6 +3,10 @@
 
 #include "revolution/types.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #define HEAP_COUNT 2
 
 bool xlHeapCompact(s32 iHeap);
@@ -17,5 +21,9 @@ bool xlHeapReset(void);
 
 extern s32 gnSizeHeap[HEAP_COUNT];
 extern u32* gnHeapOS[HEAP_COUNT];
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

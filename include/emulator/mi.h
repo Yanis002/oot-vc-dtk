@@ -6,6 +6,10 @@
 #include "emulator/xlObject.h"
 #include "revolution/types.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 // __anon_0x39384
 typedef enum MIInterruptType {
     MIT_NONE = -1,
@@ -40,5 +44,9 @@ bool miGet64(MI* pMI, u32 nAddress, s64* pData);
 bool miEvent(MI* pMI, s32 nEvent, void* pArgument);
 
 extern _XL_OBJECTTYPE gClassMI;
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

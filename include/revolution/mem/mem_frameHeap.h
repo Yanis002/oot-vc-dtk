@@ -1,5 +1,5 @@
-#ifndef RVL_SDK_MEM_FRAME_HEAP_H
-#define RVL_SDK_MEM_FRAME_HEAP_H
+#ifndef _RVL_SDK_MEM_FRAME_HEAP_H
+#define _RVL_SDK_MEM_FRAME_HEAP_H
 
 #include "revolution/types.h"
 
@@ -18,17 +18,17 @@ typedef enum {
 } MEMiFrmFreeFlag;
 
 typedef struct MEMiFrmHeapState {
-    u32 id; // at 0x0
-    u8* head; // at 0x4
-    u8* tail; // at 0x8
-    struct MEMiFrmHeapState* next; // at 0xC
+    /* 0x0 */ u32 id;
+    /* 0x4 */ u8* head;
+    /* 0x8 */ u8* tail;
+    /* 0xC */ struct MEMiFrmHeapState* next;
 } MEMiFrmHeapState;
 
 // Placed in heap after base heap head
 typedef struct MEMiFrmHeapHead {
-    u8* head; // at 0x0
-    u8* tail; // at 0x4
-    MEMiFrmHeapState* states; // at 0x8
+    /* 0x0 */ u8* head;
+    /* 0x4 */ u8* tail;
+    /* 0x8 */ MEMiFrmHeapState* states;
 } MEMiFrmHeapHead;
 
 struct MEMiHeapHead* MEMCreateFrmHeapEx(void* start, u32 size, u16 opt);

@@ -1,5 +1,5 @@
-#ifndef RVL_SDK_DVD_QUEUE_H
-#define RVL_SDK_DVD_QUEUE_H
+#ifndef _RVL_SDK_DVD_QUEUE_H
+#define _RVL_SDK_DVD_QUEUE_H
 
 #include "revolution/dvd/dvd.h"
 #include "revolution/types.h"

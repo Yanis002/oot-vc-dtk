@@ -1,5 +1,5 @@
-#ifndef METROTRK_DEBUGGER_PORTABLE_MSG_H
-#define METROTRK_DEBUGGER_PORTABLE_MSG_H
+#ifndef _METROTRK_MSG_H
+#define _METROTRK_MSG_H
 
 #include "metrotrk/dserror.h"
 #include "metrotrk/msgbuf.h"

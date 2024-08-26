@@ -1,5 +1,5 @@
-#ifndef RVL_SDK_FS_H
-#define RVL_SDK_FS_H
+#ifndef _RVL_SDK_FS_H
+#define _RVL_SDK_FS_H
 
 #include "macros.h"
 #include "revolution/ipc.h"
@@ -19,8 +19,8 @@ typedef struct FSStats {
 
 // Could be more fields, but not larger than 32B
 typedef struct FSFileStats {
-    u32 length; // at 0x0
-    u32 position; // at 0x4
+    /* 0x0 */ u32 length;
+    /* 0x4 */ u32 position;
 } FSFileStats ATTRIBUTE_ALIGN(32);
 
 s32 ISFS_OpenLib(void);

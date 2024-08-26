@@ -3,6 +3,10 @@
 
 #include "revolution/types.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 // List nodes consist of a pointer to the next node followed by an arbitrary amount of data.
 #define NODE_NEXT(pNode) (*(void**)(pNode))
 #define NODE_DATA(pNode) (((u8*)(pNode) + 4))
@@ -21,5 +25,9 @@ bool xlListFreeItem(tXL_LIST* pList, void** ppItem);
 bool xlListTestItem(tXL_LIST* pList, void* pItem);
 bool xlListSetup(void);
 bool xlListReset(void);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

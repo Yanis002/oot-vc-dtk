@@ -1,5 +1,5 @@
-#ifndef RVL_SDK_USB_H
-#define RVL_SDK_USB_H
+#ifndef _RVL_SDK_USB_H
+#define _RVL_SDK_USB_H
 
 #include "revolution/ipc.h"
 #include "revolution/types.h"

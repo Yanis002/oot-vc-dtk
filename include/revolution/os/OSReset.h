@@ -1,5 +1,5 @@
-#ifndef RVL_SDK_OS_RESET_H
-#define RVL_SDK_OS_RESET_H
+#ifndef _RVL_SDK_OS_RESET_H
+#define _RVL_SDK_OS_RESET_H
 
 #include "revolution/types.h"
 
@@ -17,15 +17,15 @@ typedef enum {
 } OSShutdownEvent;
 
 typedef struct OSShutdownFunctionInfo {
-    OSShutdownFunction func; // at 0x0
-    u32 prio; // at 0x4
-    struct OSShutdownFunctionInfo* next; // at 0x8
-    struct OSShutdownFunctionInfo* prev; // at 0xC
+    /* 0x0 */ OSShutdownFunction func;
+    /* 0x4 */ u32 prio;
+    /* 0x8 */ struct OSShutdownFunctionInfo* next;
+    /* 0xC */ struct OSShutdownFunctionInfo* prev;
 } OSShutdownFunctionInfo;
 
 typedef struct OSShutdownFunctionQueue {
-    OSShutdownFunctionInfo* head; // at 0x0
-    OSShutdownFunctionInfo* tail; // at 0x4
+    /* 0x0 */ OSShutdownFunctionInfo* head;
+    /* 0x4 */ OSShutdownFunctionInfo* tail;
 } OSShutdownFunctionQueue;
 
 void OSRegisterShutdownFunction(OSShutdownFunctionInfo* info);

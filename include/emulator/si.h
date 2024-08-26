@@ -6,6 +6,10 @@
 #include "emulator/xlObject.h"
 #include "revolution/types.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 // __anon_0x78791
 typedef struct SI {
     /* 0x00 */ s32 nAddress;
@@ -16,5 +20,9 @@ bool siGet32(SI* pSI, u32 nAddress, s32* pData);
 bool siEvent(SI* pSI, s32 nEvent, void* pArgument);
 
 extern _XL_OBJECTTYPE gClassSI;
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

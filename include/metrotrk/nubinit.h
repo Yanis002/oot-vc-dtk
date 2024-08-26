@@ -1,5 +1,5 @@
-#ifndef METROTRK_DEBUGGER_PORTABLE_NUBINIT_H
-#define METROTRK_DEBUGGER_PORTABLE_NUBINIT_H
+#ifndef _METROTRK_NUBINIT_H
+#define _METROTRK_NUBINIT_H
 
 #include "revolution/types.h"
 

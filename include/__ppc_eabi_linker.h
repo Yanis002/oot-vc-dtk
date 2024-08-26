@@ -3,6 +3,10 @@
 
 #include "macros.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 INIT extern char _stack_addr[];
 INIT extern char _stack_end[];
 INIT extern char _heap_addr[];
@@ -70,5 +74,9 @@ INIT extern char _f_PPC_EMB_sdata0[];
 INIT extern char _e_PPC_EMB_sdata0[];
 INIT extern char _f_PPC_EMB_sbss0[];
 INIT extern char _e_PPC_EMB_sbss0[];
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif // __PPC_EABI_LINKER

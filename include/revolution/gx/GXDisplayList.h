@@ -1,5 +1,5 @@
-#ifndef RVL_SDK_GX_DISPLAY_LIST_H
-#define RVL_SDK_GX_DISPLAY_LIST_H
+#ifndef _RVL_SDK_GX_DISPLAY_LIST_H
+#define _RVL_SDK_GX_DISPLAY_LIST_H
 
 #include "revolution/gx/GXHardware.h"
 #include "revolution/types.h"

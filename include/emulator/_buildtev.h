@@ -4,6 +4,10 @@
 #include "revolution/gx.h"
 #include "revolution/types.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 // __anon_0x89C77
 typedef struct TevOrder {
     /* 0x0 */ GXTexCoordID coordID;
@@ -47,5 +51,9 @@ CombineModeTev* BuildCombineModeTev(u32 color1, u32 alpha1, u32 color2, u32 alph
 
 extern GXTevAlphaArg gAlphaArgs[10];
 // extern GXTevColorArg gColorArgs[16];
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

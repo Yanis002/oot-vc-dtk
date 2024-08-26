@@ -1,5 +1,5 @@
-#ifndef RVL_SDK_NAND_H
-#define RVL_SDK_NAND_H
+#ifndef _RVL_SDK_NAND_H
+#define _RVL_SDK_NAND_H
 
 #include "revolution/fs.h"
 #include "revolution/types.h"
@@ -77,67 +77,67 @@ typedef enum {
 typedef void (*NANDAsyncCallback)(s32 result, struct NANDCommandBlock* block);
 
 typedef struct NANDStatus {
-    u32 ownerId; // at 0x0
-    u16 groupId; // at 0x4
-    u8 attr; // at 0x6
-    u8 perm; // at 0x7
+    /* 0x0 */ u32 ownerId;
+    /* 0x4 */ u16 groupId;
+    /* 0x6 */ u8 attr;
+    /* 0x7 */ u8 perm;
 } NANDStatus;
 
 typedef struct NANDFileInfo {
-    s32 fd; // at 0x0
-    s32 tempFd; // at 0x4
-    char openPath[FS_MAX_PATH]; // at 0x8
-    char tempPath[FS_MAX_PATH]; // at 0x48
-    u8 access; // at 0x88
-    u8 stage; // at 0x89
-    u8 mark; // at 0x8A
+    /* 0x0 */ s32 fd;
+    /* 0x4 */ s32 tempFd;
+    /* 0x8 */ char openPath[FS_MAX_PATH];
+    /* 0x48 */ char tempPath[FS_MAX_PATH];
+    /* 0x88 */ u8 access;
+    /* 0x89 */ u8 stage;
+    /* 0x8A */ u8 mark;
     u32 unk_8B;
 } NANDFileInfo;
 
 typedef struct NANDCommandBlock {
-    void* userData; // at 0x0
-    NANDAsyncCallback callback; // at 0x4
-    NANDFileInfo* info; // at 0x8
-    void* bytes; // at 0xC
-    void* inodes; // at 0x10
-    NANDStatus* status; // at 0x14
-    u32 ownerId; // at 0x18
-    u16 groupId; // at 0x1C
-    u8 nextStage; // at 0x1E
-    u32 attr; // at 0x20
-    u32 ownerPerm; // at 0x24
-    u32 groupPerm; // at 0x28
-    u32 otherPerm; // at 0x2C
-    u32 dirFileCount; // at 0x30
-    char path[FS_MAX_PATH]; // at 0x34
-    u32* length; // at 0x74
-    u32* position; // at 0x78
-    s32 state; // at 0x7C
-    void* buffer; // at 0x80
-    u32 bufferSize; // at 0x84
-    u8* type; // at 0x88
-    u32 uniqueNo; // at 0x8C
-    u32 reqBlocks; // at 0x90
-    u32 reqInodes; // at 0x94
-    u32* answer; // at 0x98
-    u32 homeBlocks; // at 0x9C
-    u32 homeInodes; // at 0xA0
-    u32 userBlocks; // at 0xA4
-    u32 userInodes; // at 0xA8
-    u32 workBlocks; // at 0xAC
-    u32 workInodes; // at 0xB0
-    const char** dir; // at 0xB4
+    /* 0x0 */ void* userData;
+    /* 0x4 */ NANDAsyncCallback callback;
+    /* 0x8 */ NANDFileInfo* info;
+    /* 0xC */ void* bytes;
+    /* 0x10 */ void* inodes;
+    /* 0x14 */ NANDStatus* status;
+    /* 0x18 */ u32 ownerId;
+    /* 0x1C */ u16 groupId;
+    /* 0x1E */ u8 nextStage;
+    /* 0x20 */ u32 attr;
+    /* 0x24 */ u32 ownerPerm;
+    /* 0x28 */ u32 groupPerm;
+    /* 0x2C */ u32 otherPerm;
+    /* 0x30 */ u32 dirFileCount;
+    /* 0x34 */ char path[FS_MAX_PATH];
+    /* 0x74 */ u32* length;
+    /* 0x78 */ u32* position;
+    /* 0x7C */ s32 state;
+    /* 0x80 */ void* buffer;
+    /* 0x84 */ u32 bufferSize;
+    /* 0x88 */ u8* type;
+    /* 0x8C */ u32 uniqueNo;
+    /* 0x90 */ u32 reqBlocks;
+    /* 0x94 */ u32 reqInodes;
+    /* 0x98 */ u32* answer;
+    /* 0x9C */ u32 homeBlocks;
+    /* 0xA0 */ u32 homeInodes;
+    /* 0xA4 */ u32 userBlocks;
+    /* 0xA8 */ u32 userInodes;
+    /* 0xAC */ u32 workBlocks;
+    /* 0xB0 */ u32 workInodes;
+    /* 0xB4 */ const char** dir;
 } NANDCommandBlock;
 
 typedef struct NANDBanner {
-    u32 magic; // at 0x0
-    u32 flags; // at 0x4
-    u16 iconSpeed; // at 0x8
-    u8 reserved[0x20 - 0xA]; // at 0xA
-    wchar_t title[NAND_BANNER_TITLE_MAX]; // at 0x20
-    wchar_t subtitle[NAND_BANNER_TITLE_MAX]; // at 0x60
-    u8 bannerTexture[0x6000]; // at 0xA0
-    u8 iconTexture[0x1200][NAND_BANNER_ICON_MAX_FRAME]; // at 0x60A0
+    /* 0x0 */ u32 magic;
+    /* 0x4 */ u32 flags;
+    /* 0x8 */ u16 iconSpeed;
+    u8 reserved[0x20 - /* 0xA */ 0xA];
+    /* 0x20 */ wchar_t title[NAND_BANNER_TITLE_MAX];
+    /* 0x60 */ wchar_t subtitle[NAND_BANNER_TITLE_MAX];
+    /* 0xA0 */ u8 bannerTexture[0x6000];
+    /* 0x60A0 */ u8 iconTexture[0x1200][NAND_BANNER_ICON_MAX_FRAME];
 } NANDBanner;
 
 s32 NANDCreate(const char* path, u8 perm, u8 attr);

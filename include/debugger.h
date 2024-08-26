@@ -1,6 +1,10 @@
 #ifndef DEBUGGER_H
 #define DEBUGGER_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include "revolution/types.h"
 
 // EXI error codes
@@ -19,5 +23,9 @@ void EXI2_Unreserve(void);
 bool AMC_IsStub(void);
 
 bool Hu_IsStub(void);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

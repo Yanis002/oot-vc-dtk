@@ -1,5 +1,5 @@
-#ifndef RVL_SDK_OS_ALLOC_H
-#define RVL_SDK_OS_ALLOC_H
+#ifndef _RVL_SDK_OS_ALLOC_H
+#define _RVL_SDK_OS_ALLOC_H
 
 #include "revolution/types.h"
 

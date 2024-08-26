@@ -1,5 +1,5 @@
-#ifndef RVL_SDK_OS_ERROR_H
-#define RVL_SDK_OS_ERROR_H
+#ifndef _RVL_SDK_OS_ERROR_H
+#define _RVL_SDK_OS_ERROR_H
 
 #include "macros.h"
 #include "revolution/os/OSContext.h"

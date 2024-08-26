@@ -1,5 +1,5 @@
-#ifndef RVL_SDK_GX_BUMP_H
-#define RVL_SDK_GX_BUMP_H
+#ifndef _RVL_SDK_GX_BUMP_H
+#define _RVL_SDK_GX_BUMP_H
 
 #include "revolution/gx/GXTypes.h"
 #include "revolution/types.h"

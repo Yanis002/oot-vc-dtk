@@ -1,5 +1,5 @@
-#ifndef METROTRK_DEBUGGER_PORTABLE_UART_H
-#define METROTRK_DEBUGGER_PORTABLE_UART_H
+#ifndef _METROTRK_UART_H
+#define _METROTRK_UART_H
 
 #include "revolution/types.h"
 

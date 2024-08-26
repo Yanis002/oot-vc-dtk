@@ -5,6 +5,10 @@
 #include "revolution/os.h"
 #include "revolution/types.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 // MIPS instruction encoding:
 // R-type: opcode (6 bits) | rs (5 bits) | rt (5 bits) | rd (5 bits) | sa (5 bits) | funct (6 bits)
 // I-type: opcode (6 bits) | rs (5 bits) | rt (5 bits) | imm (16 bits)
@@ -422,5 +426,9 @@ bool fn_8003F330(Cpu* pCPU, CpuFunction* pFunction);
 bool treeCleanUpCheck(Cpu* pCPU, CpuFunction* node);
 
 extern _XL_OBJECTTYPE gClassCPU;
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

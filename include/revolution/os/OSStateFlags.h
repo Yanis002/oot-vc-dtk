@@ -1,5 +1,5 @@
-#ifndef RVL_SDK_OS_STATE_FLAGS_H
-#define RVL_SDK_OS_STATE_FLAGS_H
+#ifndef _RVL_SDK_OS_STATE_FLAGS_H
+#define _RVL_SDK_OS_STATE_FLAGS_H
 
 #include "revolution/types.h"
 
@@ -8,10 +8,10 @@ extern "C" {
 #endif
 
 typedef struct OSStateFlags {
-    u32 checksum; // at 0x0
+    /* 0x0 */ u32 checksum;
     u8 BYTE_0x4;
-    u8 BYTE_0x5; // at 0x5
-    u8 discState; // at 0x6
+    /* 0x5 */ u8 BYTE_0x5;
+    /* 0x6 */ u8 discState;
     u8 BYTE_0x7;
     u32 WORD_0x8;
     u32 WORD_0xC;

@@ -1,5 +1,5 @@
-#ifndef METROTRK_DEBUGGER_PORTABLE_MEM_TRK_H
-#define METROTRK_DEBUGGER_PORTABLE_MEM_TRK_H
+#ifndef _METROTRK_MEM_TRK_H
+#define _METROTRK_MEM_TRK_H
 
 #include "revolution/types.h"
 #include "stddef.h"

@@ -1,5 +1,5 @@
-#ifndef RVL_SDK_AX_VPB_H
-#define RVL_SDK_AX_VPB_H
+#ifndef _RVL_SDK_AX_VPB_H
+#define _RVL_SDK_AX_VPB_H
 
 #include "revolution/ax/AXPB.h"
 #include "revolution/types.h"
@@ -49,22 +49,22 @@ typedef enum {
 typedef void (*AXVoiceCallback)(void* vpb);
 
 typedef struct _AXVPB {
-    void* next; // at 0x0
-    void* prev; // at 0x4
-    void* next1; // at 0x8
-    u32 priority; // at 0xC
-    AXVoiceCallback callback; // at 0x10
-    u32 userContext; // at 0x14
-    u32 index; // at 0x18
-    u32 sync; // at 0x1C
-    u32 depop; // at 0x20
-    u32 updateMS; // at 0x24
-    u32 updateCounter; // at 0x28
-    u32 updateTotal; // at 0x2C
-    u16* updateWrite; // at 0x30
-    u16 updateData[128]; // at 0x34
-    void* itdBuffer; // at 0x24
-    AXPB pb; // at 0x28
+    /* 0x0 */ void* next;
+    /* 0x4 */ void* prev;
+    /* 0x8 */ void* next1;
+    /* 0xC */ u32 priority;
+    /* 0x10 */ AXVoiceCallback callback;
+    /* 0x14 */ u32 userContext;
+    /* 0x18 */ u32 index;
+    /* 0x1C */ u32 sync;
+    /* 0x20 */ u32 depop;
+    /* 0x24 */ u32 updateMS;
+    /* 0x28 */ u32 updateCounter;
+    /* 0x2C */ u32 updateTotal;
+    /* 0x30 */ u16* updateWrite;
+    /* 0x34 */ u16 updateData[128];
+    /* 0x24 */ void* itdBuffer;
+    /* 0x28 */ AXPB pb;
 } AXVPB;
 
 s32 __AXGetNumVoices(void);

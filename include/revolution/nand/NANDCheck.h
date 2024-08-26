@@ -1,5 +1,5 @@
-#ifndef RVL_SDK_NAND_CHECK_H
-#define RVL_SDK_NAND_CHECK_H
+#ifndef _RVL_SDK_NAND_CHECK_H
+#define _RVL_SDK_NAND_CHECK_H
 
 #include "revolution/nand/nand.h"
 #include "revolution/types.h"

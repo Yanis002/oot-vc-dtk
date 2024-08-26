@@ -1,5 +1,5 @@
-#ifndef RVL_SDK_GX_FIFO_H
-#define RVL_SDK_GX_FIFO_H
+#ifndef _RVL_SDK_GX_FIFO_H
+#define _RVL_SDK_GX_FIFO_H
 
 #include "revolution/gx/GXInternal.h"
 #include "revolution/types.h"

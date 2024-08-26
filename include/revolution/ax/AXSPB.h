@@ -1,5 +1,5 @@
-#ifndef RVL_SDK_AX_SPB_H
-#define RVL_SDK_AX_SPB_H
+#ifndef _RVL_SDK_AX_SPB_H
+#define _RVL_SDK_AX_SPB_H
 
 #include "macros.h"
 #include "revolution/ax/AXPB.h"

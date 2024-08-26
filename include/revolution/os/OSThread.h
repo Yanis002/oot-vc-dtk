@@ -1,5 +1,5 @@
-#ifndef RVL_SDK_OS_THREAD_H
-#define RVL_SDK_OS_THREAD_H
+#ifndef _RVL_SDK_OS_THREAD_H
+#define _RVL_SDK_OS_THREAD_H
 
 #include "revolution/os/OSContext.h"
 #include "revolution/types.h"
@@ -26,35 +26,35 @@ typedef enum {
 } OSThreadFlag;
 
 typedef struct OSThreadQueue {
-    struct OSThread* head; // at 0x0
-    struct OSThread* tail; // at 0x4
+    /* 0x0 */ struct OSThread* head;
+    /* 0x4 */ struct OSThread* tail;
 } OSThreadQueue;
 
 typedef struct OSMutexQueue {
-    struct OSMutex* head; // at 0x0
-    struct OSMutex* tail; // at 0x4
+    /* 0x0 */ struct OSMutex* head;
+    /* 0x4 */ struct OSMutex* tail;
 } OSMutexQueue;
 
 typedef struct OSThread {
     OSContext context;
-    u16 state; // at 0x2C8
-    u16 flags; // at 0x2CA
-    s32 suspend; // at 0x2CC
-    s32 priority; // at 0x2D0
-    s32 base; // at 0x2D4
-    u32 val; // at 0x2D8
-    OSThreadQueue* queue; // at 0x2DC
-    struct OSThread* next; // at 0x2E0
-    struct OSThread* prev; // at 0x2E4
-    OSThreadQueue joinQueue; // at 0x2E8
-    struct OSMutex* mutex; // at 0x2F0
-    OSMutexQueue mutexQueue; // at 0x2F4
-    struct OSThread* nextActive; // at 0x2FC
-    struct OSThread* prevActive; // at 0x300
-    u32* stackBegin; // at 0x304
-    u32* stackEnd; // at 0x308
-    s32 error; // at 0x30C
-    void* specific[2]; // at 0x310
+    /* 0x2C8 */ u16 state;
+    /* 0x2CA */ u16 flags;
+    /* 0x2CC */ s32 suspend;
+    /* 0x2D0 */ s32 priority;
+    /* 0x2D4 */ s32 base;
+    /* 0x2D8 */ u32 val;
+    /* 0x2DC */ OSThreadQueue* queue;
+    /* 0x2E0 */ struct OSThread* next;
+    /* 0x2E4 */ struct OSThread* prev;
+    /* 0x2E8 */ OSThreadQueue joinQueue;
+    /* 0x2F0 */ struct OSMutex* mutex;
+    /* 0x2F4 */ OSMutexQueue mutexQueue;
+    /* 0x2FC */ struct OSThread* nextActive;
+    /* 0x300 */ struct OSThread* prevActive;
+    /* 0x304 */ u32* stackBegin;
+    /* 0x308 */ u32* stackEnd;
+    /* 0x30C */ s32 error;
+    /* 0x310 */ void* specific[2];
 } OSThread;
 
 typedef void (*OSSwitchThreadCallback)(OSThread* currThread, OSThread* newThread);

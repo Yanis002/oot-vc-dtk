@@ -1,5 +1,5 @@
-#ifndef RVL_SDK_OS_FONT_H
-#define RVL_SDK_OS_FONT_H
+#ifndef _RVL_SDK_OS_FONT_H
+#define _RVL_SDK_OS_FONT_H
 
 #include "revolution/types.h"
 
@@ -18,29 +18,29 @@ typedef enum {
 } OSFontEncode;
 
 typedef struct OSFontHeader {
-    u16 type; // at 0x0
-    u16 firstChar; // at 0x2
-    u16 lastChar; // at 0x4
-    u16 invalidChar; // at 0x6
-    u16 ascent; // at 0x8
-    u16 descent; // at 0xA
-    u16 width; // at 0xC
-    u16 leading; // at 0xE
-    u16 cellWidth; // at 0x10
-    u16 cellHeight; // at 0x12
-    u32 sheetSize; // at 0x14
-    u16 sheetFormat; // at 0x18
-    u16 sheetNumCol; // at 0x1A
-    u16 sheetNumRow; // at 0x1C
-    u16 sheetWidth; // at 0x1E
-    u16 sheetHeight; // at 0x20
-    u16 widthTableOfs; // at 0x22
-    u32 sheetImageOfs; // at 0x24
-    u32 sheetFullSize; // at 0x28
-    u8 c0; // at 0x2C
-    u8 c1; // at 0x2D
-    u8 c2; // at 0x2E
-    u8 c3; // at 0x2F
+    /* 0x0 */ u16 type;
+    /* 0x2 */ u16 firstChar;
+    /* 0x4 */ u16 lastChar;
+    /* 0x6 */ u16 invalidChar;
+    /* 0x8 */ u16 ascent;
+    /* 0xA */ u16 descent;
+    /* 0xC */ u16 width;
+    /* 0xE */ u16 leading;
+    /* 0x10 */ u16 cellWidth;
+    /* 0x12 */ u16 cellHeight;
+    /* 0x14 */ u32 sheetSize;
+    /* 0x18 */ u16 sheetFormat;
+    /* 0x1A */ u16 sheetNumCol;
+    /* 0x1C */ u16 sheetNumRow;
+    /* 0x1E */ u16 sheetWidth;
+    /* 0x20 */ u16 sheetHeight;
+    /* 0x22 */ u16 widthTableOfs;
+    /* 0x24 */ u32 sheetImageOfs;
+    /* 0x28 */ u32 sheetFullSize;
+    /* 0x2C */ u8 c0;
+    /* 0x2D */ u8 c1;
+    /* 0x2E */ u8 c2;
+    /* 0x2F */ u8 c3;
 } OSFontHeader;
 
 u16 OSGetFontEncode(void);

@@ -1,5 +1,5 @@
-#ifndef RVL_SDK_OS_FATAL_H
-#define RVL_SDK_OS_FATAL_H
+#ifndef _RVL_SDK_OS_FATAL_H
+#define _RVL_SDK_OS_FATAL_H
 
 #include "revolution/gx/GXTypes.h"
 #include "revolution/types.h"

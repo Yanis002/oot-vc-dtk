@@ -1,5 +1,5 @@
-#ifndef RVL_SDK_IPC_MAIN_H
-#define RVL_SDK_IPC_MAIN_H
+#ifndef _RVL_SDK_IPC_MAIN_H
+#define _RVL_SDK_IPC_MAIN_H
 
 #include "macros.h"
 #include "revolution/types.h"

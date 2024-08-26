@@ -1,5 +1,5 @@
-#ifndef RVL_SDK_MEM_LIST_H
-#define RVL_SDK_MEM_LIST_H
+#ifndef _RVL_SDK_MEM_LIST_H
+#define _RVL_SDK_MEM_LIST_H
 
 #include "revolution/types.h"
 
@@ -8,15 +8,15 @@ extern "C" {
 #endif
 
 typedef struct MEMList {
-    void* head; // at 0x0
-    void* tail; // at 0x4
-    u16 length; // at 0x8
-    u16 offset; // at 0xA
+    /* 0x0 */ void* head;
+    /* 0x4 */ void* tail;
+    /* 0x8 */ u16 length;
+    /* 0xA */ u16 offset;
 } MEMList;
 
 typedef struct MEMLink {
-    void* prev; // at 0x0
-    void* next; // at 0x4
+    /* 0x0 */ void* prev;
+    /* 0x4 */ void* next;
 } MEMLink;
 
 void MEMInitList(MEMList* list, u16 offset);

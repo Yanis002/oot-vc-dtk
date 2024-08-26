@@ -1,5 +1,5 @@
-#ifndef RVL_SDK_TPL_H
-#define RVL_SDK_TPL_H
+#ifndef _RVL_SDK_TPL_H
+#define _RVL_SDK_TPL_H
 
 #include "revolution/gx.h"
 #include "revolution/types.h"
@@ -9,38 +9,38 @@ extern "C" {
 #endif
 
 typedef struct TPLHeader {
-    u16 height; // at 0x0
-    u16 width; // at 0x2
-    u32 format; // at 0x4
-    char* data; // at 0x8
-    GXTexWrapMode wrapS; // at 0xC
-    GXTexWrapMode wrapT; // at 0x10
-    GXTexFilter minFilt; // at 0x14
-    GXTexFilter magFilt; // at 0x18
-    f32 lodBias; // at 0x1C
-    u8 edgeLodEnable; // at 0x20
-    u8 minLod; // at 0x21
-    u8 maxLod; // at 0x22
-    u8 unpacked; // at 0x23
+    /* 0x0 */ u16 height;
+    /* 0x2 */ u16 width;
+    /* 0x4 */ u32 format;
+    /* 0x8 */ char* data;
+    /* 0xC */ GXTexWrapMode wrapS;
+    /* 0x10 */ GXTexWrapMode wrapT;
+    /* 0x14 */ GXTexFilter minFilt;
+    /* 0x18 */ GXTexFilter magFilt;
+    /* 0x1C */ f32 lodBias;
+    /* 0x20 */ u8 edgeLodEnable;
+    /* 0x21 */ u8 minLod;
+    /* 0x22 */ u8 maxLod;
+    /* 0x23 */ u8 unpacked;
 } TPLHeader;
 
 typedef struct TPLClutHeader {
-    u16 numEntries; // at 0x0
-    u8 unpacked; // at 0x1
-    u8 padding; // at 0x2
-    GXTlutFmt format; // at 0x4
-    char* data; // at 0x8
+    /* 0x0 */ u16 numEntries;
+    /* 0x1 */ u8 unpacked;
+    /* 0x2 */ u8 padding;
+    /* 0x4 */ GXTlutFmt format;
+    /* 0x8 */ char* data;
 } TPLClutHeader;
 
 typedef struct TPLDescriptor {
-    TPLHeader* texHeader; // at 0x0
-    TPLClutHeader* clutHeader; // at 0x4
+    /* 0x0 */ TPLHeader* texHeader;
+    /* 0x4 */ TPLClutHeader* clutHeader;
 } TPLDescriptor;
 
 typedef struct TPLPalette {
-    u32 version; // at 0x0
-    u32 numImages; // at 0x4
-    TPLDescriptor* descriptors; // at 0x8
+    /* 0x0 */ u32 version;
+    /* 0x4 */ u32 numImages;
+    /* 0x8 */ TPLDescriptor* descriptors;
 } TPLPalette;
 
 void TPLBind(TPLPalette* pal);

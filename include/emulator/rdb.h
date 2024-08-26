@@ -4,6 +4,10 @@
 #include "emulator/xlObject.h"
 #include "revolution/types.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 // __anon_0x56A0F
 typedef struct Rdb {
     /* 0x000 */ s32 nHackCount;
@@ -15,5 +19,9 @@ typedef struct Rdb {
 bool rdbEvent(Rdb* pRDB, s32 nEvent, void* pArgument);
 
 extern _XL_OBJECTTYPE gClassRdb;
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

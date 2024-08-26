@@ -1,5 +1,5 @@
-#ifndef RVL_SDK_GX_MISC_H
-#define RVL_SDK_GX_MISC_H
+#ifndef _RVL_SDK_GX_MISC_H
+#define _RVL_SDK_GX_MISC_H
 
 #include "revolution/types.h"
 

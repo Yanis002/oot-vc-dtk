@@ -7,6 +7,10 @@
 #include "revolution/pad.h"
 #include "revolution/types.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 // `C` if `eTypeROM` is `CZLJ`
 #define GET_GAME_MEDIUM(eTypeROM) ((eTypeROM >> 24) & 0xFF)
 
@@ -223,5 +227,9 @@ bool systemExceptionPending(System* pSystem, SystemInterruptType nException);
 bool systemEvent(System* pSystem, s32 nEvent, void* pArgument);
 
 extern _XL_OBJECTTYPE gClassSystem;
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

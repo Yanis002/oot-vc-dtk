@@ -1,5 +1,5 @@
-#ifndef RVL_SDK_SC_SCAPI_H
-#define RVL_SDK_SC_SCAPI_H
+#ifndef _RVL_SDK_SC_SCAPI_H
+#define _RVL_SDK_SC_SCAPI_H
 
 #include "revolution/types.h"
 
@@ -42,19 +42,19 @@ typedef enum {
 } SCSensorBarPos;
 
 typedef struct SCIdleModeInfo {
-    u8 wc24; // at 0x0
-    u8 slotLight; // at 0x1
+    /* 0x0 */ u8 wc24;
+    /* 0x1 */ u8 slotLight;
 } SCIdleModeInfo;
 
 typedef struct SCBtDeviceInfo {
-    u8 mac[6]; // at 0x0
-    char name[64]; // at 0x6
+    /* 0x0 */ u8 mac[6];
+    /* 0x6 */ char name[64];
 } SCBtDeviceInfo;
 
 typedef struct SCBtDeviceInfoArray {
-    u8 numRegist; // at 0x0
-    SCBtDeviceInfo regist[10]; // at 0x1
-    SCBtDeviceInfo active[6]; // at 0x2BD
+    /* 0x0 */ u8 numRegist;
+    /* 0x1 */ SCBtDeviceInfo regist[10];
+    /* 0x2BD */ SCBtDeviceInfo active[6];
 } SCBtDeviceInfoArray;
 
 u8 SCGetAspectRatio(void);

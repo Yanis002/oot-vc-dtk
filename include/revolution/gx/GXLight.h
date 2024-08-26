@@ -1,5 +1,5 @@
-#ifndef RVL_SDK_GX_LIGHT_H
-#define RVL_SDK_GX_LIGHT_H
+#ifndef _RVL_SDK_GX_LIGHT_H
+#define _RVL_SDK_GX_LIGHT_H
 
 #include "revolution/gx/GXInternal.h"
 #include "revolution/gx/GXTypes.h"

@@ -1,5 +1,5 @@
-#ifndef RVL_SDK_NWC24_DOWNLOAD_H
-#define RVL_SDK_NWC24_DOWNLOAD_H
+#ifndef _RVL_SDK_NWC24_DOWNLOAD_H
+#define _RVL_SDK_NWC24_DOWNLOAD_H
 
 #include "macros.h"
 #include "revolution/fs.h"
@@ -36,56 +36,56 @@ typedef enum {
 } NWC24DlSubTaskFlags;
 
 typedef struct NWC24DlEntry {
-    u32 app; // at 0x0
-    u32 nextTime; // at 0x4
-    u32 lastAccess; // at 0x8
-    u8 flags; // at 0xC
+    /* 0x0 */ u32 app;
+    /* 0x4 */ u32 nextTime;
+    /* 0x8 */ u32 lastAccess;
+    /* 0xC */ u8 flags;
     char UNK_0xD[0x10 - 0xD];
 } NWC24DlEntry;
 
 #pragma pack(push, 1)
 typedef struct NWC24DlHeader {
-    u32 magic; // at 0x0
-    u32 version; // at 0x4
+    /* 0x0 */ u32 magic;
+    /* 0x4 */ u32 version;
     char UNK_0x8[0x10 - 0x8];
-    u16 maxSubTasks; // at 0x10
-    u16 privateTasks; // at 0x12
-    u16 maxTasks; // at 0x14
+    /* 0x10 */ u16 maxSubTasks;
+    /* 0x12 */ u16 privateTasks;
+    /* 0x14 */ u16 maxTasks;
     char UNK_0x16[0x80 - 0x16];
-    NWC24DlEntry entries[NWC24_DL_TASK_MAX]; // at 0x80
+    /* 0x80 */ NWC24DlEntry entries[NWC24_DL_TASK_MAX];
 } NWC24DlHeader;
 #pragma pack(pop)
 
 #pragma pack(push, 1)
 typedef struct NWC24DlTask {
-    u16 id; // at 0x0
-    u8 type; // at 0x2
-    u8 priority; // at 0x3
-    u32 flags; // at 0x4
-    u32 appId; // at 0x8
-    u32 titleIdHi; // at 0xC
-    u32 titleIdLo; // at 0x10
-    u16 groupId; // at 0x14
+    /* 0x0 */ u16 id;
+    /* 0x2 */ u8 type;
+    /* 0x3 */ u8 priority;
+    /* 0x4 */ u32 flags;
+    /* 0x8 */ u32 appId;
+    /* 0xC */ u32 titleIdHi;
+    /* 0x10 */ u32 titleIdLo;
+    /* 0x14 */ u16 groupId;
     char UNK_0x16[0x2];
-    s16 count; // at 0x18
-    s16 errorCount; // at 0x1A
-    u16 interval; // at 0x1C
-    u16 margin; // at 0x1E
-    u32 lastError; // at 0x20
-    u8 subTaskCounter; // at 0x24
-    u8 subTaskType; // at 0x25
-    u8 subTaskFlags; // at 0x26
+    /* 0x18 */ s16 count;
+    /* 0x1A */ s16 errorCount;
+    /* 0x1C */ u16 interval;
+    /* 0x1E */ u16 margin;
+    /* 0x20 */ u32 lastError;
+    /* 0x24 */ u8 subTaskCounter;
+    /* 0x25 */ u8 subTaskType;
+    /* 0x26 */ u8 subTaskFlags;
     char UNK_0x27[0x1];
-    u32 subTaskMask; // at 0x28
-    u32 serverInterval; // at 0x2C
-    u32 lastUpdate; // at 0x30
-    u32 lastUpdateSubTask[NWC24_DL_SUBTASK_MAX]; // at 0x34
-    char url[236]; // at 0xB4
-    char fileName[FS_MAX_PATH]; // at 0x1A0
+    /* 0x28 */ u32 subTaskMask;
+    /* 0x2C */ u32 serverInterval;
+    /* 0x30 */ u32 lastUpdate;
+    /* 0x34 */ u32 lastUpdateSubTask[NWC24_DL_SUBTASK_MAX];
+    /* 0xB4 */ char url[236];
+    /* 0x1A0 */ char fileName[FS_MAX_PATH];
     char UNK_0x1E0[0x1F8 - 0x1E0];
-    u32 userParam; // at 0x1F8
-    u8 optFlags; // at 0x1FC
-    u8 rootCaId; // at 0x1FD
+    /* 0x1F8 */ u32 userParam;
+    /* 0x1FC */ u8 optFlags;
+    /* 0x1FD */ u8 rootCaId;
     char UNK_0x1FE[0x200 - 0x1FE];
 } NWC24DlTask;
 #pragma pack(pop)

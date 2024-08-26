@@ -1,5 +1,5 @@
-#ifndef RVL_SDK_AXFX_LFO_TABLE_H
-#define RVL_SDK_AXFX_LFO_TABLE_H
+#ifndef _RVL_SDK_AXFX_LFO_TABLE_H
+#define _RVL_SDK_AXFX_LFO_TABLE_H
 
 #include "revolution/types.h"
 

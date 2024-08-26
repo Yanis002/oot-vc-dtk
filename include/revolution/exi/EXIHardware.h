@@ -1,5 +1,5 @@
-#ifndef RVL_SDK_EXI_HARDWARE_H
-#define RVL_SDK_EXI_HARDWARE_H
+#ifndef _RVL_SDK_EXI_HARDWARE_H
+#define _RVL_SDK_EXI_HARDWARE_H
 
 #include "macros.h"
 #include "revolution/exi/EXICommon.h"
@@ -10,11 +10,11 @@ extern "C" {
 #endif
 
 typedef struct EXIChannelParam {
-    u32 cpr; // at 0x0
-    void* mar; // at 0x4
-    u32 length; // at 0x8
-    u32 cr; // at 0xC
-    u32 data; // at 0x10
+    /* 0x0 */ u32 cpr;
+    /* 0x4 */ void* mar;
+    /* 0x8 */ u32 length;
+    /* 0xC */ u32 cr;
+    /* 0x10 */ u32 data;
 } EXIChannelParam;
 
 volatile EXIChannelParam EXI_CHAN_PARAMS[EXI_MAX_CHAN] AT_ADDRESS(0xCD006800);

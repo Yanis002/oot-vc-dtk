@@ -1,5 +1,5 @@
-#ifndef METROTRK_DEBUGGER_OS_DOLPHIN_USR_PUT_H
-#define METROTRK_DEBUGGER_OS_DOLPHIN_USR_PUT_H
+#ifndef _METROTRK_USR_PUT_H
+#define _METROTRK_USR_PUT_H
 
 #include "revolution/types.h"
 

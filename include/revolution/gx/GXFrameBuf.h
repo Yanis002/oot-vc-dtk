@@ -1,5 +1,5 @@
-#ifndef RVL_SDK_GX_FRAMEBUF_H
-#define RVL_SDK_GX_FRAMEBUF_H
+#ifndef _RVL_SDK_GX_FRAMEBUF_H
+#define _RVL_SDK_GX_FRAMEBUF_H
 
 #include "revolution/types.h"
 #include "revolution/vi/vitypes.h"
@@ -11,19 +11,19 @@ extern "C" {
 typedef enum VIXfbMode;
 
 typedef struct _GXRenderModeObj {
-    VITvFormat viTVmode; // at 0x0
-    u16 fbWidth; // at 0x4
-    u16 efbHeight; // at 0x6
-    u16 xfbHeight; // at 0x8
-    u16 viXOrigin; // at 0xA
-    u16 viYOrigin; // at 0xC
-    u16 viWidth; // at 0xE
-    u16 viHeight; // at 0x10
-    VIXfbMode xfbMode; // at 0x14
-    u8 field_rendering; // at 0x18
-    u8 aa; // at 0x19
-    u8 sample_pattern[12][2]; // at 0x1A
-    u8 vfilter[7]; // at 0x32
+    /* 0x0 */ VITvFormat viTVmode;
+    /* 0x4 */ u16 fbWidth;
+    /* 0x6 */ u16 efbHeight;
+    /* 0x8 */ u16 xfbHeight;
+    /* 0xA */ u16 viXOrigin;
+    /* 0xC */ u16 viYOrigin;
+    /* 0xE */ u16 viWidth;
+    /* 0x10 */ u16 viHeight;
+    /* 0x14 */ VIXfbMode xfbMode;
+    /* 0x18 */ u8 field_rendering;
+    /* 0x19 */ u8 aa;
+    /* 0x1A */ u8 sample_pattern[12][2];
+    /* 0x32 */ u8 vfilter[7];
 } GXRenderModeObj;
 
 extern GXRenderModeObj GXNtsc480IntDf;

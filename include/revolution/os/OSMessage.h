@@ -1,5 +1,5 @@
-#ifndef RVL_SDK_OS_MESSAGE_H
-#define RVL_SDK_OS_MESSAGE_H
+#ifndef _RVL_SDK_OS_MESSAGE_H
+#define _RVL_SDK_OS_MESSAGE_H
 
 #include "revolution/os/OSThread.h"
 #include "revolution/types.h"
@@ -16,12 +16,12 @@ typedef enum {
 } OSMessageFlags;
 
 typedef struct OSMessageQueue {
-    OSThreadQueue sendQueue; // at 0x0
-    OSThreadQueue recvQueue; // at 0x8
-    OSMessage* buffer; // at 0x10
-    s32 capacity; // at 0x14
-    s32 front; // at 0x18
-    s32 size; // at 0x1C
+    /* 0x0 */ OSThreadQueue sendQueue;
+    /* 0x8 */ OSThreadQueue recvQueue;
+    /* 0x10 */ OSMessage* buffer;
+    /* 0x14 */ s32 capacity;
+    /* 0x18 */ s32 front;
+    /* 0x1C */ s32 size;
 } OSMessageQueue;
 
 void OSInitMessageQueue(OSMessageQueue* queue, OSMessage* buffer, s32 capacity);

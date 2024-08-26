@@ -1,5 +1,5 @@
-#ifndef RVL_SDK_MTX_QUAT_H
-#define RVL_SDK_MTX_QUAT_H
+#ifndef _RVL_SDK_MTX_QUAT_H
+#define _RVL_SDK_MTX_QUAT_H
 
 #include "revolution/mtx/mtx.h"
 #include "revolution/types.h"

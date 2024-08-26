@@ -2,6 +2,11 @@
 #define _VIDEO_H
 
 #include "revolution/types.h"
+#include "emulator/xlObject.h"
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 typedef struct Video {
     /* 0x00 */ s32 unk_00;
@@ -10,5 +15,9 @@ typedef struct Video {
 bool videoEvent(Video* pVideo, s32 nEvent, void* pArgument);
 
 extern _XL_OBJECTTYPE gClassVideo;
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

@@ -1,5 +1,5 @@
-#ifndef RVL_SDK_NAND_CORE_H
-#define RVL_SDK_NAND_CORE_H
+#ifndef _RVL_SDK_NAND_CORE_H
+#define _RVL_SDK_NAND_CORE_H
 
 #include "macros.h"
 #include "revolution/nand/nand.h"

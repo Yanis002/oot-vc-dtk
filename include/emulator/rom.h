@@ -5,6 +5,10 @@
 #include "emulator/xlObject.h"
 #include "revolution/types.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #define ROM_THREAD_SIZE 0x2000
 
 typedef bool UnknownCallbackFunc(void);
@@ -100,5 +104,9 @@ bool romGetBuffer(Rom* pROM, void** pBuffer, u32 nAddress, s32* pData);
 bool romEvent(Rom* pROM, s32 nEvent, void* pArgument);
 
 extern _XL_OBJECTTYPE gClassROM;
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

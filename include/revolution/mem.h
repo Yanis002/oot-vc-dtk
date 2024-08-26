@@ -1,5 +1,5 @@
-#ifndef RVL_SDK_PUBLIC_MEM_H
-#define RVL_SDK_PUBLIC_MEM_H
+#ifndef _RVL_SDK_PUBLIC_MEM_H
+#define _RVL_SDK_PUBLIC_MEM_H
 
 #ifdef __cplusplus
 extern "C" {

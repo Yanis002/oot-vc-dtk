@@ -1,5 +1,5 @@
-#ifndef RVL_SDK_OS_ARENA_H
-#define RVL_SDK_OS_ARENA_H
+#ifndef _RVL_SDK_OS_ARENA_H
+#define _RVL_SDK_OS_ARENA_H
 
 #include "revolution/types.h"
 #include "stddef.h"

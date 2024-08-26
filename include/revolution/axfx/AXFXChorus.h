@@ -1,5 +1,5 @@
-#ifndef RVL_SDK_AXFX_CHORUS_H
-#define RVL_SDK_AXFX_CHORUS_H
+#ifndef _RVL_SDK_AXFX_CHORUS_H
+#define _RVL_SDK_AXFX_CHORUS_H
 
 #include "revolution/axfx/AXFXChorusExp.h"
 #include "revolution/types.h"
@@ -9,10 +9,10 @@ extern "C" {
 #endif
 
 typedef struct AXFX_CHORUS {
-    AXFX_CHORUS_EXP exp; // at 0x0
-    u32 baseDelay; // at 0xA0
-    u32 variation; // at 0xA4
-    u32 period; // at 0xA8
+    /* 0x0 */ AXFX_CHORUS_EXP exp;
+    /* 0xA0 */ u32 baseDelay;
+    /* 0xA4 */ u32 variation;
+    /* 0xA8 */ u32 period;
 } AXFX_CHORUS;
 
 u32 AXFXChorusGetMemSize(const AXFX_CHORUS* fx);

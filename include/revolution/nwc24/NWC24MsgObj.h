@@ -1,5 +1,5 @@
-#ifndef RVL_SDK_NWC24_MSG_OBJ_H
-#define RVL_SDK_NWC24_MSG_OBJ_H
+#ifndef _RVL_SDK_NWC24_MSG_OBJ_H
+#define _RVL_SDK_NWC24_MSG_OBJ_H
 
 #include "revolution/nwc24/NWC24Types.h"
 #include "revolution/nwc24/NWC24Utils.h"
@@ -31,35 +31,35 @@ typedef enum {
 } NWC24MsgType;
 
 typedef struct NWC24MsgObj {
-    u32 id; // at 0x0
-    u32 flags; // at 0x4
-    u32 length; // at 0x8
-    u32 appId; // at 0xC
+    /* 0x0 */ u32 id;
+    /* 0x4 */ u32 flags;
+    /* 0x8 */ u32 length;
+    /* 0xC */ u32 appId;
     char UNK_0x10[0x4];
-    u32 tag; // at 0x14
-    u32 ledPattern; // at 0x18
-    u64 fromId; // at 0x20
+    /* 0x14 */ u32 tag;
+    /* 0x18 */ u32 ledPattern;
+    /* 0x20 */ u64 fromId;
     u32 WORD_0x28;
     u32 WORD_0x2C;
     NWC24Data DATA_0x30;
     NWC24Data DATA_0x38;
-    NWC24Data subject; // at 0x40
-    NWC24Data text; // at 0x48
+    /* 0x40 */ NWC24Data subject;
+    /* 0x48 */ NWC24Data text;
     NWC24Data DATA_0x50;
     NWC24Data DATA_0x58;
-    NWC24Charset charset; // at 0x60
-    NWC24Encoding encoding; // at 0x64
-    NWC24Data attached[NWC24_MSG_ATTACHMENT_MAX]; // at 0x68
-    u32 attachedSize[NWC24_MSG_ATTACHMENT_MAX]; // at 0x78
-    NWC24MIMEType attachedType[NWC24_MSG_ATTACHMENT_MAX]; // at 0x80
-    union {
+    /* 0x60 */ NWC24Charset charset;
+    /* 0x64 */ NWC24Encoding encoding;
+    /* 0x68 */ NWC24Data attached[NWC24_MSG_ATTACHMENT_MAX];
+    /* 0x78 */ u32 attachedSize[NWC24_MSG_ATTACHMENT_MAX];
+    /* 0x80 */ NWC24MIMEType attachedType[NWC24_MSG_ATTACHMENT_MAX];
+    /* 0x88 */ union {
         u64 toIds[NWC24_MSG_RECIPIENT_MAX];
         NWC24Data toAddrs[NWC24_MSG_RECIPIENT_MAX];
-    }; // at 0x88
-    u8 numTo; // at 0xC8
-    u8 numAttached; // at 0xC9
-    u16 groupId; // at 0xCA
-    union {
+    };
+    /* 0xC8 */ u8 numTo;
+    /* 0xC9 */ u8 numAttached;
+    /* 0xCA */ u16 groupId;
+    /* 0xCC */ union {
         struct {
             u32 noreply : 1;
             u32 unknown : 7;
@@ -68,10 +68,10 @@ typedef struct NWC24MsgObj {
         };
 
         u32 raw;
-    } mb; // at 0xCC
+    } mb;
     NWC24Data DATA_0xD0;
-    NWC24Data face; // at 0xD8
-    NWC24Data alt; // at 0xE0
+    /* 0xD8 */ NWC24Data face;
+    /* 0xE0 */ NWC24Data alt;
     char UNK_0xE8[0x100 - 0xE8];
 } NWC24MsgObj;
 

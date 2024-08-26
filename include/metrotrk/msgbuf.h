@@ -1,5 +1,5 @@
-#ifndef METROTRK_DEBUGGER_PORTABLE_MSGBUF_H
-#define METROTRK_DEBUGGER_PORTABLE_MSGBUF_H
+#ifndef _METROTRK_MSGBUF_H
+#define _METROTRK_MSGBUF_H
 
 #include "metrotrk/mutex_TRK.h"
 #include "revolution/types.h"
@@ -32,11 +32,11 @@ typedef enum {
 } TRKMessageCommand;
 
 typedef struct TRKMessageBuffer {
-    TRKMutex mutex; // at 0x0
-    bool used; // at 0x4
-    unsigned int size; // at 0x8
-    unsigned int pos; // at 0xC
-    unsigned char data[kMessageBufferSize]; // at 0x10
+    /* 0x0 */ TRKMutex mutex;
+    /* 0x4 */ bool used;
+    /* 0x8 */ unsigned int size;
+    /* 0xC */ unsigned int pos;
+    /* 0x10 */ unsigned char data[kMessageBufferSize];
 } TRKMessageBuffer;
 
 #define TRKMessageBufferGet(buf, type, offset) (*(type*)(buf->data + offset))

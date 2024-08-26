@@ -1,5 +1,5 @@
-#ifndef RVL_SDK_OS_ALARM_H
-#define RVL_SDK_OS_ALARM_H
+#ifndef _RVL_SDK_OS_ALARM_H
+#define _RVL_SDK_OS_ALARM_H
 
 #include "revolution/os/OSContext.h"
 #include "revolution/types.h"
@@ -12,19 +12,19 @@ typedef struct OSAlarm OSAlarm;
 typedef void (*OSAlarmHandler)(struct OSAlarm* alarm, struct OSContext* ctx);
 
 struct OSAlarm {
-    OSAlarmHandler handler; // at 0x0
-    u32 tag; // at 0x4
+    /* 0x0 */ OSAlarmHandler handler;
+    /* 0x4 */ u32 tag;
     s64 end;
-    struct OSAlarm* prev; // at 0x10
-    struct OSAlarm* next; // at 0x14
-    s64 period; // at 0x18
-    s64 start; // at 0x20
-    void* userData; // at 0x28
+    /* 0x10 */ struct OSAlarm* prev;
+    /* 0x14 */ struct OSAlarm* next;
+    /* 0x18 */ s64 period;
+    /* 0x20 */ s64 start;
+    /* 0x28 */ void* userData;
 };
 
 typedef struct OSAlarmQueue {
-    OSAlarm* head; // at 0x0
-    OSAlarm* tail; // at 0x4
+    /* 0x0 */ OSAlarm* head;
+    /* 0x4 */ OSAlarm* tail;
 } OSAlarmQueue;
 
 void __OSInitAlarm(void);

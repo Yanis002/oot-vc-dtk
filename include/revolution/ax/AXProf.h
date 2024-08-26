@@ -1,5 +1,5 @@
-#ifndef RVL_SDK_AX_PROF_H
-#define RVL_SDK_AX_PROF_H
+#ifndef _RVL_SDK_AX_PROF_H
+#define _RVL_SDK_AX_PROF_H
 
 #include "revolution/types.h"
 
@@ -8,13 +8,13 @@ extern "C" {
 #endif
 
 typedef struct _AXPROFILE {
-    s64 timeBegin; // at 0x0
-    s64 timeProcessAuxBegin; // at 0x8
-    s64 timeProcessAuxEnd; // at 0x10
-    s64 timeUserFrameBegin; // at 0x18
-    s64 timeUserFrameEnd; // at 0x20
-    s64 timeEnd; // at 0x28
-    s32 numVoices; // at 0x30
+    /* 0x0 */ s64 timeBegin;
+    /* 0x8 */ s64 timeProcessAuxBegin;
+    /* 0x10 */ s64 timeProcessAuxEnd;
+    /* 0x18 */ s64 timeUserFrameBegin;
+    /* 0x20 */ s64 timeUserFrameEnd;
+    /* 0x28 */ s64 timeEnd;
+    /* 0x30 */ s32 numVoices;
     UNKWORD WORD_0x34;
 } AXPROFILE;
 

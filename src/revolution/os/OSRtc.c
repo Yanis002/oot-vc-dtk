@@ -5,17 +5,17 @@
 #define OS_SRAM_SIZE (sizeof(OSSram) + sizeof(OSSramEx))
 
 typedef struct OSScb {
-    union {
+    /* 0x0 */ union {
         struct {
             OSSram sram;
             OSSramEx sramEx;
         };
         u8 block[OS_SRAM_SIZE];
-    }; // at 0x0
-    u32 pos; // at 0x40
-    bool enabled; // at 0x44
-    bool locked; // at 0x48
-    bool sync; // at 0x4C
+    };
+    /* 0x40 */ u32 pos;
+    /* 0x44 */ bool enabled;
+    /* 0x48 */ bool locked;
+    /* 0x4C */ bool sync;
     UNKWORD WORD_0x50;
 } OSScb;
 
