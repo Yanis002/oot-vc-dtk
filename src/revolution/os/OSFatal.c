@@ -235,6 +235,24 @@ void OSFatal(GXColor textColor, GXColor bgColor, const char* msg) {
     OSSwitchFiber(Halt, OSGetArenaHi());
 }
 
+static inline GXColor RGB2YUV2(GXColor rgb) {
+    f32 Y;
+    f32 Cb;
+    f32 Cr;
+    GXColor yuv;
+
+    Y  = 0.5f + (16.0f + ((0.098f * (f32) rgb.b) + ((0.257f * (f32) rgb.r) + (0.504f * (f32) rgb.g))));
+    Cb = 0.5f + (128.0f + ((0.439f * (f32) rgb.b) + ((-0.148f * (f32) rgb.r) - (0.291f * (f32) rgb.g))));
+    Cr = 0.5f + (128.0f + (((0.439f * (f32) rgb.r) - (0.368f * (f32) rgb.g)) - (0.071f * (f32) rgb.b)));
+
+    yuv.r = (Y > 235.0f) ? 235.0f : (Y < 16.0f) ? 16.0f : Y;
+    yuv.g = (Cb > 240.0f) ? 240.0f : (Cb < 16.0f) ? 16.0f : Cb;
+    yuv.b = (Cr > 240.0f) ? 240.0f : (Cr < 16.0f) ? 16.0f : Cr;
+    yuv.a = 0;
+
+    return yuv;
+}
+
 static void Halt(void) {
     OSFontHeader* msgFont;
     const char* msg;
@@ -257,7 +275,7 @@ static void Halt(void) {
     OSLoadFont(msgFont, OSGetArenaLo());
 
     fb = OSAllocFromMEM1ArenaLo(FATAL_FB_SIZE, 32);
-    ScreenClear(fb, FATAL_FB_W, FATAL_FB_H, RGB2YUV(params->bgColor));
+    ScreenClear(fb, FATAL_FB_W, FATAL_FB_H, RGB2YUV2(params->bgColor));
     VISetNextFrameBuffer(fb);
     ConfigureVideo(FATAL_FB_W, FATAL_FB_H);
     VIFlush();
@@ -267,7 +285,7 @@ static void Halt(void) {
         ;
     }
 
-    ScreenReport(fb, FATAL_FB_W, FATAL_FB_H, RGB2YUV(params->textColor), 48,
+    ScreenReport(fb, FATAL_FB_W, FATAL_FB_H, RGB2YUV2(params->textColor), 48,
                  100, msgFont->leading, params->msg);
     DCFlushRange(fb, FATAL_FB_SIZE);
     VISetBlack(false);
@@ -282,3 +300,42 @@ static void Halt(void) {
     OSReport("%s\n", params->msg);
     PPCHalt();
 }
+
+
+
+// static void Halt(void) {
+//     u32 count;
+//     OSFontHeader* fontData;
+//     void* xfb;
+//     u32 len;
+//     OSFatalParam* fp;
+
+//     OSEnableInterrupts();
+//     fp = &FatalParam;
+//     len = strlen(fp->msg) + 1;
+//     fp->msg = memmove(OSAllocFromMEM1ArenaLo(len, 0x20), fp->msg, len);
+
+//     fontData = OSAllocFromMEM1ArenaLo(0xA1004, 0x20);
+//     OSLoadFont(fontData, OSGetArenaLo());
+    
+//     xfb = OSAllocFromMEM1ArenaLo(0x96000, 0x20);
+//     ScreenClear(xfb, 640, 480, RGB2YUV(fp->bgColor));
+//     VISetNextFrameBuffer(xfb);
+//     ConfigureVideo(640, 480);
+//     VIFlush();
+
+//     count = VIGetRetraceCount();
+//     do {} while ((s32)(VIGetRetraceCount() - count) < 2);
+
+//     ScreenReport(xfb, 640, 480, RGB2YUV(fp->textColor), 48, 100, fontData->leading, fp->msg);
+//     DCFlushRange(xfb, 0x96000);
+//     VISetBlack(false);
+//     VIFlush();
+
+//     count = VIGetRetraceCount();
+//     do {} while ((s32)(VIGetRetraceCount() - count) < 1);
+
+//     OSDisableInterrupts();
+//     OSReport("%s\n", fp->msg);
+//     PPCHalt();
+// }

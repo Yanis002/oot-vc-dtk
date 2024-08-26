@@ -48,6 +48,7 @@ typedef enum {
     OS_INTR_MAX
 } OSInterruptType;
 
+typedef s16 __OSInterrupt;
 typedef void (*OSInterruptHandler)(s16 intr, struct OSContext* ctx);
 
 extern u32 __OSLastInterruptSrr0;

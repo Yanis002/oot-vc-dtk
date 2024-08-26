@@ -9,6 +9,13 @@
 extern "C" {
 #endif
 
+#define EXI_FREQ_1M 0
+#define EXI_FREQ_2M 1
+#define EXI_FREQ_4M 2
+#define EXI_FREQ_8M 3
+#define EXI_FREQ_16M 4
+#define EXI_FREQ_32M 5
+
 #include "revolution/exi/EXIBios.h"
 #include "revolution/exi/EXICommon.h"
 #include "revolution/exi/EXIHardware.h"

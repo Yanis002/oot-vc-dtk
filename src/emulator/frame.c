@@ -3436,7 +3436,7 @@ bool frameEvent(Frame* pFrame, s32 nEvent, void* pArgument) {
 
     switch (nEvent) {
         case 1:
-            fn_8009FABC();
+            GXAbortFrame();
             break;
         case 2:
             pFrame->iHintMatrix = 0;

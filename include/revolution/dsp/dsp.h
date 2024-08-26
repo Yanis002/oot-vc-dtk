@@ -21,6 +21,7 @@ void DSPAssertInt(void);
 void DSPInit(void);
 bool DSPCheckInit(void);
 struct DSPTask* DSPAddTask(struct DSPTask* task);
+struct DSPTask* DSPCancelTask(struct DSPTask* task);
 struct DSPTask* DSPAssertTask(struct DSPTask* task);
 
 #ifdef __cplusplus

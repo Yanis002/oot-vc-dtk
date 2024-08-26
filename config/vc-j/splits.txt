@@ -343,24 +343,24 @@ revolution/os/OSStateFlags.c:
 	.data       start:0x80183E78 end:0x80183EA0
 	.bss        start:0x801DD960 end:0x801DD980
 
-revolution/ax/AXComp.c:
-	.data       start:0x80186820 end:0x801877E0
-
-revolution/ax/DSPCode.c:
-	.data       start:0x801877E0 end:0x801897E0
-
 revolution/os/__ppc_eabi_init.c:
 	.init       start:0x800042E0 end:0x80004338
 	.text       start:0x80094EE8 end:0x80094F9C
 
 revolution/exi/EXIBios.c:
 	.text       start:0x80094F9C end:0x80096830
+	.data       start:0x80183EA0 end:0x80183EE8
+	.bss        start:0x801DD980 end:0x801DDA40
+	.sdata      start:0x8025C988 end:0x8025C990
+	.sbss       start:0x8025D638 end:0x8025D640
 
 revolution/exi/EXIUart.c:
 	.text       start:0x80096830 end:0x80096B64
+	.sbss       start:0x8025D640 end:0x8025D650
 
 revolution/exi/EXICommon.c:
 	.text       start:0x80096B64 end:0x80096CF0
+	.sdata2     start:0x8025E328 end:0x8025E330
 
 revolution/si/SIBios.c:
 	.text       start:0x80096CF0 end:0x80098260
@@ -457,21 +457,40 @@ revolution/ai/ai.c:
 
 revolution/ax/AX.c:
 	.text       start:0x800ABD3C end:0x800ABDB0
+	.data       start:0x80186758 end:0x801867A0
+	.sdata      start:0x8025CA78 end:0x8025CA80
+
+revolution/ax/AXComp.c:
+	.data       start:0x80186820 end:0x801877E0
+
+revolution/ax/DSPCode.c:
+	.data       start:0x801877E0 end:0x801897E0
+	.sdata      start:0x8025CA80 end:0x8025CA88
 
 revolution/ax/AXAlloc.c:
 	.text       start:0x800ABDB0 end:0x800AC318
+	.bss        start:0x801E33D0 end:0x801E34E0
+	.sbss       start:0x8025D8D0 end:0x8025D8D8
 
 revolution/ax/AXAux.c:
 	.text       start:0x800AC318 end:0x800AC92C
+	.bss        start:0x801E34E0 end:0x801E5D60
+	.sbss       start:0x8025D8D8 end:0x8025D914
 
 revolution/ax/AXCL.c:
 	.text       start:0x800AC92C end:0x800AD388
+	.bss        start:0x801E5D60 end:0x801E6360
+	.sbss       start:0x8025D914 end:0x8025D930
 
 revolution/ax/AXOut.c:
 	.text       start:0x800AD388 end:0x800ADBA8
+	.bss        start:0x801E6360 end:0x801EB120
+	.sbss       start:0x8025D930 end:0x8025D970
 
 revolution/ax/AXSPB.c:
 	.text       start:0x800ADBA8 end:0x800ADFCC
+	.bss        start:0x801EB120 end:0x801EB1A0
+	.sbss       start:0x8025D978 end:0x8025D9C8
 
 revolution/ax/AXVPB.c:
 	.text       start:0x800ADFCC end:0x800AF598
@@ -483,22 +502,38 @@ revolution/axfx/code_800AF5D8.c:
 	.text       start:0x800AF5D8 end:0x800B1BEC
 
 revolution/dsp/dsp.c:
-	.text       start:0x800B1BEC end:0x800B1D6C
+	.text       start:0x800B1BEC end:0x800B1E68
+	.data       start:0x8018A510 end:0x8018A590
+	.sdata      start:0x8025CA90 end:0x8025CA98
+	.sbss       start:0x8025D9F8 end:0x8025DA00
 
 revolution/dsp/dsp_debug.c:
-	.text       start:0x800B1D6C end:0x800B1EB8
+	.text       start:0x800B1E68 end:0x800B1EB8
 
 revolution/dsp/dsp_task.c:
 	.text       start:0x800B1EB8 end:0x800B274C
+	.data       start:0x8018A590 end:0x8018A6D0
+	.sbss       start:0x8025DA00 end:0x8025DA18
 
 revolution/nand/nand.c:
 	.text       start:0x800B274C end:0x800B352C
+	.sdata      start:0x8025CA98 end:0x8025CAA0
 
 revolution/nand/NANDOpenClose.c:
 	.text       start:0x800B352C end:0x800B3D68
 
 revolution/nand/NANDCore.c:
-	.text       start:0x800B3D68 end:0x800B5570
+	.text       start:0x800B3D68 end:0x800B53AC
+	.rodata     start:0x8016BCE0 end:0x8016BE18
+	.data       start:0x8018A700 end:0x8018A810
+	.bss        start:0x80200CE0 end:0x80200D20
+	.sdata      start:0x8025CAA0 end:0x8025CAC8
+	.sbss       start:0x8025DA20 end:0x8025DA28
+
+revolution/nand/NANDCheck.c:
+	.text       start:0x800B53AC end:0x800B5570
+	.data       start:0x8018A810 end:0x8018A8C0
+	.sdata      start:0x8025CAC8 end:0x8025CAD8
 
 revolution/sc/scsystem.c:
 	.text       start:0x800B5570 end:0x800B6EA0
@@ -525,10 +560,20 @@ revolution/ipc/ipcProfile.c:
 	.text       start:0x800B9D34 end:0x800B9EF8
 
 revolution/fs/fs.c:
-	.text       start:0x800B9EF8 end:0x800BB4BC
+	.text       start:0x800B9EF8 end:0x800BB2B8
+	.data       start:0x8018AAF8 end:0x8018AB1C
+	.sdata      start:0x8025CBC8 end:0x8025CBD8
+	.sbss       start:0x8025DA70 end:0x8025DA88
+
+revolution/pad/Padclamp.c:
+	.text       start:0x800BB2B8 end:0x800BB4BC
 
 revolution/pad/Pad.c:
 	.text       start:0x800BB4BC end:0x800BCC9C
+	.data       start:0x8018AB20 end:0x8018AB78
+	.bss        start:0x80209090 end:0x80209120
+	.sdata      start:0x8025CBD8 end:0x8025CBF8
+	.sbss       start:0x8025DA88 end:0x8025DAB8
 
 revolution/wpad/WPAD.c:
 	.text       start:0x800BCC9C end:0x800C376C

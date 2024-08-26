@@ -38,10 +38,10 @@ static bool PlayRecordError;
 static OSPlayRecordState PlayRecordState;
 static bool PlayRecordGet;
 
+static OSPlayRecord PlayRecord ATTRIBUTE_ALIGN(32);
 static NANDFileInfo FileInfo;
 static NANDCommandBlock Block;
 static OSAlarm PlayRecordAlarm;
-static OSPlayRecord PlayRecord ATTRIBUTE_ALIGN(32);
 
 static void PlayRecordCallback(s32 result, NANDCommandBlock* block);
 
@@ -69,6 +69,9 @@ static void PlayRecordCallback(s32 result, NANDCommandBlock* block) {
 
     s32 error = NAND_RESULT_OK;
     PlayRecordLastError = result;
+
+    // I hate BSS so much :))))))))
+    (void)PlayRecord;
 
     if (PlayRecordTerminate) {
         PlayRecordTerminated = true;
@@ -249,9 +252,9 @@ void __OSStopPlayRecord(void) {
             while (true) {
                 if (PlayRecordTerminated) {
                     break;
-                }
-
-                if (OSGetTime() - start > OS_MSEC_TO_TICKS(500)) {
+                } else if (OSGetTime() - start <= OSMillisecondsToTicks(500)) {
+                    continue;
+                } else {
                     return;
                 }
             }

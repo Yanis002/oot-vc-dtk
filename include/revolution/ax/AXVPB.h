@@ -58,6 +58,11 @@ typedef struct _AXVPB {
     u32 index; // at 0x18
     u32 sync; // at 0x1C
     u32 depop; // at 0x20
+    u32 updateMS; // at 0x24
+    u32 updateCounter; // at 0x28
+    u32 updateTotal; // at 0x2C
+    u16 * updateWrite; // at 0x30
+    u16 updateData[128]; // at 0x34
     void* itdBuffer; // at 0x24
     AXPB pb; // at 0x28
 } AXVPB;

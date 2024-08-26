@@ -10,13 +10,10 @@
 
 #define STORE_OBJ (*(Store**)ppObject)
 
-//! TODO: document
-void* fn_800B3524(void** arg0);
-
 static bool fn_800616F4(Store* pStore, s32 unknown, s32 nSize);
 static bool fn_800618D4(Store* pStore, void* arg1, s32 arg2, s32 arg3);
-static void fn_80061C08(s32 nResult, void* pArg);
-static void fn_80061C4C(s32 nResult, void* pArg);
+static void fn_80061C08(s32 nResult, NANDCommandBlock* block);
+static void fn_80061C4C(s32 nResult, NANDCommandBlock* block);
 static bool fn_80061CAC(Store* pStore);
 static inline void fn_80061DB8_Inline(Store* pStore);
 
@@ -169,8 +166,8 @@ bool fn_80061BC0(Store* pStore, void* pHeapTarget, s32 nOffset, s32 nByteCount) 
     return true;
 }
 
-static void fn_80061C08(s32 nResult, void* pArg) {
-    Store* pStore = (Store*)fn_800B3524(pArg);
+static void fn_80061C08(s32 nResult, NANDCommandBlock* block) {
+    Store* pStore = (Store*)NANDGetUserData(block);
 
     if (nResult != 0) {
         pStore->unk_BC = nResult;
@@ -179,8 +176,8 @@ static void fn_80061C08(s32 nResult, void* pArg) {
     pStore->unk_B9 = 1;
 }
 
-static void fn_80061C4C(s32 nResult, void* pArg) {
-    Store* pStore = (Store*)fn_800B3524(pArg);
+static void fn_80061C4C(s32 nResult, NANDCommandBlock* block) {
+    Store* pStore = (Store*)NANDGetUserData(block);
     bool bSuccess;
 
     pStore->unk_BC = nResult;
@@ -198,7 +195,7 @@ static bool fn_80061CAC(Store* pStore) {
 
     memcpy(pStore->unk_AC, (void*)pStore->unk_A8, pStore->unk_00);
     DCFlushRange(pStore->unk_AC, pStore->unk_00);
-    fn_800B351C(&pStore->nandCmdBlock, &pStore->unk_00);
+    NANDSetUserData(&pStore->nandCmdBlock, &pStore->unk_00);
 
     while (true) {
         if (!unknownInline(pStore, 3)) {
@@ -209,7 +206,7 @@ static bool fn_80061CAC(Store* pStore) {
             return true;
         }
 
-        if (fn_800B2C7C(&pStore->nandFileInfo, pStore->unk_AC, pStore->unk_00, fn_80061C4C, &pStore->nandCmdBlock) >= 0) {
+        if (NANDWriteAsync(&pStore->nandFileInfo, pStore->unk_AC, pStore->unk_00, fn_80061C4C, &pStore->nandCmdBlock) >= 0) {
             break;
         }
 

@@ -156,7 +156,6 @@ cflags_base = [
     "-RTTI off",
     "-str reuse",
     "-enc SJIS",
-    "-O4,p",
     "-inline auto",
     "-nodefaults",
     "-msgstyle gcc",
@@ -174,7 +173,7 @@ def EmulatorLib(lib_name: str, objects: List[Object]) -> Dict[str, Any]:
     return {
         "lib": lib_name,
         "mw_version": "GC/3.0a5",
-        "cflags": [*cflags_base, "-ipa file"],
+        "cflags": [*cflags_base, "-O4,p", "-ipa file"],
         "host": False,
         "objects": objects,
     }
@@ -183,7 +182,7 @@ def RevolutionLib(lib_name: str, objects: List[Object]) -> Dict[str, Any]:
     return {
         "lib": lib_name,
         "mw_version": "GC/3.0a5", # from strings, note: dvd is using a different version
-        "cflags": [*cflags_base, "-ipa file"],
+        "cflags": [*cflags_base, "-O4,p", "-ipa file"],
         "host": False,
         "objects": objects,
     }
@@ -192,7 +191,7 @@ def GenericLib(lib_name: str, objects: List[Object]) -> Dict[str, Any]:
     return {
         "lib": lib_name,
         "mw_version": "GC/3.0a3",
-        "cflags": [*cflags_base, "-rostr", "-use_lmw_stmw on", "-lang c"],
+        "cflags": [*cflags_base, "-O4,p", "-rostr", "-use_lmw_stmw on", "-lang c"],
         "host": False,
         "objects": objects,
     }
@@ -286,7 +285,7 @@ config.libs = [
             Object(LinkedFor("vc-j"), "revolution/os/OSIpc.c"),
             Object(LinkedFor("vc-j"), "revolution/os/OSStateTM.c"),
             Object(LinkedFor("vc-j"), "revolution/os/time.dolphin.c"),
-            Object(NotLinked, "revolution/os/OSPlayRecord.c"),
+            Object(LinkedFor("vc-j"), "revolution/os/OSPlayRecord.c"),
             Object(LinkedFor("vc-j"), "revolution/os/OSStateFlags.c"),
             Object(LinkedFor("vc-j"), "revolution/os/__start.c"),
             Object(LinkedFor("vc-j"), "revolution/os/__ppc_eabi_init.c"),
@@ -295,9 +294,9 @@ config.libs = [
     RevolutionLib(
         "exi",
         [
-            Object(NotLinked, "revolution/exi/EXIBios.c"),
-            Object(NotLinked, "revolution/exi/EXIUart.c"),
-            Object(NotLinked, "revolution/exi/EXICommon.c"),
+            Object(LinkedFor("vc-j"), "revolution/exi/EXIBios.c", cflags=[*cflags_base, "-O3,p", "-ipa file"]),
+            Object(LinkedFor("vc-j"), "revolution/exi/EXIUart.c"),
+            Object(LinkedFor("vc-j"), "revolution/exi/EXICommon.c"),
         ]
     ),
     RevolutionLib(
@@ -374,15 +373,15 @@ config.libs = [
     RevolutionLib(
         "ax",
         [
-            Object(NotLinked, "revolution/ax/AX.c"),
-            Object(NotLinked, "revolution/ax/AXAlloc.c"),
+            Object(LinkedFor("vc-j"), "revolution/ax/AX.c"),
+            Object(LinkedFor("vc-j"), "revolution/ax/AXAlloc.c"),
             Object(NotLinked, "revolution/ax/AXAux.c"),
             Object(NotLinked, "revolution/ax/AXCL.c"),
             Object(NotLinked, "revolution/ax/AXOut.c"),
             Object(NotLinked, "revolution/ax/AXSPB.c"),
             Object(NotLinked, "revolution/ax/AXVPB.c"),
-            Object(NotLinked, "revolution/ax/AXComp.c"),
-            Object(NotLinked, "revolution/ax/DSPCode.c"),
+            Object(LinkedFor("vc-j"), "revolution/ax/AXComp.c"),
+            Object(LinkedFor("vc-j"), "revolution/ax/DSPCode.c"),
             Object(NotLinked, "revolution/ax/AXProf.c"),
         ]
     ),
@@ -395,9 +394,9 @@ config.libs = [
     RevolutionLib(
         "dsp",
         [
-            Object(NotLinked, "revolution/dsp/dsp.c"),
-            Object(NotLinked, "revolution/dsp/dsp_debug.c"),
-            Object(NotLinked, "revolution/dsp/dsp_task.c"),
+            Object(LinkedFor("vc-j"), "revolution/dsp/dsp.c"),
+            Object(LinkedFor("vc-j"), "revolution/dsp/dsp_debug.c"),
+            Object(LinkedFor("vc-j"), "revolution/dsp/dsp_task.c"),
         ]
     ),
     RevolutionLib(
@@ -406,6 +405,7 @@ config.libs = [
             Object(NotLinked, "revolution/nand/nand.c"),
             Object(NotLinked, "revolution/nand/NANDOpenClose.c"),
             Object(NotLinked, "revolution/nand/NANDCore.c"),
+            Object(LinkedFor("vc-j"), "revolution/nand/NANDCheck.c"),
         ]
     ),
     RevolutionLib(
@@ -434,12 +434,13 @@ config.libs = [
     RevolutionLib(
         "fs",
         [
-            Object(NotLinked, "revolution/fs/fs.c"),
+            Object(LinkedFor("vc-j"), "revolution/fs/fs.c"),
         ]
     ),
     RevolutionLib(
         "pad",
         [
+            Object(NotLinked, "revolution/pad/Padclamp.c"),
             Object(NotLinked, "revolution/pad/Pad.c"),
         ]
     ),

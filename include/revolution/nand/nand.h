@@ -91,6 +91,7 @@ typedef struct NANDFileInfo {
     u8 access; // at 0x88
     u8 stage; // at 0x89
     u8 mark; // at 0x8A
+    u32 unk_8B;
 } NANDFileInfo;
 
 typedef struct NANDCommandBlock {

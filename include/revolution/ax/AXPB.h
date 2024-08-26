@@ -264,6 +264,7 @@ typedef struct _AXPB {
     u16 type; // at 0x12
     AXPBMIX mix; // at 0x14
     AXPBITD itd; // at 0x44
+    u8 pad1[0x9]; //! TODO: figure out this struct
     AXPBDPOP dpop; // at 0x52
     AXPBVE ve; // at 0x6A
     AXPBADDR addr; // at 0x6E

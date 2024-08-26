@@ -13,6 +13,12 @@ extract:
 # system.c
 - symbol: lbl_8016FEA0
   header: lbl_8016FEA0.inc
+# DSPCode.c
+- symbol: axDspSlave
+  header: axDspSlave.inc
+# AXComp.c
+- symbol: __AXCompressorTable
+  header: __AXCompressorTable.inc
 
 block_relocations:
 - source: 0x8002C248
