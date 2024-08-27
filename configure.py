@@ -100,10 +100,19 @@ args = parser.parse_args()
 ### Project configuration
 
 config = ProjectConfig()
-config.versions = [
+
+# Only configure versions for which content1.app exists
+ALL_VERSIONS = [
     "vc-j",
 ]
-config.default_version = "vc-j"
+config.versions = [
+    version
+    for version in ALL_VERSIONS
+    if (Path("orig") / version / "content1.app").exists()
+]
+if "vc-j" in config.versions:
+    config.default_version = "vc-j"
+
 config.warn_missing_config = True
 config.warn_missing_source = False
 config.progress_all = False
@@ -173,7 +182,7 @@ def EmulatorLib(lib_name: str, objects: List[Object]) -> Dict[str, Any]:
     return {
         "lib": lib_name,
         "mw_version": "GC/3.0a5",
-        "cflags": [*cflags_base, "-O4,p", "-ipa file"],
+        "cflags": [*cflags_base, "-O4,p"],
         "host": False,
         "objects": objects,
     }
@@ -244,8 +253,8 @@ config.libs = [
             Object(LinkedFor("vc-j"), "emulator/xlPostRVL.c"),
             Object(LinkedFor("vc-j"), "emulator/xlFileRVL.c"),
             Object(LinkedFor("vc-j"), "emulator/xlText.c"),
-            Object(LinkedFor("vc-j"), "emulator/xlList.c"),
-            Object(NotLinked, "emulator/xlHeap.c", cflags=[*cflags_base, "-ipa off"]), # TODO: determine if we can remove this once this is matched
+            Object(LinkedFor("vc-j"), "emulator/xlList.c", extra_cflags=["-ipa file"]),
+            Object(NotLinked, "emulator/xlHeap.c"),
             Object(LinkedFor("vc-j"), "emulator/xlFile.c"),
             Object(LinkedFor("vc-j"), "emulator/xlObject.c"),
         ]
@@ -267,7 +276,7 @@ config.libs = [
             Object(LinkedFor("vc-j"), "revolution/os/OSCache.c"),
             Object(LinkedFor("vc-j"), "revolution/os/OSContext.c"),
             Object(LinkedFor("vc-j"), "revolution/os/OSError.c"),
-            Object(NotLinked, "revolution/os/OSExec.c", cflags=[*cflags_base]),
+            Object(NotLinked, "revolution/os/OSExec.c", cflags=[*cflags_base, "-O4,p", "-ipa off"]),
             Object(NotLinked, "revolution/os/OSFatal.c"),
             Object(LinkedFor("vc-j"), "revolution/os/OSFont.c"),
             Object(LinkedFor("vc-j"), "revolution/os/OSInterrupt.c"),
@@ -309,23 +318,23 @@ config.libs = [
     RevolutionLib(
         "db",
         [
-            Object(NotLinked, "revolution/db/db.c"),
+            Object(LinkedFor("vc-j"), "revolution/db/db.c"),
         ]
     ),
     RevolutionLib(
         "vi",
         [
             Object(NotLinked, "revolution/vi/vi.c"),
-            Object(NotLinked, "revolution/vi/i2c.c"),
+            Object(LinkedFor("vc-j"), "revolution/vi/i2c.c"),
             Object(NotLinked, "revolution/vi/vi3in1.c"),
         ]
     ),
     RevolutionLib(
         "mtx",
         [
-            Object(NotLinked, "revolution/mtx/mtx.c"),
-            Object(NotLinked, "revolution/mtx/mtxvec.c"),
-            Object(NotLinked, "revolution/mtx/mtx44.c"),
+            Object(LinkedFor("vc-j"), "revolution/mtx/mtx.c"),
+            Object(LinkedFor("vc-j"), "revolution/mtx/mtxvec.c"),
+            Object(LinkedFor("vc-j"), "revolution/mtx/mtx44.c"),
         ]
     ),
     RevolutionLib(

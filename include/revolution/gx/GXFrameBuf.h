@@ -8,7 +8,7 @@
 extern "C" {
 #endif
 
-typedef enum VIXfbMode;
+typedef enum VIXFBMode;
 
 typedef struct _GXRenderModeObj {
     /* 0x0 */ VITvFormat viTVmode;
@@ -19,7 +19,7 @@ typedef struct _GXRenderModeObj {
     /* 0xC */ u16 viYOrigin;
     /* 0xE */ u16 viWidth;
     /* 0x10 */ u16 viHeight;
-    /* 0x14 */ VIXfbMode xfbMode;
+    /* 0x14 */ VIXFBMode xfbMode;
     /* 0x18 */ u8 field_rendering;
     /* 0x19 */ u8 aa;
     /* 0x1A */ u8 sample_pattern[12][2];

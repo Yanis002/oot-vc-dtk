@@ -37,21 +37,21 @@ typedef void (*SICallback)(s32 chan, u32 status, OSContext* context);
 typedef void (*SITypeAndStatusCallback)(s32 chan, u32 type);
 
 typedef struct SIMain {
-    s32 chan;            // at 0x0
-    u32 poll;            // at 0x4
-    u32 inSize;          // at 0x8
-    void* inAddr;        // at 0xC
+    s32 chan; // at 0x0
+    u32 poll; // at 0x4
+    u32 inSize; // at 0x8
+    void* inAddr; // at 0xC
     SICallback callback; // at 0x10
 } SIMain;
 
 typedef struct SIPacket {
-    s32 chan;            // at 0x0
-    void* outAddr;       // at 0x4
-    u32 outSize;         // at 0x8
-    void* inAddr;        // at 0xC
-    u32 inSize;          // at 0x10
+    s32 chan; // at 0x0
+    void* outAddr; // at 0x4
+    u32 outSize; // at 0x8
+    void* inAddr; // at 0xC
+    u32 inSize; // at 0x10
     SICallback callback; // at 0x14
-    s64 fire;            // at 0x18
+    s64 fire; // at 0x18
 } SIPacket;
 
 void SIInit(void);

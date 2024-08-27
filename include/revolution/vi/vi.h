@@ -26,10 +26,14 @@ void VISetNextFrameBuffer(void* fb);
 void* VIGetCurrentFrameBuffer(void);
 
 void VISetBlack(bool black);
-s32 VIGetRetraceCount(void);
+u32 VIGetRetraceCount(void);
 
 VITvFormat VIGetTvFormat(void);
 VIScanMode VIGetScanMode(void);
+u32 VIGetDTVStatus(void);
+void __VIGetCurrentPosition(s16* x, s16* y);
+
+u32 VIGetDTVStatus(void);
 
 #ifdef __cplusplus
 }

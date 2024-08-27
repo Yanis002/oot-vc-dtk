@@ -322,6 +322,16 @@ static bool __romCopyUpdate_Complete(void) {
     return true;
 }
 
+static inline bool romAreOffsetsZero(Rom* pROM) { return pROM->load.nOffset0 == 0 && pROM->load.nOffset1 == 0; }
+
+static inline bool romCheckOffsets(Rom* pROM) {
+    if (romAreOffsetsZero(pROM)) {
+        return false;
+    }
+
+    return true;
+}
+
 static bool romCopyUpdate(Rom* pROM) {
     RomBlock* pBlock;
     s32 pad;
@@ -338,17 +348,7 @@ static bool romCopyUpdate(Rom* pROM) {
 
     pCPU = SYSTEM_CPU(gpSystem);
 
-    //! TODO: inline function?
-    var_r5 = 0;
-    if (pROM->load.nOffset0 == 0 && pROM->load.nOffset1 == 0) {
-        var_r5 = 1;
-    }
-    if (var_r5 != 0) {
-        var_r0 = 0;
-    } else {
-        var_r0 = 1;
-    }
-    if (var_r0 || pROM->copy.nSize == 0 || pROM->copy.bWait) {
+    if (romCheckOffsets(pROM) || pROM->copy.nSize == 0 || pROM->copy.bWait) {
         return true;
     }
 

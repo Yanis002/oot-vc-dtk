@@ -376,24 +376,36 @@ revolution/si/SISamplingRate.c:
 
 revolution/db/db.c:
 	.text       start:0x80098340 end:0x80098428
+	.data       start:0x80183FF0 end:0x80184008
+	.sbss       start:0x8025D668 end:0x8025D670
 
 revolution/vi/vi.c:
 	.text       start:0x80098428 end:0x8009AA54
+	.sbss       start:0x8025D670 end:0x8025D710
 
 revolution/vi/i2c.c:
 	.text       start:0x8009AA54 end:0x8009B470
+	.sdata      start:0x8025C9B8 end:0x8025C9C0
+	.sbss       start:0x8025D710 end:0x8025D718
 
 revolution/vi/vi3in1.c:
 	.text       start:0x8009B470 end:0x8009CB24
+	.data       start:0x80184468 end:0x80184A00
+	.bss        start:0x801DDDD0 end:0x801DDDF0
+	.sdata      start:0x8025C9C0 end:0x8025C9D8
+	.sbss       start:0x8025D718 end:0x8025D730
 
 revolution/mtx/mtx.c:
 	.text       start:0x8009CB24 end:0x8009CF1C
+	.sdata      start:0x8025C9D8 end:0x8025C9E0
+	.sdata2     start:0x8025E330 end:0x8025E338
 
 revolution/mtx/mtxvec.c:
 	.text       start:0x8009CF1C end:0x8009CF70
 
 revolution/mtx/mtx44.c:
 	.text       start:0x8009CF70 end:0x8009D1F8
+	.sdata2     start:0x8025E338 end:0x8025E348
 
 revolution/gx/GXInit.c:
 	.text       start:0x8009D1F8 end:0x8009E3C0
@@ -552,6 +564,8 @@ revolution/sc/scapi_prdinfo.c:
 
 revolution/arc/arc.c:
 	.text       start:0x800B7414 end:0x800B808C
+	.data       start:0x8018AA88 end:0x8018AAF8
+	.sdata      start:0x8025CBB8 end:0x8025CBC0
 
 revolution/ipc/ipcMain.c:
 	.text       start:0x800B808C end:0x800B8110

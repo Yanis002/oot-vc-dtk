@@ -46,7 +46,6 @@ static bool frameUpdateCache(Frame* pFrame);
 static inline bool frameGetMatrixHint(Frame* pFrame, u32 nAddress, s32* piHint);
 static bool frameResetCache(void);
 static bool frameSetupCache(Frame* pFrame);
-void PSMTX44MultVecNoW(Mtx44 m, Vec3f* src, Vec3f* dst);
 
 _XL_OBJECTTYPE gClassFrame = {
     "Frame",
@@ -4812,30 +4811,3 @@ bool frameGetTextureInfo(Frame* pFrame, TextureInfo* pInfo) {
     return true;
 }
 #endif
-
-ASM void PSMTX44MultVecNoW(Mtx44 m, Vec3f* src, Vec3f* dst) {
-#ifdef __MWERKS__ // clang-format off
-    nofralloc
-
-    psq_l   f0, 0(r4), 0, 0
-    psq_l   f1, 8(r4), 1, 0
-    psq_l   f4, 0(r3), 0, 0
-    psq_l   f5, 8(r3), 0, 0
-    psq_l   f6, 16(r3), 0, 0
-    psq_l   f7, 24(r3), 0, 0
-    psq_l   f8, 32(r3), 0, 0
-    psq_l   f9, 40(r3), 0, 0
-    ps_mul  f4, f0, f4
-    ps_madd f2, f1, f5, f4
-    ps_mul  f6, f0, f6
-    ps_madd f3, f1, f7, f6
-    ps_mul  f8, f0, f8
-    ps_sum0 f2, f2, f2, f2
-    ps_madd f9, f1, f9, f8
-    ps_sum1 f2, f3, f2, f3
-    ps_sum0 f3, f9, f9, f9
-    psq_st  f2, 0(r5), 0, 0
-    psq_st  f3, 8(r5), 1, 0
-    blr
-#endif // clang-format on
-}

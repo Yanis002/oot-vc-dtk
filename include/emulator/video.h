@@ -1,8 +1,8 @@
 #ifndef _VIDEO_H
 #define _VIDEO_H
 
-#include "revolution/types.h"
 #include "emulator/xlObject.h"
+#include "revolution/types.h"
 
 #ifdef __cplusplus
 extern "C" {

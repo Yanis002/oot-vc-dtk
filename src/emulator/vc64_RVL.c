@@ -122,8 +122,7 @@ bool simulatorGetArgument(SimulatorArgumentType eType, char** pszArgument) {
 }
 
 static inline bool simulatorRun(SystemMode* peMode) {
-    // TODO: fake match?
-    int nResult;
+    s32 nResult;
 
     while (systemGetMode(gpSystem, peMode) && *peMode == SM_RUNNING) {
         nResult = systemExecute(gpSystem, 100000);

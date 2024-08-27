@@ -5,7 +5,7 @@
 typedef struct SIPollSetting {
     struct {
         u16 lines; // at 0x0
-        u8 times;  // at 0x2
+        u8 times; // at 0x2
     } params[SI_MAX_SAMPLE_RATE + 1];
 } SIPollSetting;
 
@@ -59,19 +59,19 @@ void SISetSamplingRate(u32 msec) {
     SamplingRate = msec;
 
     switch (VIGetTvFormat()) {
-    case VI_TV_FMT_NTSC:
-    case VI_TV_FMT_MPAL:
-    case VI_TV_FMT_EURGB60:
-        xy = &XYNTSC;
-        break;
-    case VI_TV_FMT_PAL:
-        xy = &XYPAL;
-        break;
-    default:
-        OSReport("SISetSamplingRate: unknown TV format. Use default.");
-        msec = 0;
-        xy = &XYNTSC;
-        break;
+        case VI_TV_FMT_NTSC:
+        case VI_TV_FMT_MPAL:
+        case VI_TV_FMT_EURGB60:
+            xy = &XYNTSC;
+            break;
+        case VI_TV_FMT_PAL:
+            xy = &XYPAL;
+            break;
+        default:
+            OSReport("SISetSamplingRate: unknown TV format. Use default.");
+            msec = 0;
+            xy = &XYNTSC;
+            break;
     }
 
     m = (VI_HW_REGS[VI_VICLK] & VI_VICLK_SPEED) != VI_VICLK_27MHZ ? 2 : 1;
@@ -80,6 +80,4 @@ void SISetSamplingRate(u32 msec) {
     OSRestoreInterrupts(enabled);
 }
 
-void SIRefreshSamplingRate(void) {
-    SISetSamplingRate(SamplingRate);
-}
+void SIRefreshSamplingRate(void) { SISetSamplingRate(SamplingRate); }

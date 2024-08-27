@@ -7,6 +7,7 @@
 #include "revolution/demo.h"
 #include "revolution/gx.h"
 #include "revolution/sc.h"
+#include "revolution/vi.h"
 
 static GXRenderModeObj rmodeobj;
 static s32 gnCountArgument;
@@ -20,7 +21,6 @@ CNTFileInfo gCNTFileInfo;
 UnknownContentStruct gUnkContent;
 
 //! TODO: find these function names
-u32 fn_8009A7C4();
 u32 fn_800B6F8C();
 
 #define EMU_ROUND_UP(v, x) (((v) + ((x) - 1)) & ~((x) - 1))
@@ -46,7 +46,7 @@ static void xlCoreInitRenderMode(GXRenderModeObj* mode) {
 
     switch (VIGetTvFormat()) {
         case VI_NTSC:
-            rmode = fn_8009A7C4() && ((fn_800B6F8C() & 0xFF) == 1) ? &GXNtsc480Prog : &GXNtsc480IntDf;
+            rmode = VIGetDTVStatus() && ((fn_800B6F8C() & 0xFF) == 1) ? &GXNtsc480Prog : &GXNtsc480IntDf;
             rmode->viXOrigin -= 32;
             rmode->viWidth += 64;
             break;
