@@ -470,6 +470,56 @@ config.libs = [
             Object(NotLinked, "revolution/wpad/debug_msg.c"),
         ]
     ),
+    RevolutionLib(
+        "kpad",
+        [
+            Object(NotLinked, "revolution/kpad/KPAD.c"),
+        ]
+    ),
+    RevolutionLib(
+        "usb",
+        [
+            Object(NotLinked, "revolution/usb/usb.c"),
+        ]
+    ),
+    RevolutionLib(
+        "wud",
+        [
+            Object(NotLinked, "revolution/wud/WUD.c"),
+            Object(NotLinked, "revolution/wud/WUDHidHost.c"),
+            Object(NotLinked, "revolution/wud/debug_msg.c"),
+        ]
+    ),
+    RevolutionLib(
+        "code_800D1134",
+        [
+            Object(NotLinked, "revolution/code_800D1134.c"),
+        ]
+    ),
+    RevolutionLib(
+        "bte",
+        [
+            Object(NotLinked, "revolution/bte/code_800D1614.c"),
+        ]
+    ),
+    RevolutionLib(
+        "cnt",
+        [
+            Object(NotLinked, "revolution/cnt/cnt.c"),
+        ]
+    ),
+    RevolutionLib(
+        "code_800FF54C",
+        [
+            Object(NotLinked, "revolution/code_800FF54C.c"),
+        ]
+    ),
+    RevolutionLib(
+        "tpl",
+        [
+            Object(NotLinked, "revolution/tpl/TPL.c"),
+        ]
+    ),
     RuntimeLib(
         "runtime",
         [
