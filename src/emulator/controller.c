@@ -156,12 +156,10 @@ bool fn_800622B8(Controller* pController) {
         }
     }
 
-    NO_INLINE();
     return true;
 }
 
 bool fn_800623F4(Controller* pController) {
-    NO_INLINE();
     return true;
 }
 
@@ -231,7 +229,6 @@ bool simulatorCopyControllerMap(Controller* pController, u32* mapDataOutput, u32
 }
 
 bool fn_80062E5C(void) {
-    NO_INLINE();
     return true;
 }
 

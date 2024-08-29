@@ -100,7 +100,6 @@ bool xlListFreeItem(tXL_LIST* pList, void** ppItem) {
         pNode = pNodeNext;
     }
 
-    NO_INLINE();
     return false;
 }
 

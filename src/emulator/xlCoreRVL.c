@@ -100,7 +100,6 @@ bool xlCoreInitGX(void) {
 
     VIConfigure(rmode);
 
-    NO_INLINE();
     return true;
 }
 

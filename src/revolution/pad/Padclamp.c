@@ -68,8 +68,6 @@ void ClampStick(s8* px, s8* py, s8 max, s8 min) {
 
     *px = var_r31;
     *py = var_r30;
-
-    NO_INLINE();
 }
 
 inline void ClampTrigger(u8* trigger, u8 min, u8 max) {

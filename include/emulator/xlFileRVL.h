@@ -13,7 +13,6 @@ extern "C" {
 typedef bool (*DVDOpenCallback)(char*, DVDFileInfo*);
 typedef bool (*DVDReadCallback)(DVDFileInfo*, void*, s32, s32, DVDCallback);
 
-// __anon_0x2757
 typedef enum XlFileType {
     XLFT_NONE = -1,
     XLFT_TEXT = 0,
@@ -22,7 +21,7 @@ typedef enum XlFileType {
 
 typedef struct tXL_FILE {
     /* 0x04 */ void* pData;
-    /* 0x00 */ void* iBuffer; // ???
+    /* 0x00 */ void* iBuffer;
     /* 0x08 */ void* pBuffer;
     /* 0x0C */ s32 nAttributes;
     /* 0x10 */ s32 nSize;

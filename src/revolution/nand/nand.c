@@ -3,7 +3,8 @@
 #include "stdio.h"
 #include "string.h"
 
-static void nandSplitPerm(u8 perm, u32* ownerPerm, u32* groupPerm, u32* otherPerm) DECOMP_DONT_INLINE;
+static void nandComposePerm(u8* out, u32 ownerPerm, u32 groupPerm, u32 otherPerm) NO_INLINE;
+static void nandSplitPerm(u8 perm, u32* ownerPerm, u32* groupPerm, u32* otherPerm) NO_INLINE;
 static void nandGetStatusCallback(s32 result, void* arg);
 static void nandGetFileStatusAsyncCallback(s32 result, void* arg);
 static bool nandInspectPermission(u8 perm);
@@ -325,7 +326,7 @@ s32 NANDGetLengthAsync(NANDFileInfo* info, u32* lengthOut, NANDAsyncCallback cal
     return nandConvertErrorCode(nandGetFileStatusAsync(info->fd, block));
 }
 
-static void nandComposePerm(u8* out, u32 ownerPerm, u32 groupPerm, u32 otherPerm) DECOMP_DONT_INLINE {
+static void nandComposePerm(u8* out, u32 ownerPerm, u32 groupPerm, u32 otherPerm) {
     u32 perm = 0;
 
     if (ownerPerm & NAND_ACCESS_READ) {

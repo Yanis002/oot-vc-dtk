@@ -15,6 +15,7 @@ bool fn_8005F5F4(void* arg0, void* arg1, s32 arg2, void* arg3);
 
 static bool romMakeFreeCache(Rom* pROM, s32* piCache, RomCacheType eType);
 static bool romSetBlockCache(Rom* pROM, s32 iBlock, RomCacheType eType);
+static bool __romLoadBlock_Complete(Rom* pROM) NO_INLINE;
 
 _XL_OBJECTTYPE gClassROM = {
     "ROM",
@@ -215,7 +216,6 @@ static bool __romLoadBlock_Complete(Rom* pROM) {
         return false;
     }
 
-    NO_INLINE();
     return true;
 }
 

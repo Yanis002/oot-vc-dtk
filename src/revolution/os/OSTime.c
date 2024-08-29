@@ -19,6 +19,8 @@ static s32 YearDays[MONTH_MAX] = {0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 3
 // End of each month in leap year
 static s32 LeapYearDays[MONTH_MAX] = {0, 31, 60, 91, 121, 152, 182, 213, 244, 274, 305, 335};
 
+static void GetDates(s32 days, OSCalendarTime* cal) NO_INLINE;
+
 ASM s64 OSGetTime(void){
 #ifdef __MWERKS__ // clang-format off
     nofralloc
@@ -69,7 +71,7 @@ static inline s32 GetLeapDays(s32 year) {
     return (year + 3) / 4 - (year - 1) / 100 + (year - 1) / 400;
 }
 
-static void GetDates(s32 days, OSCalendarTime* cal) DECOMP_DONT_INLINE {
+static void GetDates(s32 days, OSCalendarTime* cal) {
     s32 year;
     s32 totalDays;
     s32* p_days;

@@ -1,6 +1,6 @@
 #include "emulator/system.h"
 #include "emulator/ai.h"
-#include "emulator/codeGCN.h"
+#include "emulator/codeRVL.h"
 #include "emulator/controller.h"
 #include "emulator/cpu.h"
 #include "emulator/disk.h"
@@ -8,7 +8,6 @@
 #include "emulator/flash.h"
 #include "emulator/frame.h"
 #include "emulator/library.h"
-#include "emulator/mcardGCN.h"
 #include "emulator/mi.h"
 #include "emulator/pi.h"
 #include "emulator/pif.h"
@@ -18,7 +17,7 @@
 #include "emulator/rom.h"
 #include "emulator/rsp.h"
 #include "emulator/si.h"
-#include "emulator/soundGCN.h"
+#include "emulator/soundRVL.h"
 #include "emulator/sram.h"
 #include "emulator/vc64_RVL.h"
 #include "emulator/vi.h"
@@ -323,7 +322,6 @@ bool systemSetStorageDevice(System* pSystem, SystemObjectType eStorageDevice, vo
             return false;
     }
 
-    NO_INLINE();
     return true;
 }
 
@@ -1738,7 +1736,7 @@ bool systemEvent(System* pSystem, s32 nEvent, void* pArgument) {
         case 2:
             pSystem->storageDevice = SOT_CPU;
             pSystem->eMode = SM_STOPPED;
-            pSystem->eTypeROM = SRT_NONE;
+            pSystem->eTypeROM = NONE;
             pSystem->nAddressBreak = -1;
             systemClearExceptions(pSystem);
             if (!systemCreateStorageDevice(pSystem, pArgument)) {

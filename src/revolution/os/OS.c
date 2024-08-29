@@ -34,6 +34,8 @@ bool __OSInIPL;
 
 const char* __OSVersion = "<< RVL_SDK - OS \trelease build: Sep 21 2006 14:32:13 (0x4200_60422) >>";
 
+static void ClearArena(void) NO_INLINE;
+static void ClearMEM2Arena(void) NO_INLINE;
 static void OSExceptionInit(void);
 
 void __OSDBINTSTART(void);
@@ -250,7 +252,7 @@ static inline void MemClear(void* mem, u32 size) {
     DCFlushRange(flush, 0x40000);
 }
 
-static void ClearArena(void) DECOMP_DONT_INLINE {
+static void ClearArena(void) {
     // System reset
     if (!((OSGetResetCode() >> 31) & 1)) {
         MemClear(OSGetArenaLo(), (u32)OSGetArenaHi() - (u32)OSGetArenaLo());
@@ -279,7 +281,7 @@ static void ClearArena(void) DECOMP_DONT_INLINE {
     }
 }
 
-static void ClearMEM2Arena(void) DECOMP_DONT_INLINE {
+static void ClearMEM2Arena(void) {
     // System reset
     if (!((OSGetResetCode() >> 31) & 1)) {
         MemClear(OSGetMEM2ArenaLo(), (u32)OSGetMEM2ArenaHi() - (u32)OSGetMEM2ArenaLo());

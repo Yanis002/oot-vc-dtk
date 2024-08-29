@@ -1,4 +1,4 @@
-#include "emulator/soundGCN.h"
+#include "emulator/soundRVL.h"
 #include "emulator/vc64_RVL.h"
 #include "emulator/xlFileRVL.h"
 #include "emulator/xlHeap.h"

@@ -616,7 +616,7 @@ bool rdpParseGBI(Rdp* pRDP, u64** ppnGBI, RspUCodeType eTypeUCode) {
                 frameDrawReset(pFrame, 1);
             }
             pFrame->iTileDrawn = primitive.iTile;
-            if (gpSystem->eTypeROM == SRT_ZELDA2 && rX0 == 0.0f && rX1 == N64_FRAME_WIDTH && rY0 == 0.0f &&
+            if (gpSystem->eTypeROM == NZSJ && rX0 == 0.0f && rX1 == N64_FRAME_WIDTH && rY0 == 0.0f &&
                 rY1 == N64_FRAME_HEIGHT && pFrame->bUsingLens) {
                 u32* pGBI = (u32*)pnGBI;
 
@@ -670,7 +670,7 @@ bool rdpParseGBI(Rdp* pRDP, u64** ppnGBI, RspUCodeType eTypeUCode) {
             }
 
             pGBI = (u32*)pnGBI;
-            if (gpSystem->eTypeROM == SRT_ZELDA2 && rX0 == 0.0f && rX1 == N64_FRAME_WIDTH && rY0 == 0.0f &&
+            if (gpSystem->eTypeROM == NZSJ && rX0 == 0.0f && rX1 == N64_FRAME_WIDTH && rY0 == 0.0f &&
                 rY1 == N64_FRAME_HEIGHT && pFrame->bUsingLens) {
 
                 if (pGBI[4] == 0xF8000000) {

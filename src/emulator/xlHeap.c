@@ -29,6 +29,8 @@ u32* gnHeapOS[HEAP_COUNT];
 #define CHKSUM_HI(v) ((u32)((v) >> 26))
 #define CHKSUM_LO(v) ((u32)((v) & 0x3F))
 
+static bool __xlHeapGetFree(s32 iHeap, s32* pnFreeBytes) NO_INLINE;
+
 static bool xlHeapBlockCacheGet(s32 iHeap, s32 nSize, u32** ppBlock, s32* pnBlockSize) {
     s32 nBlockCachedSize;
     s32 nBlock;
@@ -626,7 +628,6 @@ static bool __xlHeapGetFree(s32 iHeap, s32* pnFreeBytes) {
     }
 
     *pnFreeBytes = nFree;
-    NO_INLINE();
     return true;
 }
 

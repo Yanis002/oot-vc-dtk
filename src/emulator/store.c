@@ -10,7 +10,7 @@
 
 #define STORE_OBJ (*(Store**)ppObject)
 
-static bool fn_800616F4(Store* pStore, s32 unknown, s32 nSize);
+static bool fn_800616F4(Store* pStore, s32 unknown, s32 nSize) NO_INLINE;
 static bool fn_800618D4(Store* pStore, void* arg1, s32 arg2, s32 arg3);
 static void fn_80061C08(s32 nResult, NANDCommandBlock* block);
 static void fn_80061C4C(s32 nResult, NANDCommandBlock* block);
@@ -45,7 +45,6 @@ static bool fn_800616F4(Store* pStore, s32 unknown, s32 nSize) {
         return false;
     }
 
-    NO_INLINE();
     return !!xlHeapTake(&pStore->unk_AC, nSize | 0x30000000);
 }
 

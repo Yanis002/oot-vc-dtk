@@ -1,7 +1,7 @@
 #include "emulator/ai.h"
 #include "emulator/ram.h"
 #include "emulator/rsp.h"
-#include "emulator/soundGCN.h"
+#include "emulator/soundRVL.h"
 #include "emulator/system.h"
 #include "emulator/vc64_RVL.h"
 #include "emulator/xlPostRVL.h"

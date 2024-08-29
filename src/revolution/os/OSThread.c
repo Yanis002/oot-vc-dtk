@@ -2,6 +2,7 @@
 #include "revolution/os.h"
 
 static void DefaultSwitchThreadCallback(OSThread* currThread, OSThread* newThread);
+static void UnsetRun(OSThread* thread) NO_INLINE;
 
 static OSSwitchThreadCallback SwitchThreadCallback = DefaultSwitchThreadCallback;
 
@@ -173,7 +174,7 @@ static void SetRun(OSThread* thread) {
     RunQueueHint = true;
 }
 
-static void UnsetRun(OSThread* thread) DECOMP_DONT_INLINE {
+static void UnsetRun(OSThread* thread) {
     OSThreadQueue* queue;
     OSThread* next;
     OSThread* prev;

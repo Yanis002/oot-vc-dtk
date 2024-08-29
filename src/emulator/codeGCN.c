@@ -1,4 +1,4 @@
-#include "emulator/codeGCN.h"
+#include "emulator/codeRVL.h"
 
 _XL_OBJECTTYPE gClassCode = {
     "Code",

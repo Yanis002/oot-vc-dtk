@@ -124,7 +124,6 @@ void __VISetYUVSEL(VIBool outsel) {
     buffer[1] = (u8)((outsel << 5) | Vdac_Flag_Region);
     __VISendI2CData((u8)0xE0, buffer, 2);
     WaitMicroTime(2);
-    NO_INLINE();
 }
 
 void __VISetTiming(VITiming timing) {

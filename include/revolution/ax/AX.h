@@ -2,6 +2,7 @@
 #define _RVL_SDK_AX_H
 
 #include "revolution/types.h"
+#include "macros.h"
 
 #ifdef __cplusplus
 extern "C" {

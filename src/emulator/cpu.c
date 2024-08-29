@@ -1105,7 +1105,6 @@ static bool cpuGetMode(u64 nStatus, CpuMode* peMode) {
         return true;
     }
 
-    NO_INLINE();
     return false;
 }
 
@@ -1157,7 +1156,6 @@ static bool cpuSetCP0_Status(Cpu* pCPU, u64 nStatus, u32 unknown) {
 
     pCPU->anCP0[12] = nStatus;
 
-    NO_INLINE();
     return true;
 }
 
@@ -1432,8 +1430,6 @@ static void cpuCompileNOP(s32* anCode, s32* iCode, s32 number) {
     while (number-- != 0) {
         anCode[(*iCode)++] = 0x60000000;
     }
-
-    NO_INLINE();
 }
 
 #ifndef NON_MATCHING
@@ -1530,7 +1526,6 @@ static bool cpuGetPPC(Cpu* pCPU, s32* pnAddress, CpuFunction* pFunction, s32* an
 // #pragma GLOBAL_ASM("asm/non_matchings/cpu/cpuGetPPC.s")
 
 static bool fn_80031D4C(Cpu* pCPU, CpuFunction* pFunction, s32 unknown) {
-    NO_INLINE();
     return false;
 }
 
@@ -5826,7 +5821,6 @@ bool cpuGetAddressBuffer(Cpu* pCPU, void** ppBuffer, u32 nAddress) {
         return false;
     }
 
-    NO_INLINE();
     return true;
 }
 

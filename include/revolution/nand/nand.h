@@ -4,6 +4,7 @@
 #include "revolution/fs.h"
 #include "revolution/types.h"
 #include "stddef.h"
+#include "macros.h"
 
 #ifdef __cplusplus
 extern "C" {

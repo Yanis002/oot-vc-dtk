@@ -34,12 +34,12 @@ static u8 views[0xBD00] ATTRIBUTE_ALIGN(32);
 bool __OSInReboot;
 static bool Prepared;
 
-static void Run(register void* ptr) DECOMP_DONT_INLINE;
+static void Run(register void* ptr) NO_INLINE;
 
 // These were actually re(?)implemented in NANDCore/OSExec according to BBA
 static s32 _ES_InitLib(s32* fd);
 static s32 _ES_GetTicketViews(s32* fd, u64 tid, void* pViews, u32* count);
-static s32 _ES_LaunchTitle(s32* fd, u64 tid, void* pViews) DECOMP_DONT_INLINE;
+static s32 _ES_LaunchTitle(s32* fd, u64 tid, void* pViews) NO_INLINE;
 
 static inline s32 _ES_InitLib(s32* fd) {
     s32 result;

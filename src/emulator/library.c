@@ -9,7 +9,7 @@
 #include "emulator/rom.h"
 #include "emulator/rsp.h"
 #include "emulator/si.h"
-#include "emulator/soundGCN.h"
+#include "emulator/soundRVL.h"
 #include "emulator/system.h"
 #include "emulator/vc64_RVL.h"
 #include "emulator/vi.h"
@@ -3627,11 +3627,11 @@ bool libraryTestFunction(Library* pLibrary, CpuFunction* pFunction) {
                     bFlag = false;
                 }
             } else if (gaFunction[iFunction].pfLibrary == (LibraryFuncImpl)pictureSnap_Zelda2) {
-                if (((System*)gpSystem)->eTypeROM != SRT_ZELDA2) {
+                if (((System*)gpSystem)->eTypeROM != NZSJ) {
                     bFlag = false;
                 }
             } else if (gaFunction[iFunction].pfLibrary == (LibraryFuncImpl)zeldaLoadSZS_Entry) {
-                if (((System*)gpSystem)->eTypeROM != SRT_ZELDA1) {
+                if (((System*)gpSystem)->eTypeROM != CZLJ) {
                     bFlag = false;
                 }
                 if (bFlag) {
@@ -3643,7 +3643,7 @@ bool libraryTestFunction(Library* pLibrary, CpuFunction* pFunction) {
                     pnCodeTemp[0] = 0x7C000000 | (iFunction + 1);
                 }
             } else if (gaFunction[iFunction].pfLibrary == (LibraryFuncImpl)dmaSoundRomHandler_ZELDA1) {
-                if (((System*)gpSystem)->eTypeROM != SRT_ZELDA1) {
+                if (((System*)gpSystem)->eTypeROM != CZLJ) {
                     bFlag = false;
                 } else {
                     nOpcode = pnCode[2];

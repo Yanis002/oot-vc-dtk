@@ -8,14 +8,12 @@
 extern "C" {
 #endif
 
-// __anon_0x89C77
 typedef struct TevOrder {
     /* 0x0 */ GXTexCoordID coordID;
     /* 0x4 */ GXTexMapID mapID;
     /* 0x8 */ GXChannelID chanID;
 } TevOrder; // size = 0xC
 
-// __anon_0x896E8
 typedef struct TevColorOp {
     /* 0x00 */ GXTevOp op;
     /* 0x04 */ GXTevBias bias;
@@ -24,7 +22,6 @@ typedef struct TevColorOp {
     /* 0x10 */ GXTevRegID out_reg;
 } TevColorOp; // size = 0x14
 
-// __anon_0x89DF5
 typedef struct CombineModeTev {
     /* 0x000 */ u32 ccCodes[2][2];
     /* 0x010 */ u8 numCycles;
@@ -33,8 +30,6 @@ typedef struct CombineModeTev {
     /* 0x013 */ u8 numChan;
     /* 0x014 */ u32 flags;
     /* 0x018 */ TevOrder tevOrder[8];
-
-    // ok
     u8 pad3[0xC];
     /* 0x084 */ TevColorOp tevColorOpP[8][2];
     u8 pad1[0x28];
@@ -50,7 +45,7 @@ void BuildCycle(CombineModeTev* tvP, u8 (*stageValues)[4]);
 CombineModeTev* BuildCombineModeTev(u32 color1, u32 alpha1, u32 color2, u32 alpha2, u32 numCycles);
 
 extern GXTevAlphaArg gAlphaArgs[10];
-// extern GXTevColorArg gColorArgs[16];
+extern GXTevColorArg gColorArgs[16];
 
 #ifdef __cplusplus
 }
